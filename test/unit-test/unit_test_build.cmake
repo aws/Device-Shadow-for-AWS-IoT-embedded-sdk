@@ -1,11 +1,25 @@
-include("../shadowFilePaths.cmake")
-project ("shadow unit test")
-cmake_minimum_required (VERSION 3.13)
+# Include filepaths for source and include.
+include( ${MODULE_ROOT_DIR}/shadowFilePaths.cmake )
 
 # ====================  Define your project name (edit) ========================
 set(project_name "shadow")
 
 # =====================  Create your mock here  (edit)  ========================
+
+# list the files to mock here
+list(APPEND mock_list
+            "${MODULE_ROOT_DIR}/source/include/shadow.h"
+        )
+# list the directories your mocks need
+list(APPEND mock_include_list
+            .
+            ${SHADOW_INCLUDE_PUBLIC_DIRS}
+        )
+#list the definitions of your mocks to control what to be included
+list(APPEND mock_define_list
+            ""
+       )
+
 # ================= Create the library under test here (edit) ==================
 
 # list the files you would like to test here
@@ -16,8 +30,6 @@ list(APPEND real_source_files
 list(APPEND real_include_directories
             .
             ${SHADOW_INCLUDE_PUBLIC_DIRS}
-            ${SHADOW_INCLUDE_PRIVATE_DIRS}
-            ${LOGGING_INCLUDE_DIRS}
         )
 
 # =====================  Create UnitTest Code here (edit)  =====================
@@ -26,13 +38,19 @@ list(APPEND real_include_directories
 list(APPEND test_include_directories
             .
             ${SHADOW_INCLUDE_PUBLIC_DIRS}
-            ${SHADOW_INCLUDE_PRIVATE_DIRS}
-            ${LOGGING_INCLUDE_DIRS}
         )
 
 # =============================  (end edit)  ===================================
 
+set(mock_name "${project_name}_mock")
 set(real_name "${project_name}_real")
+
+create_mock_list(${mock_name}
+                "${mock_list}"
+                "${MODULE_ROOT_DIR}/tools/cmock/project.yml"
+                "${mock_include_list}"
+                "${mock_define_list}"
+        )
 
 create_real_library(${real_name}
                     "${real_source_files}"
@@ -41,6 +59,7 @@ create_real_library(${real_name}
         )
 
 list(APPEND utest_link_list
+            -l${mock_name}
             lib${real_name}.a
         )
 
@@ -57,5 +76,8 @@ create_test(${utest_name}
             "${test_include_directories}"
         )
 
-
-
+# need to redefine because the tests below don't use any mocks
+set(utest_link_list "")
+list(APPEND utest_link_list
+                lib${real_name}.a
+        )
