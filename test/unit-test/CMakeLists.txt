@@ -52,6 +52,9 @@ endif()
 # defining test targets with add_test()
 enable_testing()
 
+# disable to include shadow custom configuration header
+add_compile_definitions(SHADOW_DO_NOT_USE_CUSTOM_CONFIG)
+
 # Add build targets for CMock and Unit, required for unit testing.
 add_cmock_targets()
 
@@ -64,6 +67,7 @@ include( unit_test_build.cmake )
 # Add a target for running coverage on tests.
 add_custom_target( coverage
     COMMAND ${CMAKE_COMMAND} -P ${MODULE_ROOT_DIR}/tools/cmock/coverage.cmake
-    DEPENDS cmock unity shadow
+    DEPENDS cmock unity shadow_utest
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
 )
+
