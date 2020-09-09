@@ -21,8 +21,6 @@ COMPILE_FLAGS += -std=gnu90
 INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/cbmc/include
 INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/include
 INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/src
-INCLUDES += -I$(SRCDIR)/demos/logging-stack
-INCLUDES += -I$(SRCDIR)/platform/include
 
 # Preprocessor definitions -D...
 DEFINES += -Dshadow_EXPORTS
