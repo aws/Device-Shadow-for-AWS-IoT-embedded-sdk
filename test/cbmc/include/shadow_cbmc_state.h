@@ -26,6 +26,7 @@
 #ifndef SHADOW_CBMC_STATE_H_
 #define SHADOW_CBMC_STATE_H_
 
+#include <stddef.h>
 #include <stdbool.h>
 
 /**

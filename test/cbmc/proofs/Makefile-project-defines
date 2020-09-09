@@ -18,9 +18,10 @@ COMPILE_FLAGS += -std=gnu90
 # LINK_FLAGS =
 
 # Preprocessor include paths -I...
-INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/cbmc/include
-INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/include
-INCLUDES += -I$(SRCDIR)/libraries/aws/shadow/src
+INCLUDES += -I$(SRCDIR)/test/cbmc/include
+INCLUDES += -I$(SRCDIR)/source/include
+INCLUDES += -I$(SRCDIR)/source
 
 # Preprocessor definitions -D...
 DEFINES += -Dshadow_EXPORTS
+DEFINES += -DSHADOW_DO_NOT_USE_CUSTOM_CONFIG
