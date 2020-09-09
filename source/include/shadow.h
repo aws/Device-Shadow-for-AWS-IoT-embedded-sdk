@@ -29,8 +29,18 @@
 
 /* Standard includes. */
 #include <stdint.h>
-/* Include config file before other headers. */
-#include "shadow_config.h"
+
+/* SHADOW_DO_NOT_USE_CUSTOM_CONFIG allows building the Shadow library
+ * without a custom config. If a custom config is provided, the
+ * SHADOW_DO_NOT_USE_CUSTOM_CONFIG macro should not be defined. */
+#ifndef SHADOW_DO_NOT_USE_CUSTOM_CONFIG
+    /* Include custom config file before other headers. */
+    #include "shadow_config.h"
+#endif
+
+/* Include config defaults header to get default values of configs not
+ * defined in shadow_config_defaults.h file. */
+#include "shadow_config_defaults.h"
 
 /*--------------------------- Shadow types ---------------------------*/
 
