@@ -14,9 +14,9 @@ and build the library with default configuration values, provide `SHADOW_DO_NOT_
 
 The [shadowFilePaths.cmake](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/shadowFilePaths.cmake) file contains the information of all source files and the header include path required to build the Shadow library.
 
-As mentioned in the previous section, either a custom config file (i.e. `core_mqtt_config.h`) OR the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` macro needs to be provided to build the Shadow library.
+As mentioned in the previous section, either a custom config file (i.e. `shadow_config.h`) OR the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` macro needs to be provided to build the Shadow library.
 
-For a CMake example of building the Shadow library with the `mqttFilePaths.cmake` file, refer to the `coverity_analysis` library target in [test/CMakeLists.txt](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/test/CMakeLists.txt) file.
+For a CMake example of building the Shadow library with the `shadowFilePaths.cmake` file, refer to the `coverity_analysis` library target in [test/CMakeLists.txt](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/test/CMakeLists.txt) file.
 
 ## Building Unit Tests
 
