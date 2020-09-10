@@ -20,7 +20,7 @@ activate application
 application -> mqtt : Establish\nMQTT Connection\nwith\ncallback function
 
 
-activate mqtt 
+activate mqtt
 mqtt -> mqtt : Initialization with the callback
 mqtt -> : Connect to the broker
 mqtt -> application : Return from MQTT library
