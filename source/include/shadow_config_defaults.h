@@ -34,6 +34,23 @@
 #ifndef SHADOW_CONFIG_DEFAULTS_H_
 #define SHADOW_CONFIG_DEFAULTS_H_
 
+/* The macro definition for SHADOW_DO_NOT_USE_CUSTOM_CONFIG is for Doxygen
+ * documentation only. */
+
+/**
+ * @brief Define this macro to build the Shadow library without the custom config
+ * file shadow_config.h.
+ *
+ * Without the custom config, the Shadow library builds with
+ * default values of config macros defined in shadow_config_defaults.h file.
+ *
+ * If a custom config is provided, then SHADOW_DO_NOT_USE_CUSTOM_CONFIG should not
+ * be defined.
+ */
+#ifdef DOXYGEN
+    #define SHADOW_DO_NOT_USE_CUSTOM_CONFIG
+#endif
+
 /**
  * @brief Macro that is called in the Shadow library for logging "Error" level
  * messages.
