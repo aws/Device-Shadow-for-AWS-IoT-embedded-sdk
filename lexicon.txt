@@ -11,6 +11,7 @@ developerguide
 endcode
 endif
 endlink
+doxygen
 generatedtopicstringlength
 getshadowoperationlength
 gettopicstring
