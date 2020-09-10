@@ -427,7 +427,7 @@ typedef enum ShadowStatus
 
 /**
  * @brief Assemble shadow topic string when Thing Name is only known at run time.
- *        If the Thing Name is known at compile time, use \link #SHADOW_TOPIC_STRING_UPDATE 
+ *        If the Thing Name is known at compile time, use \link #SHADOW_TOPIC_STRING_UPDATE
  *        SHADOW_TOPIC_STRING_* \endlink macros instead.
  *
  * @param[in]  topicType Indicates what topic will be written into the buffer pointed to by pTopicBuffer.
@@ -455,12 +455,12 @@ typedef enum ShadowStatus
  * @return     One of the following:
  *             - SHADOW_SUCCESS if successful.
  *             - An error code if failed to assemble.
- * 
+ *
  * <b>Example</b>
  * @code{c}
- * 
+ *
  * // Variables used in this example.
- * 
+ *
  * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
  *
  * ShadowStatus_t shadowStatus = SHADOW_STATUS_SUCCESS;
@@ -476,12 +476,12 @@ typedef enum ShadowStatus
  *                                       & ( topicBuffer[ 0 ] ),
  *                                       bufferSize,
  *                                       & outLength );
- * 
+ *
  * if( shadowStatus == SHADOW_STATUS_SUCCESS )
  * {
  *      // The assembled topic string is put in pTopicBuffer with the length outLength.
  * }
- * 
+ *
  * @endcode
  */
 /* @[declare_shadow_gettopicstring] */
@@ -497,12 +497,12 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  * @brief Given the topic string of an incoming message, determine whether it is
  *        related to a device shadow; if it is, return information about the type of
  *        device shadow message, and a pointer to the Thing Name inside of the topic string.
- *        See #ShadowMessageType_t for the list of message types.  Those types correspond to 
+ *        See #ShadowMessageType_t for the list of message types.  Those types correspond to
  *        Device Shadow Topics.
  *
  * @note When this function returns, the pointer pThingName points at the first character
  *       of the "thingName" segment inside of the topic string.
- *       Caller is responsible for keeping the memory holding the topic string around while 
+ *       Caller is responsible for keeping the memory holding the topic string around while
  *       accessing the Thing Name through pThingName.
  *
  * @param[in]  pTopic Pointer to the MQTT topic string. Does not have to be null-terminated.
@@ -517,12 +517,12 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *             - An error code defined in #ShadowStatus_t if the message is not related to a device shadow,
  *               if any input parameter is invalid, or if the function fails to
  *               parse the topic string.
- * 
+ *
  * <b>Example</b>
  * @code{c}
- * 
+ *
  * // Variables used in this example.
- * 
+ *
  * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
  *
  * ShadowStatus_te shadowStatus = SHADOW_STATUS_SUCCESS;
@@ -535,13 +535,13 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *                                   & messageType,
  *                                   NULL,
  *                                   NULL );
- * 
+ *
  * if( shadowStatus == SHADOW_STATUS_SUCCESS )
  * {
  *      // It is a device shadow message. And the type of the message has been returned in messageType.
  *      // Now we can act on the message.
  * }
- * 
+ *
  * @endcode
  */
 /* @[declare_shadow_matchtopic] */
