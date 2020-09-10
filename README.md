@@ -2,7 +2,7 @@
 
 This repository contains a Device Shadow client library for embedded platforms to interact with the [AWS IoT Device Shadow service](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html).
 
-## Building Unit Tests.
+## Building Unit Tests
 
 ### Device Shadow Config File
 The Device Shadow library exposes build configuration macros that are required for building the library.
@@ -16,7 +16,7 @@ and build the library with default configuration values, provide `SHADOW_DO_NOT_
 
 ### Platform Prerequisites
 
-- For building the library, CMake 3.13.0 or later and a C90 compiler.
+- For building the library, **CMake 3.13.0** or later and a **C90 compiler**.
 - For running unit tests, Ruby 2.0.0 or later is additionally required for the CMock test framework (that we use).
 - For running the coverage target, gcov is additionally required.
 
@@ -24,13 +24,13 @@ and build the library with default configuration values, provide `SHADOW_DO_NOT_
 
 1. Go to the root directory of this repository.
 
-1. Create build directory: `mkdir build && cd build`
+1. Create a build directory: `mkdir build && cd build`
 
-1. Run *cmake* while inside build directory: `cmake -S ../test/unit-test `
+1. Run *cmake* while inside the build directory: `cmake ../test -DBUILD_CLONE_SUBMODULES=ON`
 
 1. Run this command to build the library and unit tests: `make all`
 
-1. The generated test executables will be present in `build/bin/tests` folder.
+1. The test executables will be present in the `build/bin/tests` folder.
 
 1. Run `ctest` to execute all tests and view the test run summary.
 
