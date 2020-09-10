@@ -1,0 +1,22 @@
+/**
+@page shadow_porting Porting Guide
+@brief Guide for porting Shadow to a new platform.
+
+A port to a new system must provide the following components:
+1. [Configuration Macros](@ref porting_config)
+
+@section porting_config Configuration Macros
+@brief Settings that must be set as macros in the config header `shadow_config.h`, or passed in as compiler options
+
+@see [Configurations](@ref shadow_config)
+
+@note Regardless of whether the following macros are defined in `shadow_config.h` or passed as compiler options,
+the `shadow_config.h` file must be included to build the Shadow library.
+
+The following logging macros are used throughout the library:
+ - @ref LogError
+ - @ref LogWarn
+ - @ref LogInfo
+ - @ref LogDebug
+
+ */
