@@ -241,9 +241,9 @@ typedef enum ShadowStatus
  *                       strlen( ( const char * ) myThingName ) )
  *
  * @param[operationLength] Can be one of:
- *                          - SHADOW_OP_UPDATE_LENGTH
- *                          - SHADOW_OP_DELETE_LENGTH
- *                          - SHADOW_OP_GET_LENGTH
+ *                          - #SHADOW_OP_UPDATE_LENGTH
+ *                          - #SHADOW_OP_DELETE_LENGTH
+ *                          - #SHADOW_OP_GET_LENGTH
  * @param[suffixLength]    Can be one of:
  *                          - SHADOW_SUFFIX_NULL_LENGTH
  *                          - SHADOW_SUFFIX_ACCEPTED_LENGTH
