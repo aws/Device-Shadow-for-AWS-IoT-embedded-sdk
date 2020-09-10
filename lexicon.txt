@@ -58,6 +58,7 @@ shadowtopicstringtypeupdateaccepted
 shadowtopicstringtypeupdatedelta
 shadowtopicstringtypeupdatedocuments
 shadowtopicstringtypeupdaterejected
+shadowtopicstringtypemaxnum
 sizeof
 stringlength
 strlen
