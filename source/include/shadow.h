@@ -245,9 +245,9 @@ typedef enum ShadowStatus
  *                          - #SHADOW_OP_DELETE_LENGTH
  *                          - #SHADOW_OP_GET_LENGTH
  * @param[suffixLength]    Can be one of:
- *                          - SHADOW_SUFFIX_NULL_LENGTH
- *                          - SHADOW_SUFFIX_ACCEPTED_LENGTH
- *                          - SHADOW_SUFFIX_REJECTED_LENGTH
+ *                          - #SHADOW_SUFFIX_NULL_LENGTH
+ *                          - #SHADOW_SUFFIX_ACCEPTED_LENGTH
+ *                          - #SHADOW_SUFFIX_REJECTED_LENGTH
  *                          - SHADOW_SUFFIX_DELTA_LENGTH
  *                          - SHADOW_SUFFIX_DOCUMENTS_LENGTH
  * @param[thingNameLength] Length of the thingName excluding the ending NULL.
