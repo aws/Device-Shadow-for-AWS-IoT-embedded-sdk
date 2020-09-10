@@ -5,7 +5,7 @@ This repository contains a Device Shadow client library for embedded platforms t
 ### Device Shadow Config File
 The Device Shadow library exposes build configuration macros that are required for building the library.
 A list of all the configurations and their default values are defined in [shadow_config_defaults.h](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/source/include/shadow_config_defaults.h). 
-To provide custom values for the configuration macros, a custom config file named `shadow_config_defaults.h` can be provided by the application to the library.
+To provide custom values for the configuration macros, a custom config file named `shadow_config.h` can be provided by the application to the library.
 
 By default, a `shadow_config.h` custom config is required to build the library. To disable this requirement
 and build the library with default configuration values, provide `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` as a compile time preprocessor macro.
