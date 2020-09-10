@@ -21,6 +21,7 @@
 
 HARNESS_ENTRY=harness
 HARNESS_FILE=Shadow_MatchTopic_harness
+PROOF_UID = Shadow_MatchTopic
 
 # The topic length is bounded to reduce the proof run time. This length bounds
 # the time to look for the thing name in the topic string. The minimum length

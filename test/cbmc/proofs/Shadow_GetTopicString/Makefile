@@ -21,6 +21,7 @@
 
 HARNESS_ENTRY=harness
 HARNESS_FILE=Shadow_GetTopicString_harness
+PROOF_UID = Shadow_GetTopicString
 
 DEFINES +=
 INCLUDES +=
