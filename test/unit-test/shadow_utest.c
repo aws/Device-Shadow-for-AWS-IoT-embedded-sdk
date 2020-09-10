@@ -164,6 +164,11 @@
 #define TEST_SHADOW_TOPIC_STRING_EMPTY_THINGNAME              "$aws/things/"
 
 /**
+ * @brief A topic string with an invalid thing name.
+ */
+#define TEST_SHADOW_TOPIC_STRING_INVALID_THINGNAME            "$aws/things//"
+
+/**
  * @brief A topic string with an empty shadow message type.
  */
 #define TEST_SHADOW_TOPIC_STRING_EMPTY_SHADOW_MESSAGE_TYPE    "$aws/things/TestThingName"
@@ -187,6 +192,12 @@
  * @brief The length of #TEST_SHADOW_TOPIC_STRING_EMPTY_THINGNAME shared among all test cases.
  */
 #define TEST_SHADOW_TOPIC_LENGTH_EMPTY_THINGNAME              ( ( uint16_t ) sizeof( TEST_SHADOW_TOPIC_STRING_EMPTY_THINGNAME ) - 1U )
+
+/**
+ * @brief The length of #TEST_SHADOW_TOPIC_STRING_INVALID_THINGNAME shared among all test cases.
+ */
+#define TEST_SHADOW_TOPIC_LENGTH_INVALID_THINGNAME            ( ( uint16_t ) sizeof( TEST_SHADOW_TOPIC_STRING_INVALID_THINGNAME ) - 1U )
+
 
 /**
  * @brief The length of #TEST_SHADOW_TOPIC_STRING_EMPTY_SHADOW_MESSAGE_TYPE shared among all test cases.
@@ -296,29 +307,79 @@ void test_Shadow_GetTopicString_Happy_Path( void )
 {
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     uint16_t outLength = 0;
-    ShadowTopicStringType_t topicType = ShadowTopicStringTypeGetAccepted;
-    char topicBuffer[ TEST_SHADOW_TOPIC_BUFFER_LENGTH ] = TEST_SHADOW_TOPIC_BUFFER_INITIALZIE;
-    uint16_t bufferSize = TEST_SHADOW_TOPIC_BUFFER_LENGTH;
+    char topicBufferExceeded[ TEST_SHADOW_TOPIC_BUFFER_LENGTH ] = TEST_SHADOW_TOPIC_BUFFER_INITIALZIE;
+    uint16_t bufferSizeExceeded = TEST_SHADOW_TOPIC_BUFFER_LENGTH;
     char topicBufferGetAccepted[ SHADOW_TOPIC_LENGTH_GET_ACCEPTED( TEST_THING_NAME_LENGTH ) ] = { 0 };
     uint16_t bufferSizeGetAccepted = TEST_SHADOW_TOPIC_LENGTH_GET_ACCEPTED;
+    char topicBuffer[ SHADOW_TOPIC_LENGTH_MAX( TEST_THING_NAME_LENGTH ) ] = { 0 };
+    uint16_t bufferSize = SHADOW_TOPIC_LENGTH_MAX( TEST_THING_NAME_LENGTH );
+    uint16_t index = 0;
 
-    /* Call Shadow_GetTopicString() with valid parameters but bufferSize > topic string length
+    /* Lookup table for Shadow message string. */
+    static const uint16_t expectedBuffersSize[ ShadowTopicStringTypeMaxNum ] =
+    {
+        TEST_SHADOW_TOPIC_LENGTH_UPDATE,
+        TEST_SHADOW_TOPIC_LENGTH_UPDATE_ACCEPTED,
+        TEST_SHADOW_TOPIC_LENGTH_UPDATE_REJECTED,
+        TEST_SHADOW_TOPIC_LENGTH_UPDATE_DOCUMENTS,
+        TEST_SHADOW_TOPIC_LENGTH_UPDATE_DELTA,
+        TEST_SHADOW_TOPIC_LENGTH_GET,
+        TEST_SHADOW_TOPIC_LENGTH_GET_ACCEPTED,
+        TEST_SHADOW_TOPIC_LENGTH_GET_REJECTED,
+        TEST_SHADOW_TOPIC_LENGTH_DELETE,
+        TEST_SHADOW_TOPIC_LENGTH_DELETE_ACCEPTED,
+        TEST_SHADOW_TOPIC_LENGTH_DELETE_REJECTED
+    };
+
+    /* Lookup table for Shadow message string. */
+    static const char * const expectedBuffers[ ShadowTopicStringTypeMaxNum ] =
+    {
+        TEST_SHADOW_TOPIC_STRING_UPDATE,
+        TEST_SHADOW_TOPIC_STRING_UPDATE_ACCEPTED,
+        TEST_SHADOW_TOPIC_STRING_UPDATE_REJECTED,
+        TEST_SHADOW_TOPIC_STRING_UPDATE_DOCUMENTS,
+        TEST_SHADOW_TOPIC_STRING_UPDATE_DELTA,
+        TEST_SHADOW_TOPIC_STRING_GET,
+        TEST_SHADOW_TOPIC_STRING_GET_ACCEPTED,
+        TEST_SHADOW_TOPIC_STRING_GET_REJECTED,
+        TEST_SHADOW_TOPIC_STRING_DELETE,
+        TEST_SHADOW_TOPIC_STRING_DELETE_ACCEPTED,
+        TEST_SHADOW_TOPIC_STRING_DELETE_REJECTED
+    };
+
+    static const ShadowTopicStringType_t topicTypes[ ShadowTopicStringTypeMaxNum ] =
+    {
+        ShadowTopicStringTypeUpdate,
+        ShadowTopicStringTypeUpdateAccepted,
+        ShadowTopicStringTypeUpdateRejected,
+        ShadowTopicStringTypeUpdateDocuments,
+        ShadowTopicStringTypeUpdateDelta,
+        ShadowTopicStringTypeGet,
+        ShadowTopicStringTypeGetAccepted,
+        ShadowTopicStringTypeGetRejected,
+        ShadowTopicStringTypeDelete,
+        ShadowTopicStringTypeDeleteAccepted,
+        ShadowTopicStringTypeDeleteRejected
+    };
+
+    /* Call Shadow_GetTopicString() with valid parameters but bufferSize exceeds topic string length
      * and verify result. */
-    shadowStatus = Shadow_GetTopicString( topicType,
+    shadowStatus = Shadow_GetTopicString( ShadowTopicStringTypeGetAccepted,
                                           TEST_THING_NAME,
                                           TEST_THING_NAME_LENGTH,
-                                          &( topicBuffer[ 0 ] ),
-                                          bufferSize,
+                                          &( topicBufferExceeded[ 0 ] ),
+                                          bufferSizeExceeded,
                                           &outLength );
     TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
     TEST_ASSERT_EQUAL_INT( TEST_SHADOW_TOPIC_LENGTH_GET_ACCEPTED, outLength );
-    TEST_ASSERT_LESS_THAN( bufferSize, outLength );
+    TEST_ASSERT_LESS_THAN( bufferSizeExceeded, outLength );
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_SHADOW_TOPIC_BUFFER_MODIFIED,
-                                  topicBuffer,
-                                  bufferSize );
+                                  topicBufferExceeded,
+                                  bufferSizeExceeded );
 
-    /* Call Shadow_GetTopicString() with valid parameters and verify result. */
-    shadowStatus = Shadow_GetTopicString( topicType,
+    /* Call Shadow_GetTopicString() with valid parameters, bufferSize = expected outLength
+     * and verify result. */
+    shadowStatus = Shadow_GetTopicString( ShadowTopicStringTypeGetAccepted,
                                           TEST_THING_NAME,
                                           TEST_THING_NAME_LENGTH,
                                           &( topicBufferGetAccepted[ 0 ] ),
@@ -328,6 +389,21 @@ void test_Shadow_GetTopicString_Happy_Path( void )
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_SHADOW_TOPIC_STRING_GET_ACCEPTED,
                                   topicBufferGetAccepted,
                                   bufferSizeGetAccepted );
+    for( index = 0; index < ShadowTopicStringTypeMaxNum; index++ )
+    {
+        /* Call Shadow_GetTopicString() with valid parameters with all types of topic string
+         * and verify result. */
+        shadowStatus = Shadow_GetTopicString( topicTypes[ index ],
+                                              TEST_THING_NAME,
+                                              TEST_THING_NAME_LENGTH,
+                                              &( topicBuffer[ 0 ] ),
+                                              bufferSize,
+                                              &outLength );
+        TEST_ASSERT_EQUAL_INT( expectedBuffersSize[ index ], outLength );
+        TEST_ASSERT_EQUAL_STRING_LEN( expectedBuffers[ index ],
+                                      topicBuffer,
+                                      outLength );
+    }
 }
 
 /*-----------------------------------------------------------*/
@@ -353,6 +429,14 @@ void test_Shadow_GetTopicString_Invalid_Parameters( void )
                                           &outLength );
     TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
 
+    shadowStatus = Shadow_GetTopicString( 0,
+                                          NULL,
+                                          0,
+                                          &( topicBuffer[ 0 ] ),
+                                          bufferSize,
+                                          &outLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
+
     shadowStatus = Shadow_GetTopicString( topicType,
                                           TEST_THING_NAME,
                                           TEST_THING_NAME_LENGTH,
@@ -360,6 +444,7 @@ void test_Shadow_GetTopicString_Invalid_Parameters( void )
                                           0,
                                           &outLength );
     TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
+
 
     shadowStatus = Shadow_GetTopicString( ShadowTopicStringTypeMaxNum + 1,
                                           TEST_THING_NAME,
@@ -457,6 +542,14 @@ void test_Shadow_MatchTopic_Invalid_Parameters( void )
                                       NULL,
                                       &pThingName,
                                       &thingNameLength );
+
+    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
+
+    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
+                                      bufferSize,
+                                      &messageType,
+                                      NULL,
+                                      &thingNameLength );
     TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
 
     shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
@@ -475,6 +568,13 @@ void test_Shadow_MatchTopic_Invalid_Parameters( void )
 
     shadowStatus = Shadow_MatchTopic( TEST_SHADOW_TOPIC_STRING_EMPTY_THINGNAME,
                                       TEST_SHADOW_TOPIC_LENGTH_EMPTY_THINGNAME,
+                                      &messageType,
+                                      &pThingName,
+                                      &thingNameLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_THINGNAME_PARSE_FAILED, shadowStatus );
+
+    shadowStatus = Shadow_MatchTopic( TEST_SHADOW_TOPIC_STRING_INVALID_THINGNAME,
+                                      TEST_SHADOW_TOPIC_LENGTH_INVALID_THINGNAME,
                                       &messageType,
                                       &pThingName,
                                       &thingNameLength );

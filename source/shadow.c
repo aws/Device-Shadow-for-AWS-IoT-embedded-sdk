@@ -298,6 +298,10 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
         }
     }
 
+    if( returnStatus != SHADOW_SUCCESS )
+    {
+        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s", pString ) );
+    }
     return returnStatus;
 }
 
@@ -350,12 +354,9 @@ static const char * getShadowOperationString( ShadowTopicStringType_t topicType 
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-            shadowOperationString = SHADOW_OP_UPDATE_DELTA;
-            break;
-
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString.*/
         default:
-            LogError( ( "Unexpected  topicType: %u", topicType ) );
-            shadowOperationString = NULL;
+            shadowOperationString = SHADOW_OP_UPDATE_DELTA;
             break;
     }
 
@@ -411,11 +412,9 @@ static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType )
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-            shadowOperationLength = SHADOW_OP_UPDATE_DELTA_LENGTH;
-            break;
-
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString.*/
         default:
-            LogError( ( "Unexpected  topicType: %u", topicType ) );
+            shadowOperationLength = SHADOW_OP_UPDATE_DELTA_LENGTH;
             break;
     }
 
@@ -517,11 +516,6 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         shadowStatus = extractShadowMessageType( &( pTopic[ consumedTopicLength ] ),
                                                  topicLength - consumedTopicLength,
                                                  pMessageType );
-
-        if( shadowStatus != SHADOW_SUCCESS )
-        {
-            LogDebug( ( "Not related to Shadow, failed to match shadow message type in pTopic %s", pTopic ) );
-        }
     }
 
     return shadowStatus;
@@ -538,6 +532,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
     uint16_t offset = 0U, generatedTopicStringLength = 0U, operationStringLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     const char * pOperationString = NULL;
+    const char shadowPrefix[ SHADOW_PREFIX_LENGTH ] = SHADOW_PREFIX;
 
     if( ( pTopicBuffer == NULL ) ||
         ( pThingName == NULL ) ||
@@ -568,7 +563,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         {
             /* Copy the Shadow topic prefix into the topic buffer. */
             ( void ) memcpy( ( void * ) pTopicBuffer,
-                             ( const void * ) SHADOW_PREFIX,
+                             ( const void * ) shadowPrefix,
                              ( size_t ) SHADOW_PREFIX_LENGTH );
             offset = ( uint16_t ) ( offset + SHADOW_PREFIX_LENGTH );
 
