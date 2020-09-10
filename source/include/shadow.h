@@ -223,11 +223,11 @@ typedef enum ShadowStatus
  * The format of shadow topic strings is defined at https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html
  *
  * A shadow topic string takes one of the two forms:
- *     $aws/things/"thingName"/shadow/"operation"
- *     $aws/things/"thingName"/shadow/"operation"/"suffix"
+ *     $aws/things/\<thingName\>/shadow/\<operation\>
+ *     $aws/things/\<thingName\>/shadow/\<operation\>/\<suffix\>
  *
- * The "thingName", "operation" and "suffix" segments correspond to the three input
- * parameters of this macro. The "suffix" part can be null.
+ * The \<thingName\>, \<operation\> and \<suffix\> segments correspond to the three input
+ * parameters of this macro. The \<suffix\> part can be null.
  *
  * When thingName is known to be "myThing" at compile time, invoke the macro like this:
  * (In this case, the length is a constant at compile time.)
@@ -241,15 +241,15 @@ typedef enum ShadowStatus
  *                       strlen( ( const char * ) myThingName ) )
  *
  * @param[operationLength] Can be one of:
- *                          - SHADOW_OP_UPDATE_LENGTH
- *                          - SHADOW_OP_DELETE_LENGTH
- *                          - SHADOW_OP_GET_LENGTH
+ *                          - #SHADOW_OP_UPDATE_LENGTH
+ *                          - #SHADOW_OP_DELETE_LENGTH
+ *                          - #SHADOW_OP_GET_LENGTH
  * @param[suffixLength]    Can be one of:
- *                          - SHADOW_SUFFIX_NULL_LENGTH
- *                          - SHADOW_SUFFIX_ACCEPTED_LENGTH
- *                          - SHADOW_SUFFIX_REJECTED_LENGTH
- *                          - SHADOW_SUFFIX_DELTA_LENGTH
- *                          - SHADOW_SUFFIX_DOCUMENTS_LENGTH
+ *                          - #SHADOW_SUFFIX_NULL_LENGTH
+ *                          - #SHADOW_SUFFIX_ACCEPTED_LENGTH
+ *                          - #SHADOW_SUFFIX_REJECTED_LENGTH
+ *                          - #SHADOW_SUFFIX_DELTA_LENGTH
+ *                          - #SHADOW_SUFFIX_DOCUMENTS_LENGTH
  * @param[thingNameLength] Length of the thingName excluding the ending NULL.
  *
  * @return Length of the shadow topic in bytes.
@@ -342,15 +342,15 @@ typedef enum ShadowStatus
  * Shadow_GetTopicString() function instead.
  *
  * @param[operation] Can be one of:
- *                       - SHADOW_OP_UPDATE
- *                       - SHADOW_OP_DELETE
- *                       - SHADOW_OP_GET
+ *                       - #SHADOW_OP_UPDATE
+ *                       - #SHADOW_OP_DELETE
+ *                       - #SHADOW_OP_GET
  * @param[suffix]    Can be one of:
- *                       - SHADOW_SUFFIX_NULL
- *                       - SHADOW_SUFFIX_ACCEPTED
- *                       - SHADOW_SUFFIX_REJECTED
- *                       - SHADOW_SUFFIX_DELTA
- *                       - SHADOW_SUFFIX_DOCUMENTS
+ *                       - #SHADOW_SUFFIX_NULL
+ *                       - #SHADOW_SUFFIX_ACCEPTED
+ *                       - #SHADOW_SUFFIX_REJECTED
+ *                       - #SHADOW_SUFFIX_DELTA
+ *                       - #SHADOW_SUFFIX_DOCUMENTS
  *
  * @param[thingName] Thing Name.
  *
@@ -501,7 +501,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *        Device Shadow Topics.
  *
  * @note When this function returns, the pointer pThingName points at the first character
- *       of the "thingName" segment inside of the topic string.
+ *       of the \<thingName\> segment inside of the topic string.
  *       Caller is responsible for keeping the memory holding the topic string around while
  *       accessing the Thing Name through pThingName.
  *
