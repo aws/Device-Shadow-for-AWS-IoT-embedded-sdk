@@ -427,8 +427,8 @@ typedef enum ShadowStatus
 
 /**
  * @brief Assemble shadow topic string when Thing Name is only known at run time.
- *        If the Thing Name is known at compile time, use \link #SHADOW_TOPIC_STRING_UPDATE
- *        SHADOW_TOPIC_STRING_* \endlink macros instead.
+ *        If the Thing Name is known at compile time, use @link #SHADOW_TOPIC_STRING_UPDATE
+ *        SHADOW_TOPIC_STRING_* @endlink macros instead.
  *
  * @param[in]  topicType Indicates what topic will be written into the buffer pointed to by pTopicBuffer.
  *             can be one of:
