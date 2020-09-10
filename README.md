@@ -2,8 +2,6 @@
 
 This repository contains a Device Shadow client library for embedded platforms to interact with the [AWS IoT Device Shadow service](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html).
 
-## Building Unit Tests
-
 ### Device Shadow Config File
 The Device Shadow library exposes build configuration macros that are required for building the library.
 A list of all the configurations and their default values are defined in [shadow_config_defaults.h](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/source/include/shadow_config_defaults.h). 
@@ -12,15 +10,23 @@ To provide custom values for the configuration macros, a custom config file name
 By default, a `shadow_config.h` custom config is required to build the library. To disable this requirement
 and build the library with default configuration values, provide `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` as a compile time preprocessor macro.
 
-**Thus, the Device Shadow library can be built by** defining the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` preprocessor macro for the library build.
+## Building the Library
+
+The [shadowFilePaths.cmake](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/shadowFilePaths.cmake) file contains the information of all source files and the header include path required to build the Shadow library.
+
+As mentioned in the previous section, either a custom config file (i.e. `core_mqtt_config.h`) OR the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` macro needs to be provided to build the Shadow library.
+
+For a CMake example of building the Shadow library with the `mqttFilePaths.cmake` file, refer to the `coverity_analysis` library target in [test/CMakeLists.txt](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/blob/master/test/CMakeLists.txt) file.
+
+## Building Unit Tests
 
 ### Platform Prerequisites
 
 - For building the library, **CMake 3.13.0** or later and a **C90 compiler**.
-- For running unit tests, Ruby 2.0.0 or later is additionally required for the CMock test framework (that we use).
-- For running the coverage target, gcov is additionally required.
+- For running unit tests, **Ruby 2.0.0** or later is additionally required for the CMock test framework (that we use).
+- For running the coverage target, **gcov** is additionally required.
 
-### Steps to build Unit Tests
+### Steps to build unit tests
 
 1. Go to the root directory of this repository.
 
