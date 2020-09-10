@@ -389,6 +389,7 @@ void test_Shadow_GetTopicString_Happy_Path( void )
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_SHADOW_TOPIC_STRING_GET_ACCEPTED,
                                   topicBufferGetAccepted,
                                   bufferSizeGetAccepted );
+
     for( index = 0; index < ShadowTopicStringTypeMaxNum; index++ )
     {
         /* Call Shadow_GetTopicString() with valid parameters with all types of topic string

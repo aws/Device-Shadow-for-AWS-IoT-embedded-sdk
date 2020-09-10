@@ -302,6 +302,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
     {
         LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s", pString ) );
     }
+
     return returnStatus;
 }
 
