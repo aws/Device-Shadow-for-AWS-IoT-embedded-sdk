@@ -38,10 +38,10 @@ void harness()
     __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
     pTopicName = mallocCanFail( topicNameLength );
 
-    pMessageType = mallocCanFail( sizeof( * pMessageType ) );
+    pMessageType = mallocCanFail( sizeof( *pMessageType ) );
 
-    pThingName = mallocCanFail( sizeof( * pThingName ) );
-    pThingNameLength = mallocCanFail( sizeof( * pThingNameLength ) );
+    pThingName = mallocCanFail( sizeof( *pThingName ) );
+    pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
 
     Shadow_MatchTopic( pTopicName,
                        topicNameLength,
