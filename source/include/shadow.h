@@ -45,6 +45,7 @@
 /*--------------------------- Shadow types ---------------------------*/
 
 /**
+ * @ingroup shadow_enum_types
  * @brief Each of these values describes the type of a shadow message.
  *        https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html
  */
@@ -62,6 +63,7 @@ typedef enum ShadowMessageType
 } ShadowMessageType_t;
 
 /**
+ * @ingroup shadow_enum_types
  * @brief Each of these values describes the type of a shadow topic string.
  *
  * These are used for topicType parameter of Shadow_GetTopicString() to tell it
@@ -84,6 +86,7 @@ typedef enum ShadowTopicStringType
 } ShadowTopicStringType_t;
 
 /**
+ * @ingroup shadow_enum_types
  * @brief Return codes from Shadow functions.
  */
 typedef enum ShadowStatus
@@ -99,112 +102,132 @@ typedef enum ShadowStatus
 /*------------------------ Shadow library functions -------------------------*/
 
 /**
+ * @ingroup shadow_constants
  * @brief The common prefix of all Shadow MQTT topics
  *        from here https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html.
  */
 #define SHADOW_PREFIX                     "$aws/things/"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_PREFIX.
  */
 #define SHADOW_PREFIX_LENGTH              ( ( uint16_t ) ( sizeof( SHADOW_PREFIX ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The string representing a Shadow "DELETE" operation in a Shadow MQTT topic.
  */
 #define SHADOW_OP_DELETE                  "/shadow/delete"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_OP_DELETE.
  */
 #define SHADOW_OP_DELETE_LENGTH           ( ( uint16_t ) ( sizeof( SHADOW_OP_DELETE ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The string representing a Shadow "GET" operation in a Shadow MQTT topic.
  */
 #define SHADOW_OP_GET                     "/shadow/get"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_OP_GET.
  */
 #define SHADOW_OP_GET_LENGTH              ( ( uint16_t ) ( sizeof( SHADOW_OP_GET ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The string representing a Shadow "UPDATE" operation in a Shadow MQTT topic.
  */
 #define SHADOW_OP_UPDATE                  "/shadow/update"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_OP_UPDATE.
  */
 #define SHADOW_OP_UPDATE_LENGTH           ( ( uint16_t ) ( sizeof( SHADOW_OP_UPDATE ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The suffix for a Shadow operation "accepted" topic.
  */
 #define SHADOW_SUFFIX_ACCEPTED            "/accepted"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_SUFFIX_ACCEPTED.
  */
 #define SHADOW_SUFFIX_ACCEPTED_LENGTH     ( ( uint16_t ) ( sizeof( SHADOW_SUFFIX_ACCEPTED ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The suffix for a Shadow operation "rejected" topic.
  */
 #define SHADOW_SUFFIX_REJECTED            "/rejected"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_SUFFIX_REJECTED.
  */
 #define SHADOW_SUFFIX_REJECTED_LENGTH     ( ( uint16_t ) ( sizeof( SHADOW_SUFFIX_REJECTED ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The suffix for a Shadow "delta" topic.
  */
 #define SHADOW_SUFFIX_DELTA               "/delta"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_SUFFIX_DELTA.
  */
 #define SHADOW_SUFFIX_DELTA_LENGTH        ( ( uint16_t ) ( sizeof( SHADOW_SUFFIX_DELTA ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The suffix for a Shadow "documents" topic.
  */
 #define SHADOW_SUFFIX_DOCUMENTS           "/documents"
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of #SHADOW_SUFFIX_DOCUMENTS.
  */
 #define SHADOW_SUFFIX_DOCUMENTS_LENGTH    ( ( uint16_t ) ( sizeof( SHADOW_SUFFIX_DOCUMENTS ) - 1U ) )
 
 /**
+ * @ingroup shadow_constants
  * @brief The suffix for a "null" suffix.
  */
 #define SHADOW_SUFFIX_NULL
 
 /**
+ * @ingroup shadow_constants
  * @brief The length of null suffix.
  */
 #define SHADOW_SUFFIX_NULL_LENGTH      ( 0U )
 
 /**
+ * @ingroup shadow_constants
  * @brief The maximum length of Thing Name.
  */
 #define SHADOW_THINGNAME_LENGTH_MAX    ( 128U )
 
 /**
+ * @ingroup shadow_constants
  * @brief Compute shadow topic length.
  *
  * The format of shadow topic strings is defined at https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html
  *
  * A shadow topic string takes one of the two forms:
- *     $aws/things/<thingName>/shadow/<operation>
- *     $aws/things/<thingName>/shadow/<operation>/<suffix>
+ *     $aws/things/"thingName"/shadow/"operation"
+ *     $aws/things/"thingName"/shadow/"operation"/"suffix"
  *
- * The <thingName>, <operation> and <suffix> segments correspond to the three input
- * parameters of this macro. The <suffix> part can be null.
+ * The "thingName", "operation" and "suffix" segments correspond to the three input
+ * parameters of this macro. The "suffix" part can be null.
  *
  * When thingName is known to be "myThing" at compile time, invoke the macro like this:
  * (In this case, the length is a constant at compile time.)
@@ -217,11 +240,11 @@ typedef enum ShadowStatus
  *     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH,
  *                       strlen( ( const char * ) myThingName ) )
  *
- * @param[operationLen] Can be one of:
+ * @param[operationLength] Can be one of:
  *                          - SHADOW_OP_UPDATE_LENGTH
  *                          - SHADOW_OP_DELETE_LENGTH
  *                          - SHADOW_OP_GET_LENGTH
- * @param[suffixLen]    Can be one of:
+ * @param[suffixLength]    Can be one of:
  *                          - SHADOW_SUFFIX_NULL_LENGTH
  *                          - SHADOW_SUFFIX_ACCEPTED_LENGTH
  *                          - SHADOW_SUFFIX_REJECTED_LENGTH
@@ -301,12 +324,14 @@ typedef enum ShadowStatus
     SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength )
 
 /**
+ * @ingroup shadow_constants
  * @brief Compute the length of the longest shadow topic.
  */
 #define SHADOW_TOPIC_LENGTH_MAX( thingNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength )
 
 /**
+ * @ingroup shadow_constants
  * @brief Assemble constant shadow topic strings when Thing Name is known at compile time.
  *
  * When thingName is known to be "myThing" at compile time, invoke the macro like this:
@@ -401,7 +426,9 @@ typedef enum ShadowStatus
     SHADOW_TOPIC_STRING( thingName, SHADOW_OP_DELETE, SHADOW_SUFFIX_REJECTED )
 
 /**
- * @brief Assemble shadow topic strings when Thing Name is only known at run time.
+ * @brief Assemble shadow topic string when Thing Name is only known at run time.
+ *        If the Thing Name is known at compile time, use \link #SHADOW_TOPIC_STRING_UPDATE 
+ *        SHADOW_TOPIC_STRING_* \endlink macros instead.
  *
  * @param[in]  topicType Indicates what topic will be written into the buffer pointed to by pTopicBuffer.
  *             can be one of:
@@ -428,38 +455,101 @@ typedef enum ShadowStatus
  * @return     One of the following:
  *             - SHADOW_SUCCESS if successful.
  *             - An error code if failed to assemble.
+ * 
+ * <b>Example</b>
+ * @code{c}
+ * 
+ * // Variables used in this example.
+ * 
+ * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
+ *
+ * ShadowStatus_t shadowStatus = SHADOW_STATUS_SUCCESS;
+ * char topicBuffer[ SHADOW_TOPIC_MAX_LENGTH ] = { 0 };
+ * uint16_t bufferSize = SHADOW_TOPIC_MAX_LENGTH;
+ * uint16_t outLength = 0;
+ * const char * pThingName = "TestThingName";
+ * uint16_t thingNameLength  = ( sizeof( thingName ) - 1U );
+ *
+ * shadowStatus = Shadow_GetTopicString( SHADOW_TOPIC_STRING_TYPE_UPDATE_DELTA,
+ *                                       pThingName,
+ *                                       thingNameLength,
+ *                                       & ( topicBuffer[ 0 ] ),
+ *                                       bufferSize,
+ *                                       & outLength );
+ * 
+ * if( shadowStatus == SHADOW_STATUS_SUCCESS )
+ * {
+ *      // The assembled topic string is put in pTopicBuffer with the length outLength.
+ * }
+ * 
+ * @endcode
  */
+/* @[declare_shadow_gettopicstring] */
 ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
                                       const char * pThingName,
                                       uint8_t thingNameLength,
                                       char * pTopicBuffer,
                                       uint16_t bufferSize,
                                       uint16_t * pOutLength );
+/* @[declare_shadow_gettopicstring] */
 
 /**
  * @brief Given the topic string of an incoming message, determine whether it is
  *        related to a device shadow; if it is, return information about the type of
  *        device shadow message, and a pointer to the Thing Name inside of the topic string.
+ *        See #ShadowMessageType_t for the list of message types.  Those types correspond to 
+ *        Device Shadow Topics.
  *
  * @note When this function returns, the pointer pThingName points at the first character
- *       of the <thingName> segment inside of the topic string.
- *       Caller is responsible for keeping the memory holding the topic strings around.
+ *       of the "thingName" segment inside of the topic string.
+ *       Caller is responsible for keeping the memory holding the topic string around while 
+ *       accessing the Thing Name through pThingName.
  *
  * @param[in]  pTopic Pointer to the MQTT topic string. Does not have to be null-terminated.
  * @param[in]  topicLength Length of the MQTT topic string.
- * @param[out] pMessageType Pointer to call-supplied memory for returning the type of the shadow message.
- * @param[out] pThingName Points to the 1st character of Thing Name inside of the topic string.
- * @param[out] pThingNameLength Pointer to caller-supplied memory for returning the length of the Thing Name.
+ * @param[out] pMessageType Pointer to caller-supplied memory for returning the type of the shadow message.
+ * @param[out] pThingName Points to the 1st character of Thing Name inside of the topic string, and can be
+ *             null if caller does not need to know the Thing Name contained in the topic string.
+ * @param[out] pThingNameLength Pointer to caller-supplied memory for returning the length of the Thing Name,
+ *             and can be null if caller does not need to know the Thing Name contained in the topic string.
  * @return     One of the following:
- *             - SHADOW_SUCCESS if the message is related to a device shadow;
- *             - An error code if the message is not related to a device shadow,
+ *             - #SHADOW_SUCCESS if the message is related to a device shadow;
+ *             - An error code defined in #ShadowStatus_t if the message is not related to a device shadow,
  *               if any input parameter is invalid, or if the function fails to
  *               parse the topic string.
+ * 
+ * <b>Example</b>
+ * @code{c}
+ * 
+ * // Variables used in this example.
+ * 
+ * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
+ *
+ * ShadowStatus_te shadowStatus = SHADOW_STATUS_SUCCESS;
+ * char * pTopicName; //usually supplied by MQTT stack
+ * uint16_t topicNameLength; //usually supplied by MQTT stack
+ * ShadowMessageType_t messageType;
+ *
+ * shadowStatus = Shadow_MatchTopic( pTopicName,
+ *                                   topicNameLength,
+ *                                   & messageType,
+ *                                   NULL,
+ *                                   NULL );
+ * 
+ * if( shadowStatus == SHADOW_STATUS_SUCCESS )
+ * {
+ *      // It is a device shadow message. And the type of the message has been returned in messageType.
+ *      // Now we can act on the message.
+ * }
+ * 
+ * @endcode
  */
+/* @[declare_shadow_matchtopic] */
 ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   uint16_t topicLength,
                                   ShadowMessageType_t * pMessageType,
                                   const char ** pThingName,
                                   uint16_t * pThingNameLength );
+/* @[declare_shadow_matchtopic] */
 
 #endif /* ifndef _SHADOW_H_ */

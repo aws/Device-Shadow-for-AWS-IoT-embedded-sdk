@@ -1,0 +1,76 @@
+/**
+@mainpage Overview
+@brief Shadow library.
+
+> A device's shadow is a JSON document that is used to store and retrieve current state information for a device. The Device Shadow service maintains a shadow for each device you connect to AWS IoT. You can use the shadow to get and set the state of a device over MQTT or HTTP, regardless of whether the device is connected to the Internet. Each device's shadow is uniquely identified by the name of the corresponding thing. 
+<span style="float:right;margin-right:4em"> &mdash; <i>Description of Device Shadows from AWS IoT documentation [https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html)</i></span><br>
+
+Device Shadows are the always-available device state in the AWS cloud. They are stored as JSON documents, and available via AWS even if the associated device goes offline. Common use cases for Device Shadows include backing up device state, or sending commands to devices.
+
+Embedded devices often use MQTT to interact with the Device Shadow.  This library provides a convenience API for handling MQTT topics reserved for Device Shadows.  This library is independent of the MQTT library.  Applications can use the macros and functions of this library to assemble and parse Device Shadow MQTT topics, then use any MQTT library to publish/subscribe to those topics.  Features of this library include:
+- It’s stateless.  It does not use any global/static memory. 
+- It depends on standard C library (string.h and stdint.h) only. 
+
+@section shadow_memory_requirements Memory Requirements
+@brief Memory requirements of the Shadow library.
+
+The configurations for memory estimation are defined <a href="https://github.com/FreeRTOS/FreeRTOS/tree/lts-development/tools/memory_estimator" target="_blank" rel="noopener noreferrer">here</a>.
+
+<table>
+    <tr>
+        <td colspan="3"><b>Code Size of Shadow Library(example generated with GCC for ARM Cortex-M)</b></td>
+    </tr>
+    <tr>
+        <td><b>File</b></td>
+        <td><b>With -O1 Optimisation</b></td>
+        <td><b>With -Os Optimisation</b></td>
+    </tr>
+    <tr>
+        <td>shadow.c</td>
+        <td>0.84K</td>
+        <td>0.68K</td>
+    </tr>
+    <tr>
+        <td><b>Total estimates</b></td>
+        <td>0.84K</td>
+        <td>0.68K</td>
+    </tr>
+</table>
+ */
+
+/**
+@page shadow_design Design
+Shadow Library Design
+
+The Device Shadow library is designed as a set of convenience macros and functions that are used to assemble and parse MQTT topic strings reserved for the Device Shadow. It does not wrap any function of the MQTT stack underneath. An application can use any MQTT library of its choice to interact with the Device Shadow service.
+
+The diagram below demonstrate how an application uses the Device Shadow library and a MQTT library to interact with the Device Shadow service.
+
+\image html shadow_design_operation.png "Shadow Demo operation diagram" width=1000px
+*/
+
+/**
+@page shadow_functions Functions
+@brief Primary functions of the Shadow library:<br><br>
+@subpage shadow_matchtopic_function <br>
+@subpage shadow_gettopicstring_function <br>
+
+@page shadow_matchtopic_function Shadow_MatchTopic
+@snippet shadow.h declare_shadow_matchtopic
+@copydoc Shadow_MatchTopic
+
+@page shadow_gettopicstring_function Shadow_GetTopicString
+@snippet shadow.h declare_shadow_gettopicstring
+@copydoc Shadow_GetTopicString
+
+*/
+
+/**
+@defgroup shadow_enum_types Enumerated Types
+@brief Enumerated types of the Shadow library
+*/
+
+/**
+@defgroup shadow_constants Constants
+@brief Constants defined in the Shadow library
+*/

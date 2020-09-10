@@ -1,0 +1,61 @@
+@startuml
+skinparam classFontSize 8
+skinparam classFontName Helvetica
+autonumber
+
+box "Shadow Library" #LightBlue
+    participant "Shadow" as shadow
+end box
+
+box "Application" #LightGreen
+    participant "Application" as application
+    participant "callback" as callback
+end box
+
+box "MQTT Library" #Orange
+    participant "MQTT" as mqtt
+end box
+
+activate application
+application -> mqtt : Establish\nMQTT Connection\nwith\ncallback function
+
+
+activate mqtt 
+mqtt -> mqtt : Initialization with the callback
+mqtt -> : Connect to the broker
+mqtt -> application : Return from MQTT library
+deactivate mqtt
+
+application -> shadow : Request shadow topics
+
+activate shadow
+shadow -> application : Return assembled\nshadow topics
+deactivate shadow
+
+application -> mqtt : Subscribe the shadow topics
+
+activate mqtt
+mqtt -> : Subscribe the\nshadow topic to the broker
+mqtt -> application : Return Success
+deactivate mqtt
+application -> mqtt : Publish messages on\nthe shadow topic
+
+
+activate mqtt
+mqtt -> : Publish message on the shadow topic to the broker
+mqtt <- : Incoming message\ntrigger callback to handle
+mqtt -> callback : Callback function handle\nincoming message
+activate callback
+callback -> shadow : parse the topic
+activate shadow
+shadow -> callback : Return the parsed result
+deactivate shadow
+callback -> callback : Handle the corresponding\nthe shadow message
+callback -> mqtt : Return from the callback
+deactivate callback
+mqtt -> application : Return from MQTT library
+deactivate mqtt
+
+deactivate application
+
+@enduml
