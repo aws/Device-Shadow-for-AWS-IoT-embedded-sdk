@@ -355,7 +355,7 @@ static const char * getShadowOperationString( ShadowTopicStringType_t topicType 
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString.*/
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString. */
         default:
             shadowOperationString = SHADOW_OP_UPDATE_DELTA;
             break;
@@ -413,7 +413,7 @@ static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType )
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString.*/
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString. */
         default:
             shadowOperationLength = SHADOW_OP_UPDATE_DELTA_LENGTH;
             break;
