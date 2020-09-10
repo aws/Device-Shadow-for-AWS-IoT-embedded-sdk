@@ -50,6 +50,30 @@ The diagram below demonstrate how an application uses the Device Shadow library 
 */
 
 /**
+@page shadow_config Configurations
+@brief Configurations of the Shadow Library.
+<!-- @par configpagestyle allows the @section titles to be styled according to style.css -->
+@par configpagestyle
+
+Some configuration settings are C pre-processor constants, and some are function-like macros for logging. They can be set with a `\#define` in the config file (**shadow_config.h**) or by using a compiler option such as -D in gcc.
+
+@section SHADOW_DO_NOT_USE_CUSTOM_CONFIG
+@copydoc SHADOW_DO_NOT_USE_CUSTOM_CONFIG
+
+@section LogError
+@copydoc LogError
+
+@section LogWarn
+@copydoc LogWarn
+
+@section LogInfo
+@copydoc LogInfo
+
+@section LogDebug
+@copydoc LogDebug
+*/
+
+/**
 @page shadow_functions Functions
 @brief Primary functions of the Shadow library:<br><br>
 @subpage shadow_matchtopic_function <br>
