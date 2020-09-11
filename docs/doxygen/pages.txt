@@ -61,16 +61,16 @@ Some configuration settings are C pre-processor constants, and some are function
 @section SHADOW_DO_NOT_USE_CUSTOM_CONFIG
 @copydoc SHADOW_DO_NOT_USE_CUSTOM_CONFIG
 
-@section LogError
+@section shadow_logerror LogError
 @copydoc LogError
 
-@section LogWarn
+@section shadow_logwarn LogWarn
 @copydoc LogWarn
 
-@section LogInfo
+@section shadow_loginfo LogInfo
 @copydoc LogInfo
 
-@section LogDebug
+@section shadow_logdebug LogDebug
 @copydoc LogDebug
 */
 
