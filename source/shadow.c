@@ -434,20 +434,17 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
 {
     uint16_t consumedTopicLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
+    uint16_t thingNameLength = 0;
 
     if( ( pTopic == NULL ) ||
         ( topicLength == 0U ) ||
-        ( pMessageType == NULL ) ||
-        ( pThingName == NULL ) ||
-        ( pThingNameLength == NULL ) )
+        ( pMessageType == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p, pThingName: %p, pThingNameLength: %p",
+        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p",
                     pTopic,
                     topicLength,
-                    pMessageType,
-                    pThingName,
-                    pThingNameLength ) );
+                    pMessageType ) );
     }
 
     /* A shadow topic string takes one of the two forms:
@@ -466,22 +463,22 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                           topicLength - consumedTopicLength,
                                           SHADOW_PREFIX,
                                           SHADOW_PREFIX_LENGTH );
+    }
 
-        if( shadowStatus == SHADOW_SUCCESS )
-        {
-            consumedTopicLength += SHADOW_PREFIX_LENGTH;
+    if( shadowStatus == SHADOW_SUCCESS )
+    {
+        consumedTopicLength += SHADOW_PREFIX_LENGTH;
 
-            /* If no more topic string is left to parse, fail. */
-            if( consumedTopicLength >= topicLength )
-            {
-                shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-                LogDebug( ( "Not related to Shadow, thing name is not in pTopic %s, failed to parse thing name", pTopic ) );
-            }
-        }
-        else
+        /* If no more topic string is left to parse, fail. */
+        if( consumedTopicLength >= topicLength )
         {
-            LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
+            shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
+            LogDebug( ( "Not related to Shadow, thing name is not in pTopic %s, failed to parse thing name", pTopic ) );
         }
+    }
+    else
+    {
+        LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
     }
 
     if( shadowStatus == SHADOW_SUCCESS )
@@ -489,14 +486,11 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         /* Extract thing name. */
         shadowStatus = validateThingName( &( pTopic[ consumedTopicLength ] ),
                                           topicLength - consumedTopicLength,
-                                          pThingNameLength );
+                                          &thingNameLength );
 
         if( shadowStatus == SHADOW_SUCCESS )
         {
-            /* Update the out parameter if we successfully extracted the thing name. */
-            *pThingName = &( pTopic[ consumedTopicLength ] );
-
-            consumedTopicLength += *pThingNameLength;
+            consumedTopicLength += thingNameLength;
 
             /* If no more topic string is left to parse, fail. */
             if( consumedTopicLength >= topicLength )
@@ -517,6 +511,21 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         shadowStatus = extractShadowMessageType( &( pTopic[ consumedTopicLength ] ),
                                                  topicLength - consumedTopicLength,
                                                  pMessageType );
+    }
+
+    if( shadowStatus == SHADOW_SUCCESS )
+    {
+        /* Update the out parameter if we successfully extracted the thing name. */
+        if( pThingName != NULL )
+        {
+            /* If match success, assign Thing Name which comes after shadow prefix. */
+            *pThingName = &( pTopic[ SHADOW_PREFIX_LENGTH ] );
+        }
+
+        if( pThingNameLength != NULL )
+        {
+            *pThingNameLength = thingNameLength;
+        }
     }
 
     return shadowStatus;

@@ -505,6 +505,24 @@ void test_Shadow_MatchTopic_Happy_Path( void )
     TEST_ASSERT_EQUAL_INT( TEST_THING_NAME_LENGTH, thingNameLength );
     TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_THING_NAME, pThingName, TEST_THING_NAME_LENGTH );
+
+    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
+                                      bufferSize,
+                                      &messageType,
+                                      NULL,
+                                      &thingNameLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
+    TEST_ASSERT_EQUAL_INT( TEST_THING_NAME_LENGTH, thingNameLength );
+    TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
+
+    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
+                                      bufferSize,
+                                      &messageType,
+                                      &pThingName,
+                                      NULL );
+    TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
+    TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
+    TEST_ASSERT_EQUAL_STRING_LEN( TEST_THING_NAME, pThingName, TEST_THING_NAME_LENGTH );
 }
 
 /*-----------------------------------------------------------*/
@@ -544,20 +562,6 @@ void test_Shadow_MatchTopic_Invalid_Parameters( void )
                                       &pThingName,
                                       &thingNameLength );
 
-    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
-
-    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
-                                      bufferSize,
-                                      &messageType,
-                                      NULL,
-                                      &thingNameLength );
-    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
-
-    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
-                                      bufferSize,
-                                      &messageType,
-                                      &pThingName,
-                                      NULL );
     TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
 
     shadowStatus = Shadow_MatchTopic( TEST_SHADOW_TOPIC_STRING_INVALID_PREFIX,
