@@ -4,12 +4,12 @@
 @brief Shadow library
 
 > A device's shadow is a JSON document that is used to store and retrieve current state information for a device. The Device Shadow service maintains a shadow for each device you connect to AWS IoT. You can use the shadow to get and set the state of a device over MQTT or HTTP, regardless of whether the device is connected to the Internet. Each device's shadow is uniquely identified by the name of the corresponding thing.
-<span style="float:right;margin-right:4em"> &mdash; <i>Description of Device Shadows from AWS IoT documentation [https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html)</i></span><br>
+<span style="float:right;margin-right:4em"> &mdash; <i>Description of Device Shadow from AWS IoT documentation [https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html)</i></span><br>
 
-Device Shadows are the always-available device state in the AWS cloud. They are stored as JSON documents, and available via AWS even if the associated device goes offline. Common use cases for Device Shadows include backing up device state, or sending commands to devices.
+Device Shadow is the always-available device state in the AWS cloud. A device's shadow is stored as a JSON document, and available via AWS even if the associated device goes offline. Common use cases for Device Shadow include backing up device state, or sending commands to devices.
 
-Embedded devices often use MQTT to interact with the Device Shadow.  This library provides a convenience API for handling MQTT topics reserved for Device Shadows.  This library is independent of the MQTT library.  Applications can use the macros and functions of this library to assemble and parse Device Shadow MQTT topics, then use any MQTT library to publish/subscribe to those topics.  Features of this library include:
-- It’s stateless.  It does not use any global/static memory.
+Embedded devices often use MQTT to interact with Device Shadow. This library provides a convenience API for handling MQTT topics reserved for Device Shadow.  This library is independent of the MQTT library.  Applications can use the macros and functions of this library to assemble and parse the Device Shadow MQTT topics, then use any MQTT library to publish/subscribe to those topics.  Features of this library include:
+- It is stateless.  It does not use any global/static memory.
 - It depends on standard C library (string.h and stdint.h) only.
 
 @section shadow_memory_requirements Memory Requirements
