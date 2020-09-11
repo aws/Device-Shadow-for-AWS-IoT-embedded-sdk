@@ -523,6 +523,14 @@ void test_Shadow_MatchTopic_Happy_Path( void )
     TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
     TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_THING_NAME, pThingName, TEST_THING_NAME_LENGTH );
+
+    shadowStatus = Shadow_MatchTopic( &( topicBuffer[ 0 ] ),
+                                      bufferSize,
+                                      &messageType,
+                                      NULL,
+                                      NULL );
+    TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
+    TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
 }
 
 /*-----------------------------------------------------------*/
