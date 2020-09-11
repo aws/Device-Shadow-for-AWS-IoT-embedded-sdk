@@ -15,8 +15,6 @@ Deviations from the MISRA standard are listed below:
 | Rule 2.5 | Advisory | Allow unused macros. Library headers may define macros intended for the application's use, but are not used by a specific file. |
 | Rule 3.1 | Required | Allow nested comments. C++ style `//` comments are used in example code within Doxygen documentation blocks. |
 | Rule 11.5 | Advisory | Allow casts from `void *`. Fields may be passed as `void *`, requiring a cast to the correct data type before use. |
-| Rule 21.1 | Required | Allow use of all macro names. No such violations exist in this library, but other libraries may define macros introduced in C99 for use with C90 compilers. |
-| Rule 21.2 | Required | Allow use of all macro and identifier names. No such violations exist in this library, but other libraries may define macros introduced in C99 for use with C90 compilers. |
 
 ### Flagged by Coverity
 | Deviation | Category | Justification |
