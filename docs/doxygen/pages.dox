@@ -28,13 +28,13 @@ The configurations for memory estimation are defined <a href="https://github.com
     </tr>
     <tr>
         <td>shadow.c</td>
-        <td>0.84K</td>
-        <td>0.68K</td>
+        <td>1.78K</td>
+        <td>0.95K</td>
     </tr>
     <tr>
         <td><b>Total estimates</b></td>
-        <td>0.84K</td>
-        <td>0.68K</td>
+        <td>1.78K</td>
+        <td>0.95K</td>
     </tr>
 </table>
  */
