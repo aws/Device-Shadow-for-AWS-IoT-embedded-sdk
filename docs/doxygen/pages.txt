@@ -45,7 +45,7 @@ Shadow Library Design
 
 The Device Shadow library is designed as a set of convenience macros and functions that are used to assemble and parse MQTT topic strings reserved for the Device Shadow. It does not wrap any function of the MQTT stack underneath. An application can use any MQTT library of its choice to interact with the Device Shadow service.
 
-The diagram below demonstrate how an application uses the Device Shadow library and a MQTT library to interact with the Device Shadow service.
+The diagram below demonstrates how an application uses the Device Shadow library, a MQTT library, and a JSON library to interact with the Device Shadow service.
 
 \image html shadow_design_operation.png "Shadow Demo operation diagram" width=1000px
 */
