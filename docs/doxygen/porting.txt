@@ -2,7 +2,7 @@
 @page shadow_porting Porting Guide
 @brief Guide for porting Shadow to a new platform.
 
-@section porting_config Configuration Macros
+@section shadow_porting_config Configuration Macros
 @brief Settings that can be set as macros in the config header `shadow_config.h`, or passed in as compiler options.
 
 The following optional logging macros are used throughout the library:
