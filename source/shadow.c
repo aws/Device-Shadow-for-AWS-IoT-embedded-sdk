@@ -518,7 +518,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         /* Update the out parameters if we successfully matched the topic. */
         if( pThingName != NULL )
         {
-            /* If match success, assign Thing Name which comes after shadow prefix. */
+            /* Thing name comes after shadow prefix. */
             *pThingName = &( pTopic[ SHADOW_PREFIX_LENGTH ] );
         }
 
