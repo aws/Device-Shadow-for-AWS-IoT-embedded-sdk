@@ -5,7 +5,7 @@ autonumber
 
 box "Application" #LightGreen
     participant "Application" as application
-    participant "callback" as callback
+    participant "Callback" as callback
 end box
 
 box "Libraries" #LightBlue
