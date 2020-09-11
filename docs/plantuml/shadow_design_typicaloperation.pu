@@ -3,6 +3,10 @@ skinparam classFontSize 8
 skinparam classFontName Helvetica
 autonumber
 
+box "JSON Library" #LightSalmon
+    participant "JSON" as json
+end box
+
 box "Shadow Library" #LightBlue
     participant "Shadow" as shadow
 end box
@@ -26,16 +30,16 @@ mqtt -> : Connect to the broker
 mqtt -> application : Return from MQTT library
 deactivate mqtt
 
-application -> shadow : Request shadow topics
+application -> shadow : Get shadow topics
 
 activate shadow
 shadow -> application : Return assembled\nshadow topics
 deactivate shadow
 
-application -> mqtt : Subscribe the shadow topics
+application -> mqtt : Subscribe to the shadow topics
 
 activate mqtt
-mqtt -> : Subscribe the\nshadow topic to the broker
+mqtt -> : Subscribe to the\nshadow topic to the broker
 mqtt -> application : Return Success
 deactivate mqtt
 application -> mqtt : Publish messages on\nthe shadow topic
@@ -43,14 +47,17 @@ application -> mqtt : Publish messages on\nthe shadow topic
 
 activate mqtt
 mqtt -> : Publish message on the shadow topic to the broker
-mqtt <- : Incoming message\ntrigger callback to handle
-mqtt -> callback : Callback function handle\nincoming message
+mqtt <- : Incoming message
+mqtt -> callback : Trigger callback function
 activate callback
 callback -> shadow : parse the topic
 activate shadow
 shadow -> callback : Return the parsed result
 deactivate shadow
-callback -> callback : Handle the corresponding\nthe shadow message
+callback -> json : Get key/value from shadow topic payload
+activate json
+json -> callback : Return parsed key/value
+deactivate json
 callback -> mqtt : Return from the callback
 deactivate callback
 mqtt -> application : Return from MQTT library
