@@ -24,8 +24,8 @@
  * @brief User-facing Shadow functions, and parameter structs.
  */
 
-#ifndef _SHADOW_H_
-#define _SHADOW_H_
+#ifndef SHADOW_H_
+#define SHADOW_H_
 
 /* Standard includes. */
 #include <stdint.h>
@@ -552,4 +552,4 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   uint16_t * pThingNameLength );
 /* @[declare_shadow_matchtopic] */
 
-#endif /* ifndef _SHADOW_H_ */
+#endif /* ifndef SHADOW_H_ */
