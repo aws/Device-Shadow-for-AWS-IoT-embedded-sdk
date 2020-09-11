@@ -3,21 +3,18 @@ skinparam classFontSize 8
 skinparam classFontName Helvetica
 autonumber
 
-box "JSON Library" #LightSalmon
-    participant "JSON" as json
-end box
-
-box "Shadow Library" #LightBlue
-    participant "Shadow" as shadow
-end box
-
 box "Application" #LightGreen
     participant "Application" as application
     participant "callback" as callback
 end box
 
-box "MQTT Library" #Orange
+box "Libraries" #LightBlue
+    participant "JSON" as json
+
+    participant "Shadow" as shadow
+
     participant "MQTT" as mqtt
+
 end box
 
 activate application
@@ -50,11 +47,11 @@ mqtt -> : Publish message on the shadow topic to the broker
 mqtt <- : Incoming message
 mqtt -> callback : Trigger callback function
 activate callback
-callback -> shadow : parse the topic
+callback -> shadow : Parse the topic
 activate shadow
 shadow -> callback : Return the parsed result
 deactivate shadow
-callback -> json : Get key/value from shadow topic payload
+callback -> json : Parse key/value from shadow topic payload
 activate json
 json -> callback : Return parsed key/value
 deactivate json
