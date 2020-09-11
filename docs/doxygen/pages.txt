@@ -1,6 +1,7 @@
 /**
 @mainpage Overview
-@brief Shadow library.
+@anchor shadow
+@brief Shadow library
 
 > A device's shadow is a JSON document that is used to store and retrieve current state information for a device. The Device Shadow service maintains a shadow for each device you connect to AWS IoT. You can use the shadow to get and set the state of a device over MQTT or HTTP, regardless of whether the device is connected to the Internet. Each device's shadow is uniquely identified by the name of the corresponding thing.
 <span style="float:right;margin-right:4em"> &mdash; <i>Description of Device Shadow from AWS IoT documentation [https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html)</i></span><br>
@@ -44,7 +45,7 @@ Shadow Library Design
 
 The Device Shadow library is designed as a set of convenience macros and functions that are used to assemble and parse MQTT topic strings reserved for the Device Shadow. It does not wrap any function of the MQTT stack underneath. An application can use any MQTT library of its choice to interact with the Device Shadow service.
 
-The diagram below demonstrate how an application uses the Device Shadow library and a MQTT library to interact with the Device Shadow service.
+The diagram below demonstrates how an application uses the Device Shadow library, a MQTT library, and a JSON library to interact with the Device Shadow service.
 
 \image html shadow_design_operation.png "Shadow Demo operation diagram" width=1000px
 */
