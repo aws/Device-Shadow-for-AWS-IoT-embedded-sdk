@@ -4,7 +4,7 @@ The Device Shadow library files conform to the [MISRA C:2012](https://www.misra.
 guidelines, with some noted exceptions. Compliance is checked with Coverity static analysis.
 Deviations from the MISRA standard are listed below:
 
-### Ignored by [Coverity Configuration](https://github.com/aws/aws-iot-device-sdk-embedded-C/blob/master/tools/coverity/misra.config)
+### Ignored by [Coverity Configuration](tools/misra.config)
 | Deviation | Category | Justification |
 | :-: | :-: | :-: |
 | Directive 4.5 | Advisory | Allow names that MISRA considers ambiguous (such as LogInfo and LogError) |
