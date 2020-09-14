@@ -1,16 +1,5 @@
 name : "Device-Shadow-for-AWS-IoT-embedded-sdk"
 version: "1.0.0"
 description: |
-  "Client library for using AWS IoT Shadow service on embedded devices. \n"
-dependencies:
- - name: "coreJSON"
-    version: "1.0.0"
-    repository:
-      type: "git"
-      url: "https://github.com/FreeRTOS/coreJSON"
- - name: "CMock"
-   version: "2.5.2"
-   repository:
-     type: "git"
-     url:  "https://github.com/ThrowTheSwitch/CMock"
+  "Client library for using AWS IoT Shadow service on embedded devices.\n"
 license: "MIT"
