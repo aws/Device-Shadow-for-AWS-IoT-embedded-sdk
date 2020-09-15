@@ -1,4 +1,4 @@
-# Device Shadow Library
+# AWS IoT Device Shadow
 
 The AWS IoT Device Shadow library enables you to store and retrieve the current state (the “shadow”) of every registered device. The device’s shadow is a persistent, virtual representation of your device that you can interact with from AWS IoT Core even if the device is offline. The device state captured as its “shadow” is itself a [JSON](https://www.json.org/) document. You can send commands over MQTT or HTTP to retrieve the latest known device state or to change the state. Each device’s shadow is uniquely identified by the name of the corresponding “thing”, a representation of a specific device or logical entity on the AWS Cloud. See [Managing Devices with AWS IoT](https://docs.aws.amazon.com/iot/latest/developerguide/iot-thing-management.html) for more information. More details about AWS IoT Device Shadow can be found in [AWS IoT documentation](https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html). This library is distributed under the [MIT License](LICENSE).
 
