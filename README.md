@@ -5,7 +5,7 @@ The AWS IoT Device Shadow library enables you to store and retrieve the current 
 This library has gone through code quality checks including for [GNU Complexity](https://www.gnu.org/software/complexity/manual/complexity.html), [MISRA coding standard](https://www.misra.org.uk/MISRAHome/MISRAC2012/tabid/196/Default.aspx), [Coverity statical analysis](https://scan.coverity.com/), and [AWS CBMC automated reasoning tool](https://www.youtube.com/watch?v=YwQHAPRhQkI&feature=youtu.be&t=1721) to validate memory safety, thread safety and functional correctness proof.  Deviations to the MISRA C:2012 guidelines are documented under [MISRA Deviations](MISRA.md). 
 
 ### Device Shadow Config File
-The Device Shadow library exposes build configuration macros that are required for building the library.
+The AWS IoT Device Shadow library exposes build configuration macros that are required for building the library.
 A list of all the configurations and their default values are defined in [shadow_config_defaults.h](source/include/shadow_config_defaults.h). 
 To provide custom values for the configuration macros, a custom config file named `shadow_config.h` can be provided by the application to the library.
 
@@ -16,9 +16,9 @@ and build the library with default configuration values, provide `SHADOW_DO_NOT_
 
 The [shadowFilePaths.cmake](shadowFilePaths.cmake) file contains the information of all source files and the header include path required to build the Shadow library.
 
-As mentioned in the previous section, either a custom config file (i.e. `shadow_config.h`) OR the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` macro needs to be provided to build the Shadow library.
+As mentioned in the previous section, either a custom config file (i.e. `shadow_config.h`) OR the `SHADOW_DO_NOT_USE_CUSTOM_CONFIG` macro needs to be provided to build the AWS IoT Device Shadow library.
 
-For a CMake example of building the Shadow library with the `shadowFilePaths.cmake` file, refer to the `coverity_analysis` library target in [test/CMakeLists.txt](test/CMakeLists.txt) file.
+For a CMake example of building the AWS IoT Device Shadow library with the `shadowFilePaths.cmake` file, refer to the `coverity_analysis` library target in [test/CMakeLists.txt](test/CMakeLists.txt) file.
 
 ## Building Unit Tests
 
@@ -44,7 +44,7 @@ For a CMake example of building the Shadow library with the `shadowFilePaths.cma
 
 ## Reference examples
 
-The AWS IoT Embedded C-SDK repository contains demos of using the Device Shadow library [here](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/demos/shadow) on a POSIX platform. These can be used as reference examples for the library API.
+The AWS IoT Embedded C-SDK repository contains demos of using the AWS IoT Device Shadow library [here](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/demos/shadow) on a POSIX platform. These can be used as reference examples for the library API.
 
 ## Generating documentation
 
