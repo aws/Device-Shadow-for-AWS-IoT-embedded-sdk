@@ -1,4 +1,4 @@
-# Change Log for Device Shadow Library
+# Change Log for AWS IoT Device Shadow
 
 ## v1.0.0 (September 2020)
 
