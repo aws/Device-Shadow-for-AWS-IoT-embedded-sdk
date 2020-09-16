@@ -1,4 +1,5 @@
 /*
+ * AWS IoT Device Shadow V1.0.0
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -442,9 +443,9 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p",
-                    pTopic,
+                    ( void * ) pTopic,
                     topicLength,
-                    pMessageType ) );
+                    ( void * ) pMessageType ) );
     }
 
     /* A shadow topic string takes one of the two forms:
@@ -552,11 +553,11 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u, topicType: %u, pOutLength: %p",
-                    pTopicBuffer,
-                    pThingName,
+                    ( void * ) pTopicBuffer,
+                    ( void * ) pThingName,
                     thingNameLength,
                     topicType,
-                    pOutLength ) );
+                    ( void * ) pOutLength ) );
     }
     else
     {
