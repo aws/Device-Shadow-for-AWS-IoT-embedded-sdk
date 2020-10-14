@@ -12,3 +12,6 @@ set( SHADOW_SOURCES
 # SHADOW library Public Include directories.
 set( SHADOW_INCLUDE_PUBLIC_DIRS
      "${CMAKE_CURRENT_LIST_DIR}/source/include" )
+
+set( SHADOW_HEADER_FILES
+     "${CMAKE_CURRENT_LIST_DIR}/source/include/shadow.h}" )
