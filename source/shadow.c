@@ -543,7 +543,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
     uint16_t offset = 0U, generatedTopicStringLength = 0U, operationStringLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     const char * pOperationString = NULL;
-    const char shadowPrefix[ SHADOW_PREFIX_LENGTH + 1 ] = SHADOW_PREFIX;
+    const char * shadowPrefix = SHADOW_PREFIX;
 
     if( ( pTopicBuffer == NULL ) ||
         ( pThingName == NULL ) ||
