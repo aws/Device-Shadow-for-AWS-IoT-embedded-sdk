@@ -1,5 +1,7 @@
 # Changelog for AWS IoT Device Shadow
 
+## v1.0.1 (November 2020)
+
 ### Updates
  - [#41](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/41) Resolve build warning from visual studio due to terminator character.
  - [#35](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/35) Configure submodules to not be cloned by default.
