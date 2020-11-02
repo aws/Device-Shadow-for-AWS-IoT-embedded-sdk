@@ -1,4 +1,4 @@
-# Change Log for AWS IoT Device Shadow
+# Changelog for AWS IoT Device Shadow
 
 ### Updates
  - [#41](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/41) Resolve build warning from visual studio due to terminator character.
