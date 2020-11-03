@@ -4,6 +4,8 @@ The AWS IoT Device Shadow library enables you to store and retrieve the current 
 
 This library has gone through code quality checks including verification that no function has a [GNU Complexity](https://www.gnu.org/software/complexity/manual/complexity.html) score over 8, and checks against deviations from mandatory rules in the [MISRA coding standard](https://www.misra.org.uk/MISRAHome/MISRAC2012/tabid/196/Default.aspx). Deviations from the MISRA C:2012 guidelines are documented under [MISRA Deviations](MISRA.md). This library has also undergone both static code analysis from [Coverity static analysis](https://scan.coverity.com/), and validation of memory safety and proof of functional correctness through the [CBMC automated reasoning tool](https://www.cprover.org/cbmc/).  
 
+See memory requirements for this library [here](https://docs.aws.amazon.com/embedded-csdk/202011.00/lib-ref/libraries/aws/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html#shadow_memory_requirements).
+
 ### AWS IoT Device Shadow Config File
 The AWS IoT Device Shadow library exposes configuration macros that are required for building the library.
 A list of all the configurations and their default values are defined in [shadow_config_defaults.h](source/include/shadow_config_defaults.h).
