@@ -25,7 +25,7 @@ For a CMake example of building the AWS IoT Device Shadow library with the `shad
 ## Building Unit Tests
 
 ### Checkout CMock Submodule
-By default, the submodules in this repository are configured with `update=none` in [.gitmodules](.gitmodules) to avoid increasing clone time and disk space usage of other repositories (like [amazon-freertos](https://github.com/aws/amazon-freertos) that submodule this repository.
+By default, the submodules in this repository are configured with `update=none` in [.gitmodules](.gitmodules) to avoid increasing clone time and disk space usage of other repositories (like [amazon-freertos](https://github.com/aws/amazon-freertos) that submodule this repository).
 
 To build unit tests, the submodule dependency of CMock is required. Use the following command to clone the submodule:
 ```
