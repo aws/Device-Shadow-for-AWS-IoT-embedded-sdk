@@ -92,12 +92,14 @@ typedef enum ShadowTopicStringType
  */
 typedef enum ShadowStatus
 {
-    SHADOW_SUCCESS = 0,                     /**< @brief Shadow function success. */
-    SHADOW_FAIL,                            /**< @brief Shadow function encountered error. */
-    SHADOW_BAD_PARAMETER,                   /**< @brief Input parameter is invalid. */
-    SHADOW_BUFFER_TOO_SMALL,                /**< @brief The provided buffer is too small. */
-    SHADOW_THINGNAME_PARSE_FAILED,          /**< @brief Could not parse the thing name. */
-    SHADOW_SHADOW_MESSAGE_TYPE_PARSE_FAILED /**< @brief Could not parse the shadow type. */
+    SHADOW_SUCCESS = 0,              /**< @brief Shadow function success. */
+    SHADOW_FAIL,                     /**< @brief Shadow function encountered error. */
+    SHADOW_BAD_PARAMETER,            /**< @brief Input parameter is invalid. */
+    SHADOW_BUFFER_TOO_SMALL,         /**< @brief The provided buffer is too small. */
+    SHADOW_THINGNAME_PARSE_FAILED,   /**< @brief Could not parse the thing name. */
+    SHADOW_ROOT_PARSE_FAILED,        /**< @brief Could not parse the classic or named shadow root. */
+    SHADOW_SHADOWNAME_PARSE_FAILED,  /**< @brief Could not parse the shadow name (in the case of a named shadow topic). */
+    SHADOW_MESSAGE_TYPE_PARSE_FAILED /**< @brief Could not parse the shadow type. */
 } ShadowStatus_t;
 
 /*------------------------ Shadow library functions -------------------------*/
@@ -117,9 +119,35 @@ typedef enum ShadowStatus
 
 /**
  * @ingroup shadow_constants
+ * @brief The root of all un-named "Classic" Shadow MQTT topics
+ *        from here https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html.
+ */
+#define SHADOW_CLASSIC_ROOT               "/shadow"
+
+/**
+ * @ingroup shadow_constants
+ * @brief The length of #SHADOW_CLASSIC_ROOT.
+ */
+#define SHADOW_CLASSIC_ROOT_LENGTH        ( ( uint16_t ) ( sizeof( SHADOW_CLASSIC_ROOT ) - 1U ) )
+
+/**
+ * @ingroup shadow_constants
+ * @brief The common root of all named Shadow MQTT topics
+ *        from here https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html.
+ */
+#define SHADOW_NAMED_ROOT                 "/shadow/name/"
+
+/**
+ * @ingroup shadow_constants
+ * @brief The length of #SHADOW_NAMED_ROOT.
+ */
+#define SHADOW_NAMED_ROOT_LENGTH          ( ( uint16_t ) ( sizeof( SHADOW_NAMED_ROOT ) - 1U ) )
+
+/**
+ * @ingroup shadow_constants
  * @brief The string representing a Shadow "DELETE" operation in a Shadow MQTT topic.
  */
-#define SHADOW_OP_DELETE                  "/shadow/delete"
+#define SHADOW_OP_DELETE                  "/delete"
 
 /**
  * @ingroup shadow_constants
@@ -131,7 +159,7 @@ typedef enum ShadowStatus
  * @ingroup shadow_constants
  * @brief The string representing a Shadow "GET" operation in a Shadow MQTT topic.
  */
-#define SHADOW_OP_GET                     "/shadow/get"
+#define SHADOW_OP_GET                     "/get"
 
 /**
  * @ingroup shadow_constants
@@ -143,7 +171,7 @@ typedef enum ShadowStatus
  * @ingroup shadow_constants
  * @brief The string representing a Shadow "UPDATE" operation in a Shadow MQTT topic.
  */
-#define SHADOW_OP_UPDATE                  "/shadow/update"
+#define SHADOW_OP_UPDATE                  "/update"
 
 /**
  * @ingroup shadow_constants
@@ -219,117 +247,151 @@ typedef enum ShadowStatus
 
 /**
  * @ingroup shadow_constants
+ * @brief The maximum length of Shadow Name.
+ */
+#define SHADOW_NAME_LENGTH_MAX         ( 64U )
+
+/**
+ * @ingroup shadow_constants
+ * @brief The name string for the un-named "Classic" shadow.
+ */
+#define SHADOW_NAME_CLASSIC            ""
+
+/**
+ * @ingroup shadow_constants
  * @brief Compute shadow topic length.
  *
  * The format of shadow topic strings is defined at https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html
  *
- * A shadow topic string takes one of the two forms:
+ * A shadow topic string takes one of the two forms, in the case of an un-named ("Classic") shadow:
  *     $aws/things/\<thingName\>/shadow/\<operation\>
  *     $aws/things/\<thingName\>/shadow/\<operation\>/\<suffix\>
  *
- * The \<thingName\>, \<operation\> and \<suffix\> segments correspond to the three input
- * parameters of this macro. The \<suffix\> part can be null.
+ * Or as follows, in the case of a named shadow:
+ *     $aws/things/\<thingName\>/shadow/name\<shadowName\>\<operation\>
+ *     $aws/things/\<thingName\>/shadow/name\<shadowName\>\<operation\>/\<suffix\>
  *
- * When thingName is known to be "myThing" at compile time, invoke the macro like this:
+ * The \<thingName\>, \<shadowName\>, \<operation\> and \<suffix\> segments correspond to the
+ * four input parameters of this macro. The \<suffix\> part can be null.
+ *
+ * When thingName and shadow name are known to be "myThing"  and "myShadow" at compile time,
+ * invoke the macro like this:
  * (In this case, the length is a constant at compile time.)
  *
- *     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH, 7 )
+ *     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH, 7, 8 )
  *
- * When thingName is only known at run time and held in a variable myThingName, invoke
- * the macro like this:
+ * When thingName and shadowName are only known at run time, and held in variables myThingName
+ * and myShadowName, invoke the macro like this:
  *
  *     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH,
- *                       strlen( ( const char * ) myThingName ) )
+ *                       strlen( ( const char * ) myThingName ),
+ *                       strlen( ( const char * ) myShadowName ) )
  *
- * @param[operationLength] Can be one of:
- *                          - #SHADOW_OP_UPDATE_LENGTH
- *                          - #SHADOW_OP_DELETE_LENGTH
- *                          - #SHADOW_OP_GET_LENGTH
- * @param[suffixLength]    Can be one of:
- *                          - #SHADOW_SUFFIX_NULL_LENGTH
- *                          - #SHADOW_SUFFIX_ACCEPTED_LENGTH
- *                          - #SHADOW_SUFFIX_REJECTED_LENGTH
- *                          - #SHADOW_SUFFIX_DELTA_LENGTH
- *                          - #SHADOW_SUFFIX_DOCUMENTS_LENGTH
- * @param[thingNameLength] Length of the thingName excluding the ending NULL.
+ * To use an un-named ("Classic") shadow, the shadowName length passed should be zero.
+ *
+ * @param[in] operationLength   Can be one of:
+ *                                  - #SHADOW_OP_UPDATE_LENGTH
+ *                                  - #SHADOW_OP_DELETE_LENGTH
+ *                                  - #SHADOW_OP_GET_LENGTH
+ * @param[in] suffixLength      Can be one of:
+ *                                  - #SHADOW_SUFFIX_NULL_LENGTH
+ *                                  - #SHADOW_SUFFIX_ACCEPTED_LENGTH
+ *                                  - #SHADOW_SUFFIX_REJECTED_LENGTH
+ *                                  - #SHADOW_SUFFIX_DELTA_LENGTH
+ *                                  - #SHADOW_SUFFIX_DOCUMENTS_LENGTH
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
  *
  * @return Length of the shadow topic in bytes.
  */
-#define SHADOW_TOPIC_LENGTH( operationLength, suffixLength, thingNameLength ) \
-    ( operationLength + suffixLength + thingNameLength + SHADOW_PREFIX_LENGTH )
+#define SHADOW_TOPIC_LENGTH( operationLength, suffixLength, thingNameLength, shadowNameLength ) \
+    ( operationLength + suffixLength + thingNameLength + shadowNameLength +                     \
+      SHADOW_PREFIX_LENGTH +                                                                    \
+      ( ( shadowNameLength > 0 ) ? SHADOW_NAMED_ROOT_LENGTH : SHADOW_CLASSIC_ROOT_LENGTH ) )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update".
  */
-#define SHADOW_TOPIC_LENGTH_UPDATE( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_UPDATE( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/accepted".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/accepted".
  */
-#define SHADOW_TOPIC_LENGTH_UPDATE_ACCEPTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_UPDATE_ACCEPTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/rejected".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/rejected" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/rejected".
  */
-#define SHADOW_TOPIC_LENGTH_UPDATE_REJECTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_UPDATE_REJECTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/documents".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/documents" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/documents".
  */
-#define SHADOW_TOPIC_LENGTH_UPDATE_DOCUMENTS( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_UPDATE_DOCUMENTS( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/delta".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/delta" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/delta".
  */
-#define SHADOW_TOPIC_LENGTH_UPDATE_DELTA( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_UPDATE_DELTA( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get".
  */
-#define SHADOW_TOPIC_LENGTH_GET( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_GET( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/accepted".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/accepted".
  */
-#define SHADOW_TOPIC_LENGTH_GET_ACCEPTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_GET_ACCEPTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/rejected".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/rejected" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/rejected".
  */
-#define SHADOW_TOPIC_LENGTH_GET_REJECTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_GET_REJECTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
  */
-#define SHADOW_TOPIC_LENGTH_DELETE( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_DELETE( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/accepted".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
  */
-#define SHADOW_TOPIC_LENGTH_DELETE_ACCEPTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_DELETE_ACCEPTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
- * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/rejected".
+ * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/rejected" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
  */
-#define SHADOW_TOPIC_LENGTH_DELETE_REJECTED( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_DELETE_REJECTED( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
 
 /**
  * @ingroup shadow_constants
  * @brief Compute the length of the longest shadow topic.
  */
-#define SHADOW_TOPIC_LENGTH_MAX( thingNameLength ) \
-    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength )
+#define SHADOW_TOPIC_LENGTH_MAX( thingNameLength, shadowNameLength ) \
+    SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength, shadowNameLength )
 
 /**
  * @ingroup shadow_constants
@@ -342,94 +404,108 @@ typedef enum ShadowStatus
  * When thingName is only known at run time, do not use this macro. Use the
  * Shadow_GetTopicString() function instead.
  *
- * @param[operation] Can be one of:
- *                       - #SHADOW_OP_UPDATE
- *                       - #SHADOW_OP_DELETE
- *                       - #SHADOW_OP_GET
- * @param[suffix]    Can be one of:
- *                       - #SHADOW_SUFFIX_NULL
- *                       - #SHADOW_SUFFIX_ACCEPTED
- *                       - #SHADOW_SUFFIX_REJECTED
- *                       - #SHADOW_SUFFIX_DELTA
- *                       - #SHADOW_SUFFIX_DOCUMENTS
+ * @param[in] operation     Can be one of:
+ *                              - #SHADOW_OP_UPDATE
+ *                              - #SHADOW_OP_DELETE
+ *                              - #SHADOW_OP_GET
+ * @param[in] suffix        Can be one of:
+ *                              - #SHADOW_SUFFIX_NULL
+ *                              - #SHADOW_SUFFIX_ACCEPTED
+ *                              - #SHADOW_SUFFIX_REJECTED
+ *                              - #SHADOW_SUFFIX_DELTA
+ *                              - #SHADOW_SUFFIX_DOCUMENTS
  *
- * @param[thingName] Thing Name.
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for un-named ("Classic") shadow.
  *
  * @return Topic string.
  */
-#define SHADOW_TOPIC_STRING( thingName, operation, suffix ) \
-    ( SHADOW_PREFIX thingName operation suffix )
+#define SHADOW_TOPIC_STRING( thingName, shadowName, operation, suffix )           \
+    ( ( sizeof( shadowName ) > 1 ) ?                                              \
+      ( SHADOW_PREFIX thingName SHADOW_NAMED_ROOT shadowName operation suffix ) : \
+      ( SHADOW_PREFIX thingName SHADOW_CLASSIC_ROOT operation suffix ) )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update".
  */
-#define SHADOW_TOPIC_STRING_UPDATE( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_NULL )
+#define SHADOW_TOPIC_STRING_UPDATE( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_NULL )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/accepted".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/accepted".
  */
-#define SHADOW_TOPIC_STRING_UPDATE_ACCEPTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_ACCEPTED )
+#define SHADOW_TOPIC_STRING_UPDATE_ACCEPTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_ACCEPTED )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/rejected".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/rejected" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/rejected".
  */
-#define SHADOW_TOPIC_STRING_UPDATE_REJECTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_REJECTED )
+#define SHADOW_TOPIC_STRING_UPDATE_REJECTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_REJECTED )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/documents".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/documents" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/documents".
  */
-#define SHADOW_TOPIC_STRING_UPDATE_DOCUMENTS( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DOCUMENTS )
+#define SHADOW_TOPIC_STRING_UPDATE_DOCUMENTS( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DOCUMENTS )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/delta".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/delta" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/delta".
  */
-#define SHADOW_TOPIC_STRING_UPDATE_DELTA( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DELTA )
+#define SHADOW_TOPIC_STRING_UPDATE_DELTA( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DELTA )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get".
  */
-#define SHADOW_TOPIC_STRING_GET( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_GET, SHADOW_SUFFIX_NULL )
+#define SHADOW_TOPIC_STRING_GET( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_NULL )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/accepted".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/accepted".
  */
-#define SHADOW_TOPIC_STRING_GET_ACCEPTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_GET, SHADOW_SUFFIX_ACCEPTED )
+#define SHADOW_TOPIC_STRING_GET_ACCEPTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_ACCEPTED )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/rejected".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/rejected" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/rejected".
  */
-#define SHADOW_TOPIC_STRING_GET_REJECTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_GET, SHADOW_SUFFIX_REJECTED )
+#define SHADOW_TOPIC_STRING_GET_REJECTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_REJECTED )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
  */
-#define SHADOW_TOPIC_STRING_DELETE( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_DELETE, SHADOW_SUFFIX_NULL )
+#define SHADOW_TOPIC_STRING_DELETE( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_NULL )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/accepted".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/accepted" or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/accepted".
  */
-#define SHADOW_TOPIC_STRING_DELETE_ACCEPTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_DELETE, SHADOW_SUFFIX_ACCEPTED )
+#define SHADOW_TOPIC_STRING_DELETE_ACCEPTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_ACCEPTED )
 
 /**
- * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/rejected".
+ * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/rejected". or
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/rejected".
  */
-#define SHADOW_TOPIC_STRING_DELETE_REJECTED( thingName ) \
-    SHADOW_TOPIC_STRING( thingName, SHADOW_OP_DELETE, SHADOW_SUFFIX_REJECTED )
+#define SHADOW_TOPIC_STRING_DELETE_REJECTED( thingName, shadowName ) \
+    SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_REJECTED )
 
 /**
- * @brief Assemble shadow topic string when Thing Name is only known at run time.
- *        If the Thing Name is known at compile time, use @link #SHADOW_TOPIC_STRING_UPDATE
- *        SHADOW_TOPIC_STRING_* @endlink macros instead.
+ * @brief Assemble shadow topic string when Thing Name or Shadow Name is only known at run time.
+ *        If both the Thing Name and Shadow Name are known at compile time, use
+ *        @link #SHADOW_TOPIC_STRING_UPDATE SHADOW_TOPIC_STRING_* @endlink macros instead.
  *
  * @param[in]  topicType Indicates what topic will be written into the buffer pointed to by pTopicBuffer.
  *             can be one of:
@@ -446,6 +522,8 @@ typedef enum ShadowStatus
  *                 - ShadowTopicStringTypeUpdateDelta
  * @param[in]  pThingName Thing Name string. No need to be null terminated. Must not be NULL.
  * @param[in]  thingNameLength Length of Thing Name string pointed to by pThingName. Must not be zero.
+ * @param[in]  pShadowName Shadow Name string. No need to be null terminated. Must not be NULL. Empty string for classic shadow.
+ * @param[in]  shadowNameLength Length of Shadow Name string pointed to by pShadowName. Zero for classic shadow.
  * @param[out] pTopicBuffer Pointer to buffer for returning the topic string.
  *             Caller is responsible for supplying memory pointed to by pTopicBuffer.
  *             This function does not fill in the terminating null character. The app
@@ -470,10 +548,14 @@ typedef enum ShadowStatus
  * uint16_t outLength = 0;
  * const char * pThingName = "TestThingName";
  * uint16_t thingNameLength  = ( sizeof( thingName ) - 1U );
+ * const char * pShadowName = "TestShadowName";
+ * uint16_t shadowNameLength  = ( sizeof( shadowName ) - 1U );
  *
  * shadowStatus = Shadow_GetTopicString( SHADOW_TOPIC_STRING_TYPE_UPDATE_DELTA,
  *                                       pThingName,
  *                                       thingNameLength,
+ *                                       pShadowName,
+ *                                       shadowNameLength,
  *                                       & ( topicBuffer[ 0 ] ),
  *                                       bufferSize,
  *                                       & outLength );
@@ -489,6 +571,8 @@ typedef enum ShadowStatus
 ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
                                       const char * pThingName,
                                       uint8_t thingNameLength,
+                                      const char * pShadowName,
+                                      uint8_t shadowNameLength,
                                       char * pTopicBuffer,
                                       uint16_t bufferSize,
                                       uint16_t * pOutLength );
@@ -513,6 +597,12 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *             null if caller does not need to know the Thing Name contained in the topic string.
  * @param[out] pThingNameLength Pointer to caller-supplied memory for returning the length of the Thing Name,
  *             and can be null if caller does not need to know the Thing Name contained in the topic string.
+ * @param[out] pShadowName Points to the 1st character of Shadow Name inside of the topic string, and can be
+ *             null if caller does not need to know the Shadow Name contained in the topic string. Null is
+ *             returned if the shadow is Classic.
+ * @param[out] pShadowNameLength Pointer to caller-supplied memory for returning the length of the Shadow Name,
+ *             and can be null if caller does not need to know the Shadow Name contained in the topic string.
+ *             A value of 0 is returned if the shadow is Classic.
  * @return     One of the following:
  *             - #SHADOW_SUCCESS if the message is related to a device shadow;
  *             - An error code defined in #ShadowStatus_t if the message is not related to a device shadow,
@@ -535,6 +625,8 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *                                   topicNameLength,
  *                                   & messageType,
  *                                   NULL,
+ *                                   NULL,
+ *                                   NULL,
  *                                   NULL );
  *
  * if( shadowStatus == SHADOW_STATUS_SUCCESS )
@@ -550,7 +642,9 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   uint16_t topicLength,
                                   ShadowMessageType_t * pMessageType,
                                   const char ** pThingName,
-                                  uint16_t * pThingNameLength );
+                                  uint16_t * pThingNameLength,
+                                  const char ** pShadowName,
+                                  uint16_t * pShadowNameLength );
 /* @[declare_shadow_matchtopic] */
 
 #endif /* ifndef SHADOW_H_ */

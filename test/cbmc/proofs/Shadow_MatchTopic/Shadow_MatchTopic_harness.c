@@ -35,6 +35,8 @@ void harness()
     ShadowMessageType_t * pMessageType;
     const char ** pThingName;
     uint16_t * pThingNameLength;
+    const char ** pShadowName;
+    uint16_t * pShadowNameLength;
 
     __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
     pTopicName = mallocCanFail( topicNameLength );
@@ -44,9 +46,14 @@ void harness()
     pThingName = mallocCanFail( sizeof( *pThingName ) );
     pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
 
+    pShadowName = mallocCanFail( sizeof( *pShadowName ) );
+    pShadowNameLength = mallocCanFail( sizeof( *pShadowNameLength ) );
+
     Shadow_MatchTopic( pTopicName,
                        topicNameLength,
                        pMessageType,
                        pThingName,
-                       pThingNameLength );
+                       pThingNameLength,
+                       pShadowName,
+                       pShadowNameLength );
 }

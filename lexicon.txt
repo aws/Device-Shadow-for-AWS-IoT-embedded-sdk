@@ -28,6 +28,8 @@ malloc
 matchtopic
 messagetype
 mqtt
+myshadow
+myshadowname
 mything
 mythingname
 noninfringement
@@ -35,9 +37,14 @@ op
 operationlength
 outlength
 param
+pconsumedtopiclength
 pmessagetype
 posix
+pname
+pnamelength
 poutlength
+pshadowname
+pshadownamelength
 pstring
 psubstring
 pthingname
@@ -46,6 +53,8 @@ ptopic
 ptopicbuffer
 ptopicname
 sdk
+shadowname
+shadownamelength
 shadowstatus
 shadowtopicstringtypedelete
 shadowtopicstringtypedeleteaccepted
@@ -66,6 +75,7 @@ structs
 sublicense
 substringlength
 suffixlength
+testshadowname
 testthingname
 thingname
 thingnamelength
@@ -74,3 +84,4 @@ topiclength
 topicnamelength
 topictype
 utest
+un

@@ -128,18 +128,18 @@ static ShadowStatus_t containsSubString( const char * pString,
                                          uint16_t subStringLength );
 
 /**
- * @brief Check if the Thing Name is valid.
+ * @brief Check if the Thing or Shadow Name is valid.
  *
- * @param[in] pString Pointer to the starting of thing name.
+ * @param[in] pString Pointer to the starting of a name.
  * @param[in] stringLength Length of pString.
- * @param[out] pThingNameLength Pointer to caller-supplied memory for returning the length of the Thing Name.
+ * @param[out] pNameLength Pointer to caller-supplied memory for returning the length of the Thing or Shadow Name.
  *
  * @return Return SHADOW_SUCCESS if it is valid;
- *         return SHADOW_THINGNAME_PARSE_FAILED if it is not.
+ *         return SHADOW_FAIL if it is not.
  */
-static ShadowStatus_t validateThingName( const char * pString,
-                                         uint16_t stringLength,
-                                         uint16_t * pThingNameLength );
+static ShadowStatus_t validateName( const char * pString,
+                                    uint16_t stringLength,
+                                    uint16_t * pNameLength );
 
 /**
  * @brief Extract the Shadow message type from a string.
@@ -149,11 +149,28 @@ static ShadowStatus_t validateThingName( const char * pString,
  * @param[out] pMessageType Pointer to call-supplied memory for returning the type of the shadow message.
  *
  * @return Return SHADOW_SUCCESS if successfully extracted;
- *         return SHADOW_SHADOW_MESSAGE_TYPE_PARSE_FAILED if failed.
+ *         return SHADOW_MESSAGE_TYPE_PARSE_FAILED if failed.
  */
 static ShadowStatus_t extractShadowMessageType( const char * pString,
                                                 uint16_t stringLength,
                                                 ShadowMessageType_t * pMessageType );
+
+/**
+ * @brief Extract the classic shadow root OR the named shadow root and shadow name from a topic string.
+ *
+ * @param[in] pTopic Pointer to the topic string.
+ * @param[in] topicLength Length of pTopic.
+ * @param[out] pConsumedTopicLength Pointer to call-supplied memory for returning the consumed topic length.
+ * @param[out] pShadowNameLength Pointer to call-supplied memory for returning the shadow name length.
+ *
+ * @return Return SHADOW_SUCCESS if successfully extracted;
+ *         return SHADOW_ROOT_PARSE_FAILED shadow root parsing fails.
+ *         return SHADOW_SHADOWNAME_PARSE_FAILED shadow name parsing fails.
+ */
+static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
+                                                uint16_t topicLength,
+                                                uint16_t * pConsumedTopicLength,
+                                                uint16_t * pShadowNameLength );
 
 /**
  * @brief Get the shadow operation string for a given shadow topic type.
@@ -172,6 +189,23 @@ static const char * getShadowOperationString( ShadowTopicStringType_t topicType 
  * @return The shadow operation string length for the given shadow type.
  */
 static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType );
+
+/**
+ * @brief Creates a shadow topic string
+ *
+ * @param[in] topicType The type of shadow topic to be constructed.
+ * @param[in] pThingName Pointer to the Thing name.
+ * @param[in] thingNameLength The length of the Thing name.
+ * @param[in] pShadowName Pointer to the Shadow name.
+ * @param[in] shadowNameLength The length of the Shadow name.
+ * @param[out] pTopicBuffer Pointer to call-supplied memory for returning the constructed shadow topic string.
+ */
+static void createShadowTopicString( ShadowTopicStringType_t topicType,
+                                     const char * pThingName,
+                                     uint8_t thingNameLength,
+                                     const char * pShadowName,
+                                     uint8_t shadowNameLength,
+                                     char * pTopicBuffer );
 
 /*-----------------------------------------------------------*/
 
@@ -198,36 +232,89 @@ static ShadowStatus_t containsSubString( const char * pString,
 }
 /*-----------------------------------------------------------*/
 
-static ShadowStatus_t validateThingName( const char * pString,
-                                         uint16_t stringLength,
-                                         uint16_t * pThingNameLength )
+static ShadowStatus_t validateName( const char * pString,
+                                    uint16_t stringLength,
+                                    uint16_t * pNameLength )
 {
     uint16_t index = 0U;
-    ShadowStatus_t returnStatus = SHADOW_THINGNAME_PARSE_FAILED;
+    ShadowStatus_t returnStatus = SHADOW_FAIL;
 
     for( ; index < stringLength; index++ )
     {
+        /* The name should always be terminated by a forward slash */
         if( pString[ index ] == ( char ) '/' )
         {
+            if( index > 0U )
+            {
+                /* Only accept names of greater than zero length */
+                *pNameLength = index;
+                returnStatus = SHADOW_SUCCESS;
+            }
+
             break;
         }
     }
 
-    /* Zero length thing name is not valid,
-     * $"$aws/things/<ThingName>/
-     * $"$aws/things/<ThingName>"
-     * will extract the same thing name result.
-     * Only empty thing name string like:
-     * "$aws/things/" or "$aws/things" will fail.
-     */
-    if( index > 0U )
-    {
-        *pThingNameLength = index;
-        returnStatus = SHADOW_SUCCESS;
-    }
-
     return returnStatus;
 }
+
+/*-----------------------------------------------------------*/
+
+static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
+                                                uint16_t topicLength,
+                                                uint16_t * pConsumedTopicLength,
+                                                uint16_t * pShadowNameLength )
+{
+    ShadowStatus_t shadowStatus;
+
+    /* Look for the named shadow root */
+    shadowStatus = containsSubString( &( pTopic[ *pConsumedTopicLength ] ),
+                                      topicLength - *pConsumedTopicLength,
+                                      SHADOW_NAMED_ROOT,
+                                      SHADOW_NAMED_ROOT_LENGTH );
+
+    if( shadowStatus == SHADOW_SUCCESS )
+    {
+        /* Topic is a named shadow */
+        *pConsumedTopicLength += SHADOW_NAMED_ROOT_LENGTH;
+
+        /* Extract shadow name. */
+        shadowStatus = validateName( &( pTopic[ *pConsumedTopicLength ] ),
+                                     topicLength - *pConsumedTopicLength,
+                                     pShadowNameLength );
+
+        if( shadowStatus == SHADOW_SUCCESS )
+        {
+            *pConsumedTopicLength += *pShadowNameLength;
+        }
+        else
+        {
+            shadowStatus = SHADOW_SHADOWNAME_PARSE_FAILED;
+            LogDebug( ( "Not related to Shadow, failed to parse shadow name in pTopic %s", pTopic ) );
+        }
+    }
+    else
+    {
+        /* Not a named shadow. Try to match the classic shadow root. */
+        shadowStatus = containsSubString( &( pTopic[ *pConsumedTopicLength ] ),
+                                          topicLength - *pConsumedTopicLength,
+                                          SHADOW_CLASSIC_ROOT,
+                                          SHADOW_CLASSIC_ROOT_LENGTH );
+
+        if( shadowStatus == SHADOW_SUCCESS )
+        {
+            *pConsumedTopicLength += SHADOW_CLASSIC_ROOT_LENGTH;
+        }
+        else
+        {
+            shadowStatus = SHADOW_ROOT_PARSE_FAILED;
+            LogDebug( ( "Not related to Shadow, failed to parse shadow root in pTopic %s", pTopic ) );
+        }
+    }
+
+    return shadowStatus;
+}
+
 /*-----------------------------------------------------------*/
 
 static ShadowStatus_t extractShadowMessageType( const char * pString,
@@ -425,17 +512,79 @@ static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType )
 
 /*-----------------------------------------------------------*/
 
+static void createShadowTopicString( ShadowTopicStringType_t topicType,
+                                     const char * pThingName,
+                                     uint8_t thingNameLength,
+                                     const char * pShadowName,
+                                     uint8_t shadowNameLength,
+                                     char * pTopicBuffer )
+{
+    uint16_t offset = 0U, operationStringLength = 0U;
+    const char * pShadowPrefix = SHADOW_PREFIX;
+    const char * pOperationString = NULL;
+    const char * pClassicShadowRoot = SHADOW_CLASSIC_ROOT;
+    const char * pNamedShadowRoot = SHADOW_NAMED_ROOT;
+
+    /* Copy the Shadow topic prefix into the topic buffer. */
+    ( void ) memcpy( ( void * ) pTopicBuffer,
+                     ( const void * ) pShadowPrefix,
+                     ( size_t ) SHADOW_PREFIX_LENGTH );
+    offset = ( uint16_t ) ( offset + SHADOW_PREFIX_LENGTH );
+
+    /* Copy the Thing Name into the topic buffer. */
+    ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
+                     ( const void * ) pThingName,
+                     ( size_t ) thingNameLength );
+    offset = ( uint16_t ) ( offset + thingNameLength );
+
+    /* Are we assembling a named shadow? */
+    if( shadowNameLength > 0U )
+    {
+        /* Copy the named Shadow topic root into the topic buffer. */
+        ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
+                         ( const void * ) pNamedShadowRoot,
+                         ( size_t ) SHADOW_NAMED_ROOT_LENGTH );
+        offset = ( uint16_t ) ( offset + SHADOW_NAMED_ROOT_LENGTH );
+
+        /* Copy the Shadow Name into the topic buffer. */
+        ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
+                         ( const void * ) pShadowName,
+                         ( size_t ) shadowNameLength );
+        offset = ( uint16_t ) ( offset + shadowNameLength );
+    }
+    else
+    {
+        /* Copy the Classic Shadow topic root into the topic buffer. */
+        ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
+                         ( const void * ) pClassicShadowRoot,
+                         ( size_t ) SHADOW_CLASSIC_ROOT_LENGTH );
+        offset = ( uint16_t ) ( offset + SHADOW_CLASSIC_ROOT_LENGTH );
+    }
+
+    pOperationString = getShadowOperationString( topicType );
+    operationStringLength = getShadowOperationLength( topicType );
+    /* Copy the Shadow operation string into the topic buffer. */
+    ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
+                     ( const void * ) pOperationString,
+                     ( size_t ) operationStringLength );
+}
+
+/*-----------------------------------------------------------*/
+
 /*-----------------------------------------------------------*/
 
 ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   uint16_t topicLength,
                                   ShadowMessageType_t * pMessageType,
                                   const char ** pThingName,
-                                  uint16_t * pThingNameLength )
+                                  uint16_t * pThingNameLength,
+                                  const char ** pShadowName,
+                                  uint16_t * pShadowNameLength )
 {
     uint16_t consumedTopicLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     uint16_t thingNameLength = 0;
+    uint16_t shadowNameLength = 0;
 
     if( ( pTopic == NULL ) ||
         ( topicLength == 0U ) ||
@@ -448,14 +597,19 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                     ( void * ) pMessageType ) );
     }
 
-    /* A shadow topic string takes one of the two forms:
+    /* A shadow topic string takes one of the two forms.
+     * Classic shadow:
      *   $aws/things/<thingName>/shadow/<operation>
      *   $aws/things/<thingName>/shadow/<operation>/<suffix>
+     * Named shadow:
+     *   $aws/things/<thingName>/shadow/name/<shadowName>/<operation>
+     *   $aws/things/<thingName>/shadow/name/<shadowName>/<operation>/<suffix>
      *
      * We need to match the following things:
      * 1. Prefix ($aws/things).
      * 2. Thing Name.
-     * 3. Shadow operation and suffix.
+     * 3. Classic shadow root (/shadow) OR Named shadow root (/shadow/name) and shadow name
+     * 5. Shadow operation and suffix.
      */
     if( shadowStatus == SHADOW_SUCCESS )
     {
@@ -464,46 +618,41 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                           topicLength - consumedTopicLength,
                                           SHADOW_PREFIX,
                                           SHADOW_PREFIX_LENGTH );
-    }
 
-    if( shadowStatus == SHADOW_SUCCESS )
-    {
-        consumedTopicLength += SHADOW_PREFIX_LENGTH;
-
-        /* If no more topic string is left to parse, fail. */
-        if( consumedTopicLength >= topicLength )
+        if( shadowStatus == SHADOW_SUCCESS )
         {
-            shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, thing name is not in pTopic %s, failed to parse thing name", pTopic ) );
+            consumedTopicLength += SHADOW_PREFIX_LENGTH;
         }
-    }
-    else
-    {
-        LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
+        else
+        {
+            LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
+        }
     }
 
     if( shadowStatus == SHADOW_SUCCESS )
     {
         /* Extract thing name. */
-        shadowStatus = validateThingName( &( pTopic[ consumedTopicLength ] ),
-                                          topicLength - consumedTopicLength,
-                                          &thingNameLength );
+        shadowStatus = validateName( &( pTopic[ consumedTopicLength ] ),
+                                     topicLength - consumedTopicLength,
+                                     &thingNameLength );
 
         if( shadowStatus == SHADOW_SUCCESS )
         {
             consumedTopicLength += thingNameLength;
-
-            /* If no more topic string is left to parse, fail. */
-            if( consumedTopicLength >= topicLength )
-            {
-                shadowStatus = SHADOW_SHADOW_MESSAGE_TYPE_PARSE_FAILED;
-                LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type", pTopic ) );
-            }
         }
         else
         {
+            shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
             LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s", pTopic ) );
         }
+    }
+
+    if( shadowStatus == SHADOW_SUCCESS )
+    {
+        shadowStatus = extractShadowRootAndName( pTopic,
+                                                 topicLength,
+                                                 &consumedTopicLength,
+                                                 &shadowNameLength );
     }
 
     if( shadowStatus == SHADOW_SUCCESS )
@@ -512,6 +661,12 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         shadowStatus = extractShadowMessageType( &( pTopic[ consumedTopicLength ] ),
                                                  topicLength - consumedTopicLength,
                                                  pMessageType );
+
+        if( shadowStatus != SHADOW_SUCCESS )
+        {
+            shadowStatus = SHADOW_MESSAGE_TYPE_PARSE_FAILED;
+            LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type", pTopic ) );
+        }
     }
 
     if( shadowStatus == SHADOW_SUCCESS )
@@ -527,42 +682,59 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         {
             *pThingNameLength = thingNameLength;
         }
+
+        if( pShadowName != NULL )
+        {
+            *pShadowName = &( pTopic[ SHADOW_PREFIX_LENGTH + thingNameLength +
+                                      SHADOW_NAMED_ROOT_LENGTH ] );
+        }
+
+        if( pShadowNameLength != NULL )
+        {
+            *pShadowNameLength = shadowNameLength;
+        }
     }
 
     return shadowStatus;
 }
 /*-----------------------------------------------------------*/
-
 ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
                                       const char * pThingName,
                                       uint8_t thingNameLength,
+                                      const char * pShadowName,
+                                      uint8_t shadowNameLength,
                                       char * pTopicBuffer,
                                       uint16_t bufferSize,
                                       uint16_t * pOutLength )
 {
-    uint16_t offset = 0U, generatedTopicStringLength = 0U, operationStringLength = 0U;
+    uint16_t generatedTopicStringLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
-    const char * pOperationString = NULL;
-    const char * pShadowPrefix = SHADOW_PREFIX;
 
     if( ( pTopicBuffer == NULL ) ||
         ( pThingName == NULL ) ||
         ( thingNameLength == 0U ) ||
+        ( ( pShadowName == NULL ) && ( shadowNameLength > 0U ) ) ||
         ( topicType >= ShadowTopicStringTypeMaxNum ) ||
         ( pOutLength == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u, topicType: %u, pOutLength: %p",
+        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u,\
+                    pShadowName: %p, shadowNameLength: %u, topicType: %u, pOutLength: %p",
                     ( void * ) pTopicBuffer,
                     ( void * ) pThingName,
                     thingNameLength,
+                    ( void * ) pShadowName,
+                    shadowNameLength,
                     topicType,
                     ( void * ) pOutLength ) );
     }
     else
     {
-        generatedTopicStringLength = SHADOW_PREFIX_LENGTH +                 /* Prefix ("$aws/things/"). */
-                                     thingNameLength +                      /* Thing name. */
+        generatedTopicStringLength = SHADOW_PREFIX_LENGTH +        /* Prefix ("$aws/things/"). */
+                                     thingNameLength +             /* Thing name. */
+                                     ( ( shadowNameLength > 0U ) ? /* Handle named or classic shadow */
+                                       ( SHADOW_NAMED_ROOT_LENGTH + shadowNameLength ) :
+                                       SHADOW_CLASSIC_ROOT_LENGTH ) +
                                      getShadowOperationLength( topicType ); /* Shadow operation. */
 
         if( bufferSize < generatedTopicStringLength )
@@ -572,24 +744,13 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         }
         else
         {
-            /* Copy the Shadow topic prefix into the topic buffer. */
-            ( void ) memcpy( ( void * ) pTopicBuffer,
-                             ( const void * ) pShadowPrefix,
-                             ( size_t ) SHADOW_PREFIX_LENGTH );
-            offset = ( uint16_t ) ( offset + SHADOW_PREFIX_LENGTH );
-
-            /* Copy the Thing Name into the topic buffer. */
-            ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
-                             ( const void * ) pThingName,
-                             ( size_t ) thingNameLength );
-            offset = ( uint16_t ) ( offset + thingNameLength );
-
-            pOperationString = getShadowOperationString( topicType );
-            operationStringLength = getShadowOperationLength( topicType );
-            /* Copy the Shadow operation string into the topic buffer. */
-            ( void ) memcpy( ( void * ) &( pTopicBuffer[ offset ] ),
-                             ( const void * ) pOperationString,
-                             ( size_t ) operationStringLength );
+            /* With everything validated, now create the topic string */
+            createShadowTopicString( topicType,
+                                     pThingName,
+                                     thingNameLength,
+                                     pShadowName,
+                                     shadowNameLength,
+                                     pTopicBuffer );
 
             /* Return the generated topic string length to the caller. */
             *pOutLength = generatedTopicStringLength;
