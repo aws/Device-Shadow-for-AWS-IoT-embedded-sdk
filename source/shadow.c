@@ -554,10 +554,8 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, "
                     "thingNameLength: %u, topicType: %d, pOutLength: %p.",
-                    ( void * ) pTopicBuffer,
-                    ( void * ) pThingName,
-                    ( unsigned int ) thingNameLength,
-                    topicType,
+                    ( void * ) pTopicBuffer, ( void * ) pThingName,
+                    ( unsigned int ) thingNameLength, topicType,
                     ( void * ) pOutLength ) );
     }
     else
