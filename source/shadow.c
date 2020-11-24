@@ -301,7 +301,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
 
     if( returnStatus != SHADOW_SUCCESS )
     {
-        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s", pString ) );
+        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s.", pString ) );
     }
 
     return returnStatus;
@@ -442,9 +442,9 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         ( pMessageType == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p",
+        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
                     ( void * ) pTopic,
-                    topicLength,
+                    ( unsigned int ) topicLength,
                     ( void * ) pMessageType ) );
     }
 
@@ -474,12 +474,12 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         if( consumedTopicLength >= topicLength )
         {
             shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, thing name is not in pTopic %s, failed to parse thing name", pTopic ) );
+            LogDebug( ( "Not related to Shadow, thing name is not in pTopic %s, failed to parse thing name.", pTopic ) );
         }
     }
     else
     {
-        LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
+        LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s.", pTopic ) );
     }
 
     if( shadowStatus == SHADOW_SUCCESS )
@@ -497,12 +497,12 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
             if( consumedTopicLength >= topicLength )
             {
                 shadowStatus = SHADOW_SHADOW_MESSAGE_TYPE_PARSE_FAILED;
-                LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type", pTopic ) );
+                LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type.", pTopic ) );
             }
         }
         else
         {
-            LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s", pTopic ) );
+            LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s.", pTopic ) );
         }
     }
 
@@ -552,11 +552,10 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         ( pOutLength == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u, topicType: %u, pOutLength: %p",
-                    ( void * ) pTopicBuffer,
-                    ( void * ) pThingName,
-                    thingNameLength,
-                    topicType,
+        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, "
+                    "thingNameLength: %u, topicType: %d, pOutLength: %p.",
+                    ( void * ) pTopicBuffer, ( void * ) pThingName,
+                    ( unsigned int ) thingNameLength, topicType,
                     ( void * ) pOutLength ) );
     }
     else
@@ -568,7 +567,9 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         if( bufferSize < generatedTopicStringLength )
         {
             shadowStatus = SHADOW_BUFFER_TOO_SMALL;
-            LogError( ( "Input bufferSize too small, bufferSize %d, required %d", bufferSize, generatedTopicStringLength ) );
+            LogError( ( "Input bufferSize too small, bufferSize %u, required %u.",
+                        ( unsigned int ) bufferSize,
+                        ( unsigned int ) generatedTopicStringLength ) );
         }
         else
         {
