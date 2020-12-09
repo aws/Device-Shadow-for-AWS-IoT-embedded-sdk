@@ -3,14 +3,14 @@
 ## v1.0.2 (December 2020)
 
 ### Updates
- - [#60](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/60) Cast logging arguments to C types matching the format specifier.
+ - [#60](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/60) Cast logging arguments to C types matching the format specifier.
 
 ### Other
- - [#51](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/51) Formatting update.
- - [#57](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/57) Fix a broken link.
- - [#54](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/54), [#62](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/62) Github actions update.
- - [#58](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/58), [#61](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/61) Github repo chores
- - [#53](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/53) CBMC automation update.
+ - [#51](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/51) Formatting update.
+ - [#57](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/57) Fix a broken link.
+ - [#54](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/54), [#62](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/62) Github actions update.
+ - [#58](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/58), [#61](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/61) Github repo chores
+ - [#53](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/53) CBMC automation update.
 
 ## v1.0.1 (November 2020)
 
