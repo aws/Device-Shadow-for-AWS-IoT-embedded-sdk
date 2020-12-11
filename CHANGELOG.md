@@ -8,8 +8,8 @@
 ### Other
  - [#51](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/51) Formatting update.
  - [#57](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/57) Fix a broken link.
- - [#54](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/54), [#62](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/62) Github actions update.
- - [#58](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/58), [#61](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk-fork/pull/61) Github repo chores
+ - [#54](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/54), [#62](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/62) Github actions update.
+ - [#58](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/58), [#61](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/61) Github repo chores
  - [#53](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/53) CBMC automation update.
 
 ## v1.0.1 (November 2020)
