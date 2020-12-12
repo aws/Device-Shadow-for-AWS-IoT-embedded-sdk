@@ -112,6 +112,20 @@
 #define SHADOW_OP_DELETE_REJECTED_LENGTH     ( SHADOW_OP_DELETE_LENGTH + SHADOW_SUFFIX_REJECTED_LENGTH )
 
 /**
+ * @brief Check if Shadow_MatchTopic has valid parameters.
+ *
+ * @param[in] pTopic Pointer to the topic string.
+ * @param[in] topicLength Length of pTopic.
+ * @param[in] pMessageType Pointer to call-supplied memory for returning the type of the shadow message.
+ *
+ * @return Return SHADOW_SUCCESS if the parameters are valid;
+ *         return SHADOW_BAD_PARAMETER if not.
+ */
+static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
+                                                    uint16_t topicLength,
+                                                    const ShadowMessageType_t * pMessageType );
+
+/**
  * @brief Determine if the string contains the substring.
  *
  * @param[in] pString Pointer to the string.
@@ -209,6 +223,28 @@ static void createShadowTopicString( ShadowTopicStringType_t topicType,
 
 /*-----------------------------------------------------------*/
 
+static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
+                                                    uint16_t topicLength,
+                                                    const ShadowMessageType_t * pMessageType )
+{
+    ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
+
+    if( ( pTopic == NULL ) ||
+        ( topicLength == 0U ) ||
+        ( pMessageType == NULL ) )
+    {
+        shadowStatus = SHADOW_BAD_PARAMETER;
+        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
+                    ( void * ) pTopic,
+                    ( unsigned int ) topicLength,
+                    ( void * ) pMessageType ) );
+    }
+
+    return shadowStatus;
+}
+
+/*-----------------------------------------------------------*/
+
 static ShadowStatus_t containsSubString( const char * pString,
                                          uint16_t stringLength,
                                          const char * pSubString,
@@ -230,6 +266,7 @@ static ShadowStatus_t containsSubString( const char * pString,
 
     return returnStatus;
 }
+
 /*-----------------------------------------------------------*/
 
 static ShadowStatus_t validateName( const char * pString,
@@ -586,16 +623,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
     uint16_t thingNameLength = 0;
     uint16_t shadowNameLength = 0;
 
-    if( ( pTopic == NULL ) ||
-        ( topicLength == 0U ) ||
-        ( pMessageType == NULL ) )
-    {
-        shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
-                    ( void * ) pTopic,
-                    ( unsigned int ) topicLength,
-                    ( void * ) pMessageType ) );
-    }
+    shadowStatus = validateMatchTopicParameters( pTopic, topicLength, pMessageType );
 
     /* A shadow topic string takes one of the two forms.
      * Classic shadow:
