@@ -1,5 +1,5 @@
 /*
- * AWS IoT Device Shadow v1.0.1
+ * AWS IoT Device Shadow v1.0.2
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -388,7 +388,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
 
     if( returnStatus != SHADOW_SUCCESS )
     {
-        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s", pString ) );
+        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s.", pString ) );
     }
 
     return returnStatus;
@@ -591,9 +591,9 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         ( pMessageType == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p",
+        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
                     ( void * ) pTopic,
-                    topicLength,
+                    ( unsigned int ) topicLength,
                     ( void * ) pMessageType ) );
     }
 
@@ -609,7 +609,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
      * 1. Prefix ($aws/things).
      * 2. Thing Name.
      * 3. Classic shadow root (/shadow) OR Named shadow root (/shadow/name) and shadow name
-     * 5. Shadow operation and suffix.
+     * 4. Shadow operation and suffix.
      */
     if( shadowStatus == SHADOW_SUCCESS )
     {
@@ -625,7 +625,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         }
         else
         {
-            LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s", pTopic ) );
+            LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s.", pTopic ) );
         }
     }
 
@@ -643,7 +643,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         else
         {
             shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s", pTopic ) );
+            LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s.", pTopic ) );
         }
     }
 
@@ -665,7 +665,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
         if( shadowStatus != SHADOW_SUCCESS )
         {
             shadowStatus = SHADOW_MESSAGE_TYPE_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type", pTopic ) );
+            LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type.", pTopic ) );
         }
     }
 
@@ -719,12 +719,12 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u,\
-                    pShadowName: %p, shadowNameLength: %u, topicType: %u, pOutLength: %p",
+                    pShadowName: %p, shadowNameLength: %u, topicType: %d, pOutLength: %p.",
                     ( void * ) pTopicBuffer,
                     ( void * ) pThingName,
-                    thingNameLength,
+                    ( unsigned int ) thingNameLength,
                     ( void * ) pShadowName,
-                    shadowNameLength,
+                    ( unsigned int ) shadowNameLength,
                     topicType,
                     ( void * ) pOutLength ) );
     }
@@ -740,7 +740,9 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
         if( bufferSize < generatedTopicStringLength )
         {
             shadowStatus = SHADOW_BUFFER_TOO_SMALL;
-            LogError( ( "Input bufferSize too small, bufferSize %d, required %d", bufferSize, generatedTopicStringLength ) );
+            LogError( ( "Input bufferSize too small, bufferSize %u, required %u.",
+                        ( unsigned int ) bufferSize,
+                        ( unsigned int ) generatedTopicStringLength ) );
         }
         else
         {

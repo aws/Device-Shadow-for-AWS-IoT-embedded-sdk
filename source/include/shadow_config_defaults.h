@@ -1,5 +1,5 @@
 /*
- * AWS IoT Device Shadow v1.0.1
+ * AWS IoT Device Shadow v1.0.2
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
@@ -63,7 +63,7 @@
  * double parentheses to be ISO C89/C90 standard compliant. For a reference
  * POSIX implementation of the logging macros, refer to shadow_config.h files, and the
  * logging-stack in demos folder of the
- * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master).
+ * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C).
  *
  * <b>Default value</b>: Error logging is turned off, and no code is generated for calls
  * to the macro in the Shadow library on compilation.
@@ -83,7 +83,7 @@
  * double parentheses to be ISO C89/C90 standard compliant. For a reference
  * POSIX implementation of the logging macros, refer to shadow_config.h files, and the
  * logging-stack in demos folder of the
- * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master).
+ * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C).
  *
  * <b>Default value</b>: Warning logs are turned off, and no code is generated for calls
  * to the macro in the Shadow library on compilation.
@@ -103,7 +103,7 @@
  * double parentheses to be ISO C89/C90 standard compliant. For a reference
  * POSIX implementation of the logging macros, refer to shadow_config.h files, and the
  * logging-stack in demos folder of the
- * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master).
+ * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C).
  *
  * <b>Default value</b>: Info logging is turned off, and no code is generated for calls
  * to the macro in the Shadow library on compilation.
@@ -123,7 +123,7 @@
  * double parentheses to be ISO C89/C90 standard compliant. For a reference
  * POSIX implementation of the logging macros, refer to shadow_config.h files, and the
  * logging-stack in demos folder of the
- * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master).
+ * [AWS IoT Embedded C SDK repository](https://github.com/aws/aws-iot-device-sdk-embedded-C).
  *
  * <b>Default value</b>: Debug logging is turned off, and no code is generated for calls
  * to the macro in the Shadow library on compilation.

@@ -4,7 +4,7 @@ The AWS IoT Device Shadow library enables you to store and retrieve the current 
 
 This library has gone through code quality checks including verification that no function has a [GNU Complexity](https://www.gnu.org/software/complexity/manual/complexity.html) score over 8, and checks against deviations from mandatory rules in the [MISRA coding standard](https://www.misra.org.uk/MISRAHome/MISRAC2012/tabid/196/Default.aspx). Deviations from the MISRA C:2012 guidelines are documented under [MISRA Deviations](MISRA.md). This library has also undergone both static code analysis from [Coverity static analysis](https://scan.coverity.com/), and validation of memory safety and proof of functional correctness through the [CBMC automated reasoning tool](https://www.cprover.org/cbmc/).  
 
-See memory requirements for this library [here](https://docs.aws.amazon.com/embedded-csdk/202011.00/lib-ref/libraries/aws/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html#shadow_memory_requirements).
+See memory requirements for this library [here](https://docs.aws.amazon.com/embedded-csdk/202012.00/lib-ref/libraries/aws/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html#shadow_memory_requirements).
 
 ### AWS IoT Device Shadow Config File
 The AWS IoT Device Shadow library exposes configuration macros that are required for building the library.
@@ -57,9 +57,9 @@ Please refer to the demos of the AWS IoT Device Shadow library in the following 
 
 | Platform | Location | Transport Interface Implementation <br> (for [coreMQTT](https://github.com/FreeRTOS/coreMQTT) stack) </br> |
 | :-: | :-: | :-: |
-| POSIX | [AWS IoT Device SDK for Embedded C](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/master/demos/shadow/shadow_demo_main) | POSIX sockets for TCP/IP and OpenSSL for TLS stack
+| POSIX | [AWS IoT Device SDK for Embedded C](https://github.com/aws/aws-iot-device-sdk-embedded-C/tree/main/demos/shadow/shadow_demo_main) | POSIX sockets for TCP/IP and OpenSSL for TLS stack
 | FreeRTOS | [FreeRTOS/FreeRTOS](https://github.com/FreeRTOS/FreeRTOS/tree/master/FreeRTOS-Plus/Demo/AWS/Device_Shadow_Windows_Simulator) | FreeRTOS+TCP for TCP/IP and mbedTLS for TLS stack |
-| FreeRTOS | [FreeRTOS AWS Reference Integrations](https://github.com/aws/amazon-freertos/tree/master/demos/device_shadow_for_aws_iot_embedded_sdk) | Based on Secure Sockets Abstraction |
+| FreeRTOS | [FreeRTOS AWS Reference Integrations](https://github.com/aws/amazon-freertos/tree/master/demos/device_shadow_for_aws) | Based on Secure Sockets Abstraction |
 
 ## Generating documentation
 
@@ -69,3 +69,7 @@ Doxygen pages, please run the following command from the root of this repository
 ```shell
 doxygen docs/doxygen/config.doxyfile
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](./.github/CONTRIBUTING.md) for information on contributing.
