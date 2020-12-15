@@ -6,6 +6,8 @@ This library has gone through code quality checks including verification that no
 
 See memory requirements for this library [here](https://docs.aws.amazon.com/embedded-csdk/202012.00/lib-ref/libraries/aws/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html#shadow_memory_requirements).
 
+**AWS IoT Device Shadow v1.0.2 [source code](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/tree/v1.0.2/source) is part of the [FreeRTOS 202012.00 LTS](https://github.com/FreeRTOS/FreeRTOS-LTS/tree/202012.00_LTS) release.**
+
 ### AWS IoT Device Shadow Config File
 The AWS IoT Device Shadow library exposes configuration macros that are required for building the library.
 A list of all the configurations and their default values are defined in [shadow_config_defaults.h](source/include/shadow_config_defaults.h).
