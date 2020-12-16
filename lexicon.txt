@@ -14,10 +14,10 @@ copydoc
 css
 defgroup
 developerguide
-doxygen
 endcode
 endif
 endlink
+doxygen
 gcc
 generatedtopicstringlength
 getshadowoperationlength
@@ -72,13 +72,12 @@ shadowtopicstringtypedeleterejected
 shadowtopicstringtypeget
 shadowtopicstringtypegetaccepted
 shadowtopicstringtypegetrejected
-shadowtopicstringtypemaxnum
 shadowtopicstringtypeupdate
 shadowtopicstringtypeupdateaccepted
 shadowtopicstringtypeupdatedelta
-shadowtopicstringtypeupdatedelta
 shadowtopicstringtypeupdatedocuments
 shadowtopicstringtypeupdaterejected
+shadowtopicstringtypemaxnum
 sizeof
 stdint
 stringlength
