@@ -92,14 +92,14 @@ typedef enum ShadowTopicStringType
  */
 typedef enum ShadowStatus
 {
-    SHADOW_SUCCESS = 0,              /**< @brief Shadow function success. */
-    SHADOW_FAIL,                     /**< @brief Shadow function encountered error. */
-    SHADOW_BAD_PARAMETER,            /**< @brief Input parameter is invalid. */
-    SHADOW_BUFFER_TOO_SMALL,         /**< @brief The provided buffer is too small. */
-    SHADOW_THINGNAME_PARSE_FAILED,   /**< @brief Could not parse the thing name. */
-    SHADOW_ROOT_PARSE_FAILED,        /**< @brief Could not parse the classic or named shadow root. */
-    SHADOW_SHADOWNAME_PARSE_FAILED,  /**< @brief Could not parse the shadow name (in the case of a named shadow topic). */
-    SHADOW_MESSAGE_TYPE_PARSE_FAILED /**< @brief Could not parse the shadow type. */
+    SHADOW_SUCCESS = 0,               /**< @brief Shadow function success. */
+    SHADOW_FAIL,                      /**< @brief Shadow function encountered error. */
+    SHADOW_BAD_PARAMETER,             /**< @brief Input parameter is invalid. */
+    SHADOW_BUFFER_TOO_SMALL,          /**< @brief The provided buffer is too small. */
+    SHADOW_THINGNAME_PARSE_FAILED,    /**< @brief Could not parse the thing name. */
+    SHADOW_MESSAGE_TYPE_PARSE_FAILED, /**< @brief Could not parse the shadow type. */
+    SHADOW_ROOT_PARSE_FAILED,         /**< @brief Could not parse the classic or named shadow root. */
+    SHADOW_SHADOWNAME_PARSE_FAILED    /**< @brief Could not parse the shadow name (in the case of a named shadow topic). */
 } ShadowStatus_t;
 
 /*------------------------ Shadow library functions -------------------------*/
@@ -119,7 +119,7 @@ typedef enum ShadowStatus
 
 /**
  * @ingroup shadow_constants
- * @brief The root of all un-named "Classic" Shadow MQTT topics
+ * @brief The root of all unnamed "Classic" Shadow MQTT topics
  *        from here https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html.
  */
 #define SHADOW_CLASSIC_ROOT               "/shadow"
@@ -253,7 +253,7 @@ typedef enum ShadowStatus
 
 /**
  * @ingroup shadow_constants
- * @brief The name string for the un-named "Classic" shadow.
+ * @brief The name string for the unnamed "Classic" shadow.
  */
 #define SHADOW_NAME_CLASSIC            ""
 
@@ -263,13 +263,13 @@ typedef enum ShadowStatus
  *
  * The format of shadow topic strings is defined at https://docs.aws.amazon.com/iot/latest/developerguide/device-shadow-mqtt.html
  *
- * A shadow topic string takes one of the two forms, in the case of an un-named ("Classic") shadow:
+ * A shadow topic string takes one of the two forms, in the case of an unnamed ("Classic") shadow:
  *     $aws/things/\<thingName\>/shadow/\<operation\>
  *     $aws/things/\<thingName\>/shadow/\<operation\>/\<suffix\>
  *
  * Or as follows, in the case of a named shadow:
- *     $aws/things/\<thingName\>/shadow/name\<shadowName\>\<operation\>
- *     $aws/things/\<thingName\>/shadow/name\<shadowName\>\<operation\>/\<suffix\>
+ *     $aws/things/\<thingName\>/shadow/name/<shadowName\>/<operation\>
+ *     $aws/things/\<thingName\>/shadow/name/<shadowName\>/<operation\>/\<suffix\>
  *
  * The \<thingName\>, \<shadowName\>, \<operation\> and \<suffix\> segments correspond to the
  * four input parameters of this macro. The \<suffix\> part can be null.
@@ -287,7 +287,7 @@ typedef enum ShadowStatus
  *                       strlen( ( const char * ) myThingName ),
  *                       strlen( ( const char * ) myShadowName ) )
  *
- * To use an un-named ("Classic") shadow, the shadowName length passed should be zero.
+ * To use an unnamed ("Classic") shadow, the shadowName length passed must be zero.
  *
  * @param[in] operationLength   Can be one of:
  *                                  - #SHADOW_OP_UPDATE_LENGTH
@@ -312,6 +312,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_UPDATE( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
@@ -319,6 +324,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/accepted".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_UPDATE_ACCEPTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
@@ -326,6 +336,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/rejected" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/rejected".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_UPDATE_REJECTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
@@ -333,6 +348,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/documents" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/documents".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_UPDATE_DOCUMENTS( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength, shadowNameLength )
@@ -340,6 +360,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/update/delta" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/delta".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_UPDATE_DELTA( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DELTA_LENGTH, thingNameLength, shadowNameLength )
@@ -347,6 +372,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_GET( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
@@ -354,6 +384,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/accepted".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_GET_ACCEPTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
@@ -361,6 +396,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/get/rejected" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/rejected".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_GET_REJECTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_GET_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
@@ -368,6 +408,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_DELETE( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_NULL_LENGTH, thingNameLength, shadowNameLength )
@@ -375,6 +420,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_DELETE_ACCEPTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_ACCEPTED_LENGTH, thingNameLength, shadowNameLength )
@@ -382,6 +432,11 @@ typedef enum ShadowStatus
 /**
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/rejected" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_DELETE_REJECTED( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_DELETE_LENGTH, SHADOW_SUFFIX_REJECTED_LENGTH, thingNameLength, shadowNameLength )
@@ -389,6 +444,11 @@ typedef enum ShadowStatus
 /**
  * @ingroup shadow_constants
  * @brief Compute the length of the longest shadow topic.
+ *
+ * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
+ * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
+ *
+ * @return Length of the shadow topic in bytes.
  */
 #define SHADOW_TOPIC_LENGTH_MAX( thingNameLength, shadowNameLength ) \
     SHADOW_TOPIC_LENGTH( SHADOW_OP_UPDATE_LENGTH, SHADOW_SUFFIX_DOCUMENTS_LENGTH, thingNameLength, shadowNameLength )
@@ -416,7 +476,7 @@ typedef enum ShadowStatus
  *                              - #SHADOW_SUFFIX_DOCUMENTS
  *
  * @param[in] thingName     Thing Name.
- * @param[in] shadowName    Shadow Name. Empty string for un-named ("Classic") shadow.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
  *
  * @return Topic string.
  */
@@ -428,6 +488,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_UPDATE( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_NULL )
@@ -435,6 +500,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/accepted".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_UPDATE_ACCEPTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_ACCEPTED )
@@ -442,6 +512,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/rejected" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/rejected".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_UPDATE_REJECTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_REJECTED )
@@ -449,6 +524,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/documents" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/documents".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_UPDATE_DOCUMENTS( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DOCUMENTS )
@@ -456,6 +536,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/update/delta" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/update/delta".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_UPDATE_DELTA( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_UPDATE, SHADOW_SUFFIX_DELTA )
@@ -463,6 +548,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_GET( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_NULL )
@@ -470,6 +560,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/accepted".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_GET_ACCEPTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_ACCEPTED )
@@ -477,6 +572,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/get/rejected" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/get/rejected".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_GET_REJECTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_GET, SHADOW_SUFFIX_REJECTED )
@@ -484,6 +584,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_DELETE( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_NULL )
@@ -491,6 +596,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/accepted" or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/accepted".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_DELETE_ACCEPTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_ACCEPTED )
@@ -498,6 +608,11 @@ typedef enum ShadowStatus
 /**
  * @brief Assemble shadow topic string "$aws/things/<thingName>/shadow/delete/rejected". or
  *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/rejected".
+ *
+ * @param[in] thingName     Thing Name.
+ * @param[in] shadowName    Shadow Name. Empty string for an unnamed ("Classic") shadow.
+ *
+ * @return Topic string.
  */
 #define SHADOW_TOPIC_STRING_DELETE_REJECTED( thingName, shadowName ) \
     SHADOW_TOPIC_STRING( thingName, shadowName, SHADOW_OP_DELETE, SHADOW_SUFFIX_REJECTED )
@@ -546,15 +661,15 @@ typedef enum ShadowStatus
  * char topicBuffer[ SHADOW_TOPIC_MAX_LENGTH ] = { 0 };
  * uint16_t bufferSize = SHADOW_TOPIC_MAX_LENGTH;
  * uint16_t outLength = 0;
- * const char * pThingName = "TestThingName";
+ * const char thingName[] = "TestThingName";
  * uint16_t thingNameLength  = ( sizeof( thingName ) - 1U );
- * const char * pShadowName = "TestShadowName";
+ * const char shadowName[] = "TestShadowName";
  * uint16_t shadowNameLength  = ( sizeof( shadowName ) - 1U );
  *
  * shadowStatus = Shadow_GetTopicString( SHADOW_TOPIC_STRING_TYPE_UPDATE_DELTA,
- *                                       pThingName,
+ *                                       thingName,
  *                                       thingNameLength,
- *                                       pShadowName,
+ *                                       shadowName,
  *                                       shadowNameLength,
  *                                       & ( topicBuffer[ 0 ] ),
  *                                       bufferSize,
@@ -623,7 +738,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *
  * shadowStatus = Shadow_MatchTopic( pTopicName,
  *                                   topicNameLength,
- *                                   & messageType,
+ *                                   &messageType,
  *                                   NULL,
  *                                   NULL,
  *                                   NULL,

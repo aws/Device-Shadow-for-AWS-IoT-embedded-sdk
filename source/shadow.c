@@ -116,7 +116,7 @@
  *
  * @param[in] pTopic Pointer to the topic string.
  * @param[in] topicLength Length of pTopic.
- * @param[in] pMessageType Pointer to call-supplied memory for returning the type of the shadow message.
+ * @param[in] pMessageType Pointer to caller-supplied memory for returning the type of the shadow message.
  *
  * @return Return SHADOW_SUCCESS if the parameters are valid;
  *         return SHADOW_BAD_PARAMETER if not.
@@ -160,7 +160,7 @@ static ShadowStatus_t validateName( const char * pString,
  *
  * @param[in] pString Pointer to the string.
  * @param[in] stringLength Length of pString.
- * @param[out] pMessageType Pointer to call-supplied memory for returning the type of the shadow message.
+ * @param[out] pMessageType Pointer to caller-supplied memory for returning the type of the shadow message.
  *
  * @return Return SHADOW_SUCCESS if successfully extracted;
  *         return SHADOW_MESSAGE_TYPE_PARSE_FAILED if failed.
@@ -174,8 +174,8 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
  *
  * @param[in] pTopic Pointer to the topic string.
  * @param[in] topicLength Length of pTopic.
- * @param[out] pConsumedTopicLength Pointer to call-supplied memory for returning the consumed topic length.
- * @param[out] pShadowNameLength Pointer to call-supplied memory for returning the shadow name length.
+ * @param[out] pConsumedTopicLength Pointer to caller-supplied memory for returning the consumed topic length.
+ * @param[out] pShadowNameLength Pointer to caller-supplied memory for returning the shadow name length.
  *
  * @return Return SHADOW_SUCCESS if successfully extracted;
  *         return SHADOW_ROOT_PARSE_FAILED shadow root parsing fails.
@@ -212,7 +212,7 @@ static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType );
  * @param[in] thingNameLength The length of the Thing name.
  * @param[in] pShadowName Pointer to the Shadow name.
  * @param[in] shadowNameLength The length of the Shadow name.
- * @param[out] pTopicBuffer Pointer to call-supplied memory for returning the constructed shadow topic string.
+ * @param[out] pTopicBuffer Pointer to caller-supplied memory for returning the constructed shadow topic string.
  */
 static void createShadowTopicString( ShadowTopicStringType_t topicType,
                                      const char * pThingName,
@@ -605,8 +605,6 @@ static void createShadowTopicString( ShadowTopicStringType_t topicType,
                      ( const void * ) pOperationString,
                      ( size_t ) operationStringLength );
 }
-
-/*-----------------------------------------------------------*/
 
 /*-----------------------------------------------------------*/
 
