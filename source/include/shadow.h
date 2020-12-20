@@ -657,7 +657,7 @@ typedef enum ShadowStatus
  *
  * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
  *
- * ShadowStatus_t shadowStatus = SHADOW_STATUS_SUCCESS;
+ * ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
  * char topicBuffer[ SHADOW_TOPIC_MAX_LENGTH ] = { 0 };
  * uint16_t bufferSize = SHADOW_TOPIC_MAX_LENGTH;
  * uint16_t outLength = 0;
@@ -666,7 +666,7 @@ typedef enum ShadowStatus
  * const char shadowName[] = "TestShadowName";
  * uint16_t shadowNameLength  = ( sizeof( shadowName ) - 1U );
  *
- * shadowStatus = Shadow_GetTopicString( SHADOW_TOPIC_STRING_TYPE_UPDATE_DELTA,
+ * shadowStatus = Shadow_GetTopicString( ShadowTopicStringTypeUpdateDelta,
  *                                       thingName,
  *                                       thingNameLength,
  *                                       shadowName,
@@ -675,7 +675,7 @@ typedef enum ShadowStatus
  *                                       bufferSize,
  *                                       & outLength );
  *
- * if( shadowStatus == SHADOW_STATUS_SUCCESS )
+ * if( shadowStatus == SHADOW_SUCCESS )
  * {
  *      // The assembled topic string is put in pTopicBuffer with the length outLength.
  * }
@@ -731,7 +731,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *
  * #define SHADOW_TOPIC_MAX_LENGTH  ( 256U )
  *
- * ShadowStatus_te shadowStatus = SHADOW_STATUS_SUCCESS;
+ * ShadowStatus_te shadowStatus = SHADOW_SUCCESS;
  * char * pTopicName; //usually supplied by MQTT stack
  * uint16_t topicNameLength; //usually supplied by MQTT stack
  * ShadowMessageType_t messageType;
@@ -744,7 +744,7 @@ ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
  *                                   NULL,
  *                                   NULL );
  *
- * if( shadowStatus == SHADOW_STATUS_SUCCESS )
+ * if( shadowStatus == SHADOW_SUCCESS )
  * {
  *      // It is a device shadow message. And the type of the message has been returned in messageType.
  *      // Now we can act on the message.
