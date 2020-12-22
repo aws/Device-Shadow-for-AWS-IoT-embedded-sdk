@@ -21,15 +21,13 @@ Embedded devices often use MQTT to interact with Device Shadow. This library pro
     </tr>
     <tr>
         <td><b>File</b></td>
-        <td><b>No Optimization (asserts enabled)</b></td>
         <td><b>With -O1 Optimization (asserts disabled)</b></td>
         <td><b>With -Os Optimization (asserts disabled)</b></td>
     </tr>
     <tr>
         <td>shadow.c</td>
-        <td>2.3K</td>
-        <td>1.8K</td>
-        <td>0.9K</td>
+        <td>1.2K</td>
+        <td>0.7K</td>
     </tr>
 </table>
  */
