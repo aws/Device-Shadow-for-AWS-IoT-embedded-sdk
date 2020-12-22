@@ -31,8 +31,8 @@ Embedded devices often use MQTT to interact with Device Shadow. This library pro
     </tr>
     <tr>
         <td><b>Total estimate</b></td>
-        <td><center>1.2K</center></td>
-        <td><center>0.7K</center></td>
+        <td><center><b>1.2K</b></center></td>
+        <td><center><b>0.7K</b></center></td>
     </tr>
 </table>
  */
