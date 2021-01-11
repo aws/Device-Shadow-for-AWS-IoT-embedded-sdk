@@ -112,7 +112,7 @@
 #define SHADOW_OP_DELETE_REJECTED_LENGTH     ( SHADOW_OP_DELETE_LENGTH + SHADOW_SUFFIX_REJECTED_LENGTH )
 
 /**
- * @brief Check if Shadow_MatchTopic has valid parameters.
+ * @brief Check if Shadow_MatchTopicString has valid parameters.
  *
  * @param[in] pTopic Pointer to the topic string.
  * @param[in] topicLength Length of pTopic.
@@ -480,7 +480,7 @@ static const char * getShadowOperationString( ShadowTopicStringType_t topicType 
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString. */
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_AssembleTopicString. */
         default:
             shadowOperationString = SHADOW_OP_UPDATE_DELTA;
             break;
@@ -538,7 +538,7 @@ static uint16_t getShadowOperationLength( ShadowTopicStringType_t topicType )
             break;
 
         case ShadowTopicStringTypeUpdateDelta:
-        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_GetTopicString. */
+        /* topicType >= ShadowTopicStringTypeMaxNum check is covered at entry of Shadow_AssembleTopicString. */
         default:
             shadowOperationLength = SHADOW_OP_UPDATE_DELTA_LENGTH;
             break;
@@ -608,13 +608,13 @@ static void createShadowTopicString( ShadowTopicStringType_t topicType,
 
 /*-----------------------------------------------------------*/
 
-ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
-                                  uint16_t topicLength,
-                                  ShadowMessageType_t * pMessageType,
-                                  const char ** pThingName,
-                                  uint16_t * pThingNameLength,
-                                  const char ** pShadowName,
-                                  uint16_t * pShadowNameLength )
+ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
+                                        uint16_t topicLength,
+                                        ShadowMessageType_t * pMessageType,
+                                        const char ** pThingName,
+                                        uint16_t * pThingNameLength,
+                                        const char ** pShadowName,
+                                        uint16_t * pShadowNameLength )
 {
     uint16_t consumedTopicLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
@@ -724,14 +724,14 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
     return shadowStatus;
 }
 /*-----------------------------------------------------------*/
-ShadowStatus_t Shadow_GetTopicString( ShadowTopicStringType_t topicType,
-                                      const char * pThingName,
-                                      uint8_t thingNameLength,
-                                      const char * pShadowName,
-                                      uint8_t shadowNameLength,
-                                      char * pTopicBuffer,
-                                      uint16_t bufferSize,
-                                      uint16_t * pOutLength )
+ShadowStatus_t Shadow_AssembleTopicString( ShadowTopicStringType_t topicType,
+                                           const char * pThingName,
+                                           uint8_t thingNameLength,
+                                           const char * pShadowName,
+                                           uint8_t shadowNameLength,
+                                           char * pTopicBuffer,
+                                           uint16_t bufferSize,
+                                           uint16_t * pOutLength )
 {
     uint16_t generatedTopicStringLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;

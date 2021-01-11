@@ -21,8 +21,8 @@
  */
 
 /**
- * @file Shadow_MatchTopic_harness.c
- * @brief Implements the proof harness for Shadow_MatchTopic function.
+ * @file Shadow_AssembleTopicString_harness.c
+ * @brief Implements the proof harness for Shadow_AssembleTopicString function.
  */
 
 #include "shadow.h"
@@ -30,30 +30,26 @@
 
 void harness()
 {
-    const char * pTopicName;
-    uint16_t topicNameLength;
-    ShadowMessageType_t * pMessageType;
-    const char ** pThingName;
-    uint16_t * pThingNameLength;
-    const char ** pShadowName;
-    uint16_t * pShadowNameLength;
+    char * topicBuffer;
+    uint16_t bufferSize;
+    uint16_t * pOutLength;
+    char * pThingName;
+    uint8_t thingNameLength;
+    char * pShadowName;
+    uint8_t shadowNameLength;
+    uint8_t topicType;
 
-    __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
-    pTopicName = mallocCanFail( topicNameLength );
+    topicBuffer = mallocCanFail( bufferSize );
+    pOutLength = mallocCanFail( sizeof( *pOutLength ) );
+    pThingName = mallocCanFail( thingNameLength );
+    pShadowName = mallocCanFail( shadowNameLength );
 
-    pMessageType = mallocCanFail( sizeof( *pMessageType ) );
-
-    pThingName = mallocCanFail( sizeof( *pThingName ) );
-    pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
-
-    pShadowName = mallocCanFail( sizeof( *pShadowName ) );
-    pShadowNameLength = mallocCanFail( sizeof( *pShadowNameLength ) );
-
-    Shadow_MatchTopic( pTopicName,
-                       topicNameLength,
-                       pMessageType,
-                       pThingName,
-                       pThingNameLength,
-                       pShadowName,
-                       pShadowNameLength );
+    Shadow_AssembleTopicString( topicType,
+                                pThingName,
+                                thingNameLength,
+                                pShadowName,
+                                shadowNameLength,
+                                &( topicBuffer[ 0 ] ),
+                                bufferSize,
+                                pOutLength );
 }

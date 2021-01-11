@@ -20,29 +20,13 @@
 #
 
 HARNESS_ENTRY=harness
-HARNESS_FILE=Shadow_MatchTopic_harness
-PROOF_UID = Shadow_MatchTopic
+HARNESS_FILE=Shadow_AssembleTopicString_harness
+PROOF_UID = Shadow_AssembleTopicString
 
-# The topic length is bounded to reduce the proof run time. This length bounds
-# the time to look for the thing and shadow names in the topic string. It adds
-# no value to the proof to input the largest possible topic string accepted by
-# AWS (64KB). We allow for a the longest named shadow topic, but with only
-# reasonable allowance for typical Thing and Shadow names.
-# $aws/things/thingName/shadow/name/shadowName/update/documents
-TOPIC_STRING_LENGTH_MAX=65
-
-DEFINES += -DTOPIC_STRING_LENGTH_MAX=$(TOPIC_STRING_LENGTH_MAX)
+DEFINES +=
 INCLUDES +=
 
-# The maximum length of the message type ( /update/documents ) is 17.
-UNWINDSET += strncmp.0:18
-
-# Allow for the longest possible Shadow name
-UNWINDSET += __CPROVER_file_local_shadow_c_validateName.0:64
-
-# The number of message types is 8.
-UNWINDSET += __CPROVER_file_local_shadow_c_extractShadowMessageType.0:9
-
+REMOVE_FUNCTION_BODY +=
 
 PROOF_SOURCES += $(PROOFDIR)/$(HARNESS_FILE).c
 PROOF_SOURCES += $(SRCDIR)/test/cbmc/sources/shadow_cbmc_state.c

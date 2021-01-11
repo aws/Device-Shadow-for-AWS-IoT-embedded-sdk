@@ -21,8 +21,8 @@
  */
 
 /**
- * @file Shadow_GetTopicString_harness.c
- * @brief Implements the proof harness for Shadow_GetTopicString function.
+ * @file Shadow_MatchTopicString_harness.c
+ * @brief Implements the proof harness for Shadow_MatchTopicString function.
  */
 
 #include "shadow.h"
@@ -30,26 +30,30 @@
 
 void harness()
 {
-    char * topicBuffer;
-    uint16_t bufferSize;
-    uint16_t * pOutLength;
-    char * pThingName;
-    uint8_t thingNameLength;
-    char * pShadowName;
-    uint8_t shadowNameLength;
-    uint8_t topicType;
+    const char * pTopicName;
+    uint16_t topicNameLength;
+    ShadowMessageType_t * pMessageType;
+    const char ** pThingName;
+    uint16_t * pThingNameLength;
+    const char ** pShadowName;
+    uint16_t * pShadowNameLength;
 
-    topicBuffer = mallocCanFail( bufferSize );
-    pOutLength = mallocCanFail( sizeof( *pOutLength ) );
-    pThingName = mallocCanFail( thingNameLength );
-    pShadowName = mallocCanFail( shadowNameLength );
+    __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
+    pTopicName = mallocCanFail( topicNameLength );
 
-    Shadow_GetTopicString( topicType,
-                           pThingName,
-                           thingNameLength,
-                           pShadowName,
-                           shadowNameLength,
-                           &( topicBuffer[ 0 ] ),
-                           bufferSize,
-                           pOutLength );
+    pMessageType = mallocCanFail( sizeof( *pMessageType ) );
+
+    pThingName = mallocCanFail( sizeof( *pThingName ) );
+    pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
+
+    pShadowName = mallocCanFail( sizeof( *pShadowName ) );
+    pShadowNameLength = mallocCanFail( sizeof( *pShadowNameLength ) );
+
+    Shadow_MatchTopicString( pTopicName,
+                             topicNameLength,
+                             pMessageType,
+                             pThingName,
+                             pThingNameLength,
+                             pShadowName,
+                             pShadowNameLength );
 }

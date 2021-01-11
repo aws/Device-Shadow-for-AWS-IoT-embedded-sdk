@@ -2,6 +2,6 @@
   [
 
   ],
-  "proof-name": "Shadow_MatchTopic",
+  "proof-name": "Shadow_AssembleTopicString",
   "proof-root": "../cbmc/proofs"
 }
