@@ -435,7 +435,7 @@ typedef enum ShadowStatus
 /**
  * @ingroup shadow_constants
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/accepted" or
- *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/accepted".
  *
  * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
  * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
@@ -448,7 +448,7 @@ typedef enum ShadowStatus
 /**
  * @ingroup shadow_constants
  * @brief Compute the length of shadow topic "$aws/things/<thingName>/shadow/delete/rejected" or
- *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete".
+ *        "$aws/things/<thingName>/shadow/name/<shadowName>/delete/rejected".
  *
  * @param[in] thingNameLength   Length of the thingName excluding the ending NULL.
  * @param[in] shadowNameLength  Length of the shadowName excluding the ending NULL. Zero for "Classic" shadow.
