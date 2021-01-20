@@ -21,8 +21,8 @@
  */
 
 /**
- * @file Shadow_GetTopicString_harness.c
- * @brief Implements the proof harness for Shadow_GetTopicString function.
+ * @file Shadow_AssembleTopicString_harness.c
+ * @brief Implements the proof harness for Shadow_AssembleTopicString function.
  */
 
 #include "shadow.h"
@@ -35,16 +35,21 @@ void harness()
     uint16_t * pOutLength;
     char * pThingName;
     uint8_t thingNameLength;
+    char * pShadowName;
+    uint8_t shadowNameLength;
     uint8_t topicType;
 
     topicBuffer = mallocCanFail( bufferSize );
     pOutLength = mallocCanFail( sizeof( *pOutLength ) );
     pThingName = mallocCanFail( thingNameLength );
+    pShadowName = mallocCanFail( shadowNameLength );
 
-    Shadow_GetTopicString( topicType,
-                           pThingName,
-                           thingNameLength,
-                           &( topicBuffer[ 0 ] ),
-                           bufferSize,
-                           pOutLength );
+    Shadow_AssembleTopicString( topicType,
+                                pThingName,
+                                thingNameLength,
+                                pShadowName,
+                                shadowNameLength,
+                                &( topicBuffer[ 0 ] ),
+                                bufferSize,
+                                pOutLength );
 }

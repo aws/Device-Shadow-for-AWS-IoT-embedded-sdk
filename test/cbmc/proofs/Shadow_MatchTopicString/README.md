@@ -1,7 +1,7 @@
-Shadow_MatchTopic proof
+Shadow_MatchTopicString proof
 ==============
 
-This directory contains a memory safety proof for Shadow_MatchTopic.
+This directory contains a memory safety proof for Shadow_MatchTopicString.
 
 To run the proof.
 * Add cbmc, goto-cc, goto-instrument, goto-analyzer, and cbmc-viewer

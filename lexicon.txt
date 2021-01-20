@@ -43,6 +43,8 @@ matchtopic
 mdash
 messagetype
 mqtt
+myshadow
+myshadowname
 mything
 mythingname
 noninfringement
@@ -51,11 +53,16 @@ operationlength
 os
 outlength
 param
+pconsumedtopiclength
 pmessagetype
 png
 posix
+pname
+pnamelength
 poutlength
 pre
+pshadowname
+pshadownamelength
 pstring
 psubstring
 pthingname
@@ -65,6 +72,8 @@ ptopicbuffer
 ptopicname
 rm
 sdk
+shadowname
+shadownamelength
 shadowstatus
 shadowtopicstringtypedelete
 shadowtopicstringtypedeleteaccepted
@@ -87,6 +96,7 @@ sublicense
 substringlength
 suffixlength
 td
+testshadowname
 testthingname
 thingname
 thingnamelength
@@ -97,3 +107,4 @@ topicnamelength
 topictype
 tr
 utest
+un

@@ -1,7 +1,7 @@
-Shadow_GetTopicString proof
+Shadow_AssembleTopicString proof
 ==============
 
-This directory contains a memory safety proof for Shadow_GetTopicString.
+This directory contains a memory safety proof for Shadow_AssembleTopicString.
 
 To run the proof.
 * Add cbmc, goto-cc, goto-instrument, goto-analyzer, and cbmc-viewer

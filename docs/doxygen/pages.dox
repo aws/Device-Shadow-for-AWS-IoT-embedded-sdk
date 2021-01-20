@@ -75,16 +75,16 @@ Some configuration settings are C pre-processor constants, and some are function
 /**
 @page shadow_functions Functions
 @brief Primary functions of the Shadow library:<br><br>
-@subpage shadow_matchtopic_function <br>
-@subpage shadow_gettopicstring_function <br>
+@subpage shadow_matchtopicstring_function <br>
+@subpage shadow_assembletopicstring_function <br>
 
-@page shadow_matchtopic_function Shadow_MatchTopic
-@snippet shadow.h declare_shadow_matchtopic
-@copydoc Shadow_MatchTopic
+@page shadow_matchtopicstring_function Shadow_MatchTopicString
+@snippet shadow.h declare_shadow_matchtopicstring
+@copydoc Shadow_MatchTopicString
 
-@page shadow_gettopicstring_function Shadow_GetTopicString
-@snippet shadow.h declare_shadow_gettopicstring
-@copydoc Shadow_GetTopicString
+@page shadow_assembletopicstring_function Shadow_AssembleTopicString
+@snippet shadow.h declare_shadow_assembletopicstring
+@copydoc Shadow_AssembleTopicString
 
 */
 
