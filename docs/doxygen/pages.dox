@@ -17,19 +17,22 @@ Embedded devices often use MQTT to interact with Device Shadow. This library pro
 
 <table>
     <tr>
-        <td colspan="4"><center><b>Code Size of Device Shadow Library (sizes generated with [GCC for ARM Cortex-M toolchain](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads/9-2020-q2-update))</b></center></td>
+        <td colspan="3"><center><b>Code Size of AWS IoT Device Shadow (example generated with GCC for ARM Cortex-M)</b></center></td>
     </tr>
     <tr>
         <td><b>File</b></td>
-        <td><b>No Optimization (asserts enabled)</b></td>
-        <td><b>With -O1 Optimization (asserts disabled)</b></td>
-        <td><b>With -Os Optimization (asserts disabled)</b></td>
+        <td><center><b>With -O1 Optimization</b></center></td>
+        <td><center><b>With -Os Optimization</b></center></td>
     </tr>
     <tr>
         <td>shadow.c</td>
-        <td>2.3K</td>
-        <td>1.8K</td>
-        <td>0.9K</td>
+        <td><center>1.2K</center></td>
+        <td><center>0.7K</center></td>
+    </tr>
+    <tr>
+        <td><b>Total estimate</b></td>
+        <td><center><b>1.2K</b></center></td>
+        <td><center><b>0.7K</b></center></td>
     </tr>
 </table>
  */
