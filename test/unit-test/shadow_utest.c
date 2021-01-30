@@ -705,6 +705,21 @@ void test_Shadow_AssembleTopicString_Classic_Happy_Path( void )
                                       topicBuffer,
                                       outLength );
     }
+
+    /* Call Shadow_AssembleTopicString() with valid parameters.
+     * Use classic shadow by passing NULL for shadow name and 0 for shadow name length. */
+    shadowStatus = Shadow_AssembleTopicString( ShadowTopicStringTypeGetAccepted,
+                                               TEST_THING_NAME,
+                                               TEST_THING_NAME_LENGTH,
+                                               NULL,
+                                               0,
+                                               &( topicBufferGetAccepted[ 0 ] ),
+                                               bufferSizeGetAccepted,
+                                               &outLength );
+    TEST_ASSERT_EQUAL_INT( TEST_CLASSIC_TOPIC_LENGTH_GET_ACCEPTED, outLength );
+    TEST_ASSERT_EQUAL_STRING_LEN( TEST_CLASSIC_TOPIC_STRING_GET_ACCEPTED,
+                                  topicBufferGetAccepted,
+                                  bufferSizeGetAccepted );
 }
 
 /**
