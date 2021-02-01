@@ -323,22 +323,22 @@ ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicTyp
                     ( unsigned int ) thingNameLength,
                     ( void * ) pShadowName,
                     ( unsigned int ) shadowNameLength,
-                    topicType,
+                    ( int ) topicType,
                     ( void * ) pOutLength ) );
     }
     else if( thingNameLength > SHADOW_THINGNAME_MAX_LENGTH )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid thingNamelength. Thing name length of %u exceeds maximum allowed length %u.",
-                    thingNameLength,
-                    SHADOW_THINGNAME_MAX_LENGTH ) );
+                    ( unsigned int ) thingNameLength,
+                    ( unsigned int ) SHADOW_THINGNAME_MAX_LENGTH ) );
     }
     else if( shadowNameLength > SHADOW_NAME_MAX_LENGTH )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid shadowNameLength. Shadow name length of %u exceeds maximum allowed length %u.",
-                    shadowNameLength,
-                    SHADOW_NAME_MAX_LENGTH ) );
+                    ( unsigned int ) shadowNameLength,
+                    ( unsigned int ) SHADOW_NAME_MAX_LENGTH ) );
     }
 
     return shadowStatus;
@@ -413,14 +413,14 @@ static ShadowStatus_t extractThingName( const char * pTopic,
     if( shadowStatus != SHADOW_SUCCESS )
     {
         shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-        LogDebug( ( "Not related to Shadow, failed to parse thing name in pTopic %s.", pTopic ) );
+        LogDebug( ( "Not related to Shadow. Failed to parse thing name in pTopic %s.", pTopic ) );
     }
     else if( *pThingNameLength > SHADOW_THINGNAME_MAX_LENGTH )
     {
         shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
         LogDebug( ( "Not related to Shadow. Thing name length of %u exceeds maximum allowed length %u in pTopic %s.",
-                    *pThingNameLength,
-                    SHADOW_THINGNAME_MAX_LENGTH,
+                    ( unsigned int ) *pThingNameLength,
+                    ( unsigned int ) SHADOW_THINGNAME_MAX_LENGTH,
                     pTopic ) );
     }
     else
@@ -459,14 +459,14 @@ static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
         if( shadowStatus != SHADOW_SUCCESS )
         {
             shadowStatus = SHADOW_SHADOWNAME_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, failed to parse shadow name in pTopic %s.", pTopic ) );
+            LogDebug( ( "Not related to Shadow. Failed to parse shadow name in pTopic %s.", pTopic ) );
         }
         else if( *pShadowNameLength > SHADOW_NAME_MAX_LENGTH )
         {
             shadowStatus = SHADOW_SHADOWNAME_PARSE_FAILED;
             LogDebug( ( "Not related to Shadow. Shadow name length of %u exceeds maximum allowed length %u in pTopic %s.",
-                        *pShadowNameLength,
-                        SHADOW_NAME_MAX_LENGTH,
+                        ( unsigned int ) *pShadowNameLength,
+                        ( unsigned int ) SHADOW_NAME_MAX_LENGTH,
                         pTopic ) );
         }
         else
@@ -489,7 +489,7 @@ static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
         else
         {
             shadowStatus = SHADOW_ROOT_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, failed to parse shadow root in pTopic %s", pTopic ) );
+            LogDebug( ( "Not related to Shadow. Failed to parse shadow root in pTopic %s", pTopic ) );
         }
     }
 
@@ -569,7 +569,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
 
     if( returnStatus != SHADOW_SUCCESS )
     {
-        LogDebug( ( "Not related to Shadow, failed to match shadow message type in pString %s.", pString ) );
+        LogDebug( ( "Not related to Shadow. Failed to match shadow message type in pString %s.", pString ) );
     }
 
     return returnStatus;
@@ -795,7 +795,7 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
         }
         else
         {
-            LogDebug( ( "Not related to Shadow, failed to parse shadow topic prefix in pTopic %s.", pTopic ) );
+            LogDebug( ( "Not related to Shadow. Failed to parse shadow topic prefix in pTopic %s.", pTopic ) );
         }
     }
 
@@ -826,7 +826,7 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
         if( shadowStatus != SHADOW_SUCCESS )
         {
             shadowStatus = SHADOW_MESSAGE_TYPE_PARSE_FAILED;
-            LogDebug( ( "Not related to Shadow, shadow message type is not in pTopic %s, failed to parse shadow message type.", pTopic ) );
+            LogDebug( ( "Not related to Shadow. Shadow message type is not in pTopic %s, failed to parse shadow message type.", pTopic ) );
         }
     }
 
