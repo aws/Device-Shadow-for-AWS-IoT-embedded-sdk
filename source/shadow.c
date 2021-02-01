@@ -143,6 +143,7 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
 /**
  * @brief Check if Shadow_AssembleTopicString has valid parameters.
  *
+ * @param[in]  topicType Shadow topic type.
  * @param[in]  pThingName Thing Name string.
  * @param[in]  thingNameLength Length of Thing Name string pointed to by pThingName.
  * @param[in]  pShadowName Shadow Name string.
