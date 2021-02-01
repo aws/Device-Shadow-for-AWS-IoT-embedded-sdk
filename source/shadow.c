@@ -381,33 +381,43 @@ static ShadowStatus_t validateName( const char * pString,
 {
     uint16_t index = 0U;
     ShadowStatus_t returnStatus = SHADOW_FAIL;
+    uint8_t parsedName = 0U;
 
     for( ; index < stringLength; index++ )
     {
         /* The name should always be terminated by a forward slash */
         if( pString[ index ] == ( char ) '/' )
         {
-            if( index == 0U )
-            {
-                LogDebug( ( "Not a Shadow topic. Unable to find a %s name in the topic.",
-                            ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow" ) );
-            }
-            else if( index > maxAllowedLength )
-            {
-                LogDebug( ( "Not a Shadow topic. Extracted %s name length of %u exceeds maximum allowed length %u.",
-                            ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow",
-                            ( unsigned int ) index,
-                            ( unsigned int ) maxAllowedLength ) );
-            }
-            else
-            {
-                /* Only accept names of greater than zero length */
-                *pNameLength = index;
-                returnStatus = SHADOW_SUCCESS;
-            }
-
+            parsedName = 1U;
             break;
         }
+    }
+
+    if( parsedName == 1U )
+    {
+        if( index == 0U )
+        {
+            LogDebug( ( "Not a Shadow topic. Unable to find a %s name in the topic.",
+                        ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow" ) );
+        }
+        else if( index > maxAllowedLength )
+        {
+            LogDebug( ( "Not a Shadow topic. Extracted %s name length of %u exceeds maximum allowed length %u.",
+                        ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow",
+                        ( unsigned int ) index,
+                        ( unsigned int ) maxAllowedLength ) );
+        }
+        else
+        {
+            /* Only accept names of greater than zero length */
+            *pNameLength = index;
+            returnStatus = SHADOW_SUCCESS;
+        }
+    }
+    else
+    {
+        LogDebug( ( "Not a Shadow topic. Unable to find a %s name in the topic.",
+                    ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow" ) );
     }
 
     return returnStatus;
@@ -446,13 +456,11 @@ static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
                                                 uint16_t * pConsumedTopicLength,
                                                 uint16_t * pShadowNameLength )
 {
-    ShadowStatus_t shadowStatus;
-
     /* Look for the named shadow root */
-    shadowStatus = containsSubString( &( pTopic[ *pConsumedTopicLength ] ),
-                                      topicLength - *pConsumedTopicLength,
-                                      SHADOW_NAMED_ROOT,
-                                      SHADOW_NAMED_ROOT_LENGTH );
+    ShadowStatus_t shadowStatus = containsSubString( &( pTopic[ *pConsumedTopicLength ] ),
+                                                     topicLength - *pConsumedTopicLength,
+                                                     SHADOW_NAMED_ROOT,
+                                                     SHADOW_NAMED_ROOT_LENGTH );
 
     if( shadowStatus == SHADOW_SUCCESS )
     {
@@ -872,15 +880,14 @@ ShadowStatus_t Shadow_AssembleTopicString( ShadowTopicStringType_t topicType,
                                            uint16_t * pOutLength )
 {
     uint16_t generatedTopicStringLength = 0U;
-    ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
 
-    shadowStatus = validateAssembleTopicParameters( topicType,
-                                                    pThingName,
-                                                    thingNameLength,
-                                                    pShadowName,
-                                                    shadowNameLength,
-                                                    pTopicBuffer,
-                                                    pOutLength );
+    ShadowStatus_t shadowStatus = validateAssembleTopicParameters( topicType,
+                                                                   pThingName,
+                                                                   thingNameLength,
+                                                                   pShadowName,
+                                                                   shadowNameLength,
+                                                                   pTopicBuffer,
+                                                                   pOutLength );
 
     if( shadowStatus == SHADOW_SUCCESS )
     {
