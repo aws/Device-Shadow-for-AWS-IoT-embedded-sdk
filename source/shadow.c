@@ -439,7 +439,6 @@ static ShadowStatus_t extractThingName( const char * pTopic,
     if( shadowStatus != SHADOW_SUCCESS )
     {
         shadowStatus = SHADOW_THINGNAME_PARSE_FAILED;
-        LogDebug( ( "Not a Shadow topic. Failed to parse thing name in pTopic %s.", pTopic ) );
     }
     else
     {
@@ -476,7 +475,6 @@ static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
         if( shadowStatus != SHADOW_SUCCESS )
         {
             shadowStatus = SHADOW_SHADOWNAME_PARSE_FAILED;
-            LogDebug( ( "Not a Shadow topic. Failed to parse shadow name in pTopic %s.", pTopic ) );
         }
         else
         {
