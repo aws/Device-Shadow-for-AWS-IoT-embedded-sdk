@@ -416,6 +416,16 @@
 #define TEST_NAMED_TOPIC_STRING_INVALID_GET_REJECTED         "$aws/things/TestThingName/shadow/name/TestShadowName/get/rejected/gibberish"
 
 /**
+ * @brief A topic string that exceeds the maximum Thing name length.
+ */
+#define TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_THING_NAME       "$aws/things/TestThingName12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890/shadow/name/TestShadowName/delete/rejected"
+
+/**
+ * @brief A topic string that exceeds the maximum Shadow name length.
+ */
+#define TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_SHADOW_NAME      "$aws/things/TestThingName/shadow/name/TestShadowName123456789012345678901234567890123456789012345678901234567890/delete/rejected"
+
+/**
  * @brief The length of #TEST_NAMED_TOPIC_STRING_EMPTY_SHADOWNAME shared among all named shadow test cases.
  */
 #define TEST_NAMED_TOPIC_LENGTH_EMPTY_SHADOWNAME             ( ( uint16_t ) sizeof( TEST_NAMED_TOPIC_STRING_EMPTY_SHADOWNAME ) - 1U )
@@ -446,6 +456,16 @@
 #define TEST_NAMED_TOPIC_LENGTH_INVALID_GET_REJECTED         ( ( uint16_t ) sizeof( TEST_NAMED_TOPIC_STRING_INVALID_GET_REJECTED ) - 1U )
 
 /**
+ * @brief The length of #TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_THING_NAME.
+ */
+#define TEST_NAMED_TOPIC_LENGTH_EXCEEDS_MAX_THING_NAME       ( ( uint16_t ) sizeof( TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_THING_NAME ) - 1U )
+
+/**
+ * @brief The length of #TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_SHADOW_NAME.
+ */
+#define TEST_NAMED_TOPIC_LENGTH_EXCEEDS_MAX_SHADOW_NAME      ( ( uint16_t ) sizeof( TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_SHADOW_NAME ) - 1U )
+
+/**
  * @brief The init value for a topic buffer.
  */
 #define TEST_NAMED_TOPIC_BUFFER_INITIALIZE                   "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789abcdefghijklmnopqrstuvwxyz123456789"
@@ -459,6 +479,20 @@
  * @brief The length of #TEST_NAMED_TOPIC_STRING_DELETE_REJECTED shared among all named shadow test cases.
  */
 #define TEST_NAMED_TOPIC_BUFFER_LENGTH                       ( ( uint16_t ) sizeof( TEST_NAMED_TOPIC_BUFFER_INITIALIZE ) - 1U )
+
+/**
+ * @brief Maximum shadow name length.
+ * Refer to https://docs.aws.amazon.com/general/latest/gr/iot-core.html#device-shadow-limits
+ * for more details about the Device Shadow limits.
+ */
+#define SHADOW_NAME_MAX_LENGTH                               ( 64U )
+
+/**
+ * @brief Maximum thing name length.
+ * Refer to https://docs.aws.amazon.com/general/latest/gr/iot-core.html#device-shadow-limits
+ * for more details about the Device Shadow limits.
+ */
+#define SHADOW_THINGNAME_MAX_LENGTH                          ( 128U )
 
 /*-----------------------------------------------------------*/
 
@@ -671,6 +705,21 @@ void test_Shadow_AssembleTopicString_Classic_Happy_Path( void )
                                       topicBuffer,
                                       outLength );
     }
+
+    /* Call Shadow_AssembleTopicString() with valid parameters.
+     * Use classic shadow by passing NULL for shadow name and 0 for shadow name length. */
+    shadowStatus = Shadow_AssembleTopicString( ShadowTopicStringTypeGetAccepted,
+                                               TEST_THING_NAME,
+                                               TEST_THING_NAME_LENGTH,
+                                               NULL,
+                                               0,
+                                               &( topicBufferGetAccepted[ 0 ] ),
+                                               bufferSizeGetAccepted,
+                                               &outLength );
+    TEST_ASSERT_EQUAL_INT( TEST_CLASSIC_TOPIC_LENGTH_GET_ACCEPTED, outLength );
+    TEST_ASSERT_EQUAL_STRING_LEN( TEST_CLASSIC_TOPIC_STRING_GET_ACCEPTED,
+                                  topicBufferGetAccepted,
+                                  bufferSizeGetAccepted );
 }
 
 /**
@@ -858,6 +907,26 @@ void test_Shadow_AssembleTopicString_Invalid_Parameters( void )
                                                TEST_THING_NAME_LENGTH,
                                                NULL,
                                                1,
+                                               namedTopicBuffer,
+                                               namedBufferSize,
+                                               &outLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
+
+    shadowStatus = Shadow_AssembleTopicString( topicType,
+                                               TEST_THING_NAME,
+                                               SHADOW_THINGNAME_MAX_LENGTH + 1,
+                                               TEST_SHADOW_NAME,
+                                               TEST_SHADOW_NAME_LENGTH,
+                                               namedTopicBuffer,
+                                               namedBufferSize,
+                                               &outLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_BAD_PARAMETER, shadowStatus );
+
+    shadowStatus = Shadow_AssembleTopicString( topicType,
+                                               TEST_THING_NAME,
+                                               TEST_THING_NAME_LENGTH,
+                                               TEST_SHADOW_NAME,
+                                               SHADOW_NAME_MAX_LENGTH + 1,
                                                namedTopicBuffer,
                                                namedBufferSize,
                                                &outLength );
@@ -1101,6 +1170,15 @@ void test_Shadow_MatchTopicString_Invalid_Parameters( void )
                                             &shadowNameLength );
     TEST_ASSERT_EQUAL_INT( SHADOW_THINGNAME_PARSE_FAILED, shadowStatus );
 
+    shadowStatus = Shadow_MatchTopicString( TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_THING_NAME,
+                                            TEST_NAMED_TOPIC_LENGTH_EXCEEDS_MAX_THING_NAME,
+                                            &messageType,
+                                            &pThingName,
+                                            &thingNameLength,
+                                            &pShadowName,
+                                            &shadowNameLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_THINGNAME_PARSE_FAILED, shadowStatus );
+
     shadowStatus = Shadow_MatchTopicString( TEST_TOPIC_STRING_EMPTY_SHADOW_ROOT,
                                             TEST_TOPIC_LENGTH_EMPTY_SHADOW_ROOT,
                                             &messageType,
@@ -1139,6 +1217,15 @@ void test_Shadow_MatchTopicString_Invalid_Parameters( void )
 
     shadowStatus = Shadow_MatchTopicString( TEST_NAMED_TOPIC_STRING_UNTERMINATED_SHADOWNAME,
                                             TEST_NAMED_TOPIC_LENGTH_UNTERMINATED_SHADOWNAME,
+                                            &messageType,
+                                            &pThingName,
+                                            &thingNameLength,
+                                            &pShadowName,
+                                            &shadowNameLength );
+    TEST_ASSERT_EQUAL_INT( SHADOW_SHADOWNAME_PARSE_FAILED, shadowStatus );
+
+    shadowStatus = Shadow_MatchTopicString( TEST_NAMED_TOPIC_STRING_EXCEEDS_MAX_SHADOW_NAME,
+                                            TEST_NAMED_TOPIC_LENGTH_EXCEEDS_MAX_SHADOW_NAME,
                                             &messageType,
                                             &pThingName,
                                             &thingNameLength,

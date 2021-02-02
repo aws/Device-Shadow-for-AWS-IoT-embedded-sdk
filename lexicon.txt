@@ -14,6 +14,7 @@ copydoc
 css
 defgroup
 developerguide
+device-shadow-limits
 endcode
 endif
 endlink
@@ -23,6 +24,7 @@ generatedtopicstringlength
 getshadowoperationlength
 gettopicstring
 github
+gr
 html
 http
 https
@@ -31,6 +33,7 @@ inc
 ingroup
 init
 iot
+iot-core
 iso
 json
 logdebug
@@ -40,6 +43,7 @@ logwarn
 mainpage
 malloc
 matchtopic
+maxallowedlength
 mdash
 messagetype
 mqtt
