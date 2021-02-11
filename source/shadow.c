@@ -148,8 +148,8 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
  * @param[in]  thingNameLength Length of Thing Name string pointed to by pThingName.
  * @param[in]  pShadowName Shadow Name string.
  * @param[in]  shadowNameLength Length of Shadow Name string pointed to by pShadowName.
- * @param[out] pTopicBuffer Pointer to buffer for returning the topic string.
- * @param[out] pOutLength Pointer to caller-supplied memory for returning the length of the topic string.
+ * @param[in] pTopicBuffer Pointer to buffer for returning the topic string.
+ * @param[in] pOutLength Pointer to caller-supplied memory for returning the length of the topic string.
  *
  * @return Return SHADOW_SUCCESS if the parameters are valid;
  *         return SHADOW_BAD_PARAMETER if not.
