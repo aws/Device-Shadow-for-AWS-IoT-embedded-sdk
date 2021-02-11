@@ -967,7 +967,7 @@ void test_Shadow_AssembleTopicString_Invalid_Parameters( void )
 
 /**
  * @brief Tests the behavior of Shadow_MatchTopicString() for classic shadow with valid parameters. Tests Classic
- * shadows through the deprecated legacy API macro Shadow_MatchTopic(), to verify the legacy macros.
+ * shadows through the deprecated legacy API Shadow_MatchTopic().
  */
 void test_Shadow_MatchTopicString_Classic_Happy_Path( void )
 {
@@ -1025,9 +1025,9 @@ void test_Shadow_MatchTopicString_Named_Happy_Path( void )
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     ShadowMessageType_t messageType = ShadowMessageTypeMaxNum;
     const char * pThingName = NULL;
-    uint16_t thingNameLength = 0U;
+    uint8_t thingNameLength = 0U;
     const char * pShadowName = NULL;
-    uint16_t shadowNameLength = 0U;
+    uint8_t shadowNameLength = 0U;
     const char topicBuffer[ TEST_NAMED_TOPIC_LENGTH_UPDATE_ACCEPTED ] = TEST_NAMED_TOPIC_STRING_UPDATE_ACCEPTED;
     uint16_t bufferSize = TEST_NAMED_TOPIC_LENGTH_UPDATE_ACCEPTED;
 
@@ -1042,6 +1042,20 @@ void test_Shadow_MatchTopicString_Named_Happy_Path( void )
 
     TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
     TEST_ASSERT_EQUAL_INT( TEST_THING_NAME_LENGTH, thingNameLength );
+    TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
+    TEST_ASSERT_EQUAL_STRING_LEN( TEST_THING_NAME, pThingName, TEST_THING_NAME_LENGTH );
+    TEST_ASSERT_EQUAL_INT( TEST_SHADOW_NAME_LENGTH, shadowNameLength );
+    TEST_ASSERT_EQUAL_STRING_LEN( TEST_SHADOW_NAME, pShadowName, TEST_SHADOW_NAME_LENGTH );
+
+    shadowStatus = Shadow_MatchTopicString( &( topicBuffer[ 0 ] ),
+                                            bufferSize,
+                                            &messageType,
+                                            &pThingName,
+                                            NULL,
+                                            &pShadowName,
+                                            &shadowNameLength );
+
+    TEST_ASSERT_EQUAL_INT( SHADOW_SUCCESS, shadowStatus );
     TEST_ASSERT_EQUAL_INT( ShadowMessageTypeUpdateAccepted, messageType );
     TEST_ASSERT_EQUAL_STRING_LEN( TEST_THING_NAME, pThingName, TEST_THING_NAME_LENGTH );
     TEST_ASSERT_EQUAL_INT( TEST_SHADOW_NAME_LENGTH, shadowNameLength );
@@ -1097,9 +1111,9 @@ void test_Shadow_MatchTopicString_Invalid_Parameters( void )
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
     ShadowMessageType_t messageType = ShadowMessageTypeMaxNum;
     const char * pThingName = NULL;
-    uint16_t thingNameLength = 0U;
+    uint8_t thingNameLength = 0U;
     const char * pShadowName = NULL;
-    uint16_t shadowNameLength = 0U;
+    uint8_t shadowNameLength = 0U;
     const char classicTopicBuffer[ TEST_CLASSIC_TOPIC_LENGTH_UPDATE_ACCEPTED ] = TEST_CLASSIC_TOPIC_STRING_UPDATE_ACCEPTED;
     uint16_t classicBufferSize = TEST_CLASSIC_TOPIC_LENGTH_UPDATE_ACCEPTED;
     const char namedTopicBuffer[ TEST_NAMED_TOPIC_LENGTH_UPDATE_ACCEPTED ] = TEST_NAMED_TOPIC_STRING_UPDATE_ACCEPTED;
