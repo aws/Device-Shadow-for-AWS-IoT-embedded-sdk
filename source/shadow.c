@@ -154,13 +154,13 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
  * @return Return SHADOW_SUCCESS if the parameters are valid;
  *         return SHADOW_BAD_PARAMETER if not.
  */
-ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicType,
-                                                const char * pThingName,
-                                                uint8_t thingNameLength,
-                                                const char * pShadowName,
-                                                uint8_t shadowNameLength,
-                                                char * pTopicBuffer,
-                                                uint16_t * pOutLength );
+static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicType,
+                                                       const char * pThingName,
+                                                       uint8_t thingNameLength,
+                                                       const char * pShadowName,
+                                                       uint8_t shadowNameLength,
+                                                       const char * pTopicBuffer,
+                                                       const uint16_t * pOutLength );
 
 /**
  * @brief Determine if the string contains the substring.
@@ -191,8 +191,8 @@ static ShadowStatus_t containsSubString( const char * pString,
  */
 static ShadowStatus_t validateName( const char * pString,
                                     uint16_t stringLength,
-                                    uint16_t maxAllowedLength,
-                                    uint16_t * pNameLength );
+                                    uint8_t maxAllowedLength,
+                                    uint8_t * pNameLength );
 
 /**
  * @brief Extract the Shadow message type from a string.
@@ -222,7 +222,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
 static ShadowStatus_t extractThingName( const char * pTopic,
                                         uint16_t topicLength,
                                         uint16_t * pConsumedTopicLength,
-                                        uint16_t * pThingNameLength );
+                                        uint8_t * pThingNameLength );
 
 /**
  * @brief Extract the classic shadow root OR the named shadow root and shadow name from a topic string.
@@ -239,7 +239,7 @@ static ShadowStatus_t extractThingName( const char * pTopic,
 static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
                                                 uint16_t topicLength,
                                                 uint16_t * pConsumedTopicLength,
-                                                uint16_t * pShadowNameLength );
+                                                uint8_t * pShadowNameLength );
 
 /**
  * @brief Get the shadow operation string for a given shadow topic type.
@@ -305,8 +305,8 @@ ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicTyp
                                                 uint8_t thingNameLength,
                                                 const char * pShadowName,
                                                 uint8_t shadowNameLength,
-                                                char * pTopicBuffer,
-                                                uint16_t * pOutLength )
+                                                const char * pTopicBuffer,
+                                                const uint16_t * pOutLength )
 {
     ShadowStatus_t shadowStatus = SHADOW_BAD_PARAMETER;
 
@@ -376,8 +376,8 @@ static ShadowStatus_t containsSubString( const char * pString,
 
 static ShadowStatus_t validateName( const char * pString,
                                     uint16_t stringLength,
-                                    uint16_t maxAllowedLength,
-                                    uint16_t * pNameLength )
+                                    uint8_t maxAllowedLength,
+                                    uint8_t * pNameLength )
 {
     uint16_t index = 0U;
     ShadowStatus_t returnStatus = SHADOW_FAIL;
@@ -428,7 +428,7 @@ static ShadowStatus_t validateName( const char * pString,
 static ShadowStatus_t extractThingName( const char * pTopic,
                                         uint16_t topicLength,
                                         uint16_t * pConsumedTopicLength,
-                                        uint16_t * pThingNameLength )
+                                        uint8_t * pThingNameLength )
 {
     /* Extract thing name. */
     ShadowStatus_t shadowStatus = validateName( &( pTopic[ *pConsumedTopicLength ] ),
@@ -453,7 +453,7 @@ static ShadowStatus_t extractThingName( const char * pTopic,
 static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
                                                 uint16_t topicLength,
                                                 uint16_t * pConsumedTopicLength,
-                                                uint16_t * pShadowNameLength )
+                                                uint8_t * pShadowNameLength )
 {
     /* Look for the named shadow root */
     ShadowStatus_t shadowStatus = containsSubString( &( pTopic[ *pConsumedTopicLength ] ),
@@ -763,14 +763,14 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
                                         uint16_t topicLength,
                                         ShadowMessageType_t * pMessageType,
                                         const char ** pThingName,
-                                        uint16_t * pThingNameLength,
+                                        uint8_t * pThingNameLength,
                                         const char ** pShadowName,
-                                        uint16_t * pShadowNameLength )
+                                        uint8_t * pShadowNameLength )
 {
     uint16_t consumedTopicLength = 0U;
     ShadowStatus_t shadowStatus = SHADOW_SUCCESS;
-    uint16_t thingNameLength = 0;
-    uint16_t shadowNameLength = 0;
+    uint8_t thingNameLength = 0;
+    uint8_t shadowNameLength = 0;
 
     shadowStatus = validateMatchTopicParameters( pTopic, topicLength, pMessageType );
 
@@ -922,3 +922,26 @@ ShadowStatus_t Shadow_AssembleTopicString( ShadowTopicStringType_t topicType,
     return shadowStatus;
 }
 /*-----------------------------------------------------------*/
+
+ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
+                                  uint16_t topicLength,
+                                  ShadowMessageType_t * pMessageType,
+                                  const char ** pThingName,
+                                  uint16_t * pThingNameLength )
+{
+    uint8_t thingNameLength = 0U;
+    ShadowStatus_t shadowStatus = Shadow_MatchTopicString( pTopic,
+                                                           topicLength,
+                                                           pMessageType,
+                                                           pThingName,
+                                                           &thingNameLength,
+                                                           NULL,
+                                                           NULL );
+
+    if( pThingNameLength != NULL )
+    {
+        *pThingNameLength = thingNameLength;
+    }
+
+    return shadowStatus;
+}

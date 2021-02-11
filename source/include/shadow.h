@@ -789,9 +789,9 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
                                         uint16_t topicLength,
                                         ShadowMessageType_t * pMessageType,
                                         const char ** pThingName,
-                                        uint16_t * pThingNameLength,
+                                        uint8_t * pThingNameLength,
                                         const char ** pShadowName,
-                                        uint16_t * pShadowNameLength );
+                                        uint8_t * pShadowNameLength );
 /* @[declare_shadow_matchtopicstring] */
 
 /*------------- Shadow library backwardly-compatible constants -------------*/
@@ -1048,8 +1048,11 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
  * See @ref Shadow_MatchTopicString for documentation of common behavior.
  */
 /* @[declare_shadow_matchtopic] */
-#define Shadow_MatchTopic( pTopic, topicLength, pMessageType, pThingName, pThingNameLength ) \
-    Shadow_MatchTopicString( pTopic, topicLength, pMessageType, pThingName, pThingNameLength, NULL, 0 )
+ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
+                                  uint16_t topicLength,
+                                  ShadowMessageType_t * pMessageType,
+                                  const char ** pThingName,
+                                  uint16_t * pThingNameLength );
 /* @[declare_shadow_matchtopic] */
 
 #endif /* ifndef SHADOW_H_ */
