@@ -44,7 +44,6 @@ void harness()
     pThingName = mallocCanFail( sizeof( *pThingName ) );
     pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
 
-
     Shadow_MatchTopic( pTopicName,
                        topicNameLength,
                        pMessageType,
