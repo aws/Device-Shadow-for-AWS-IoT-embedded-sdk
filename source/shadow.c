@@ -148,8 +148,8 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
  * @param[in]  thingNameLength Length of Thing Name string pointed to by pThingName.
  * @param[in]  pShadowName Shadow Name string.
  * @param[in]  shadowNameLength Length of Shadow Name string pointed to by pShadowName.
- * @param[in] pTopicBuffer Pointer to buffer for returning the topic string.
- * @param[in] pOutLength Pointer to caller-supplied memory for returning the length of the topic string.
+ * @param[in]  pTopicBuffer Pointer to the topic buffer.
+ * @param[in]  pOutLength Pointer to the length of the topic created.
  *
  * @return Return SHADOW_SUCCESS if the parameters are valid;
  *         return SHADOW_BAD_PARAMETER if not.
@@ -938,6 +938,12 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                                            NULL,
                                                            NULL );
 
+    /* Update the output parameter for Thing name length.
+     * Shadow_MatchTopicString takes a pointer to a 8 bit unsigned integer for
+     * output parameter `Thing name length`, whereas Shadow_MatchTopic takes a
+     * pointer to a 16 bit integer. The maximum possible Thing name length is
+     * 128 bytes and hence unsigned 8 bit integer is large enough to hold the
+     * Thing name length. Refer to #SHADOW_THINGNAME_MAX_LENGTH for more details. */
     if( pThingNameLength != NULL )
     {
         *pThingNameLength = thingNameLength;
