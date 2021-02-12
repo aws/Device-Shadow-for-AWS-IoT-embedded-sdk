@@ -37,8 +37,6 @@ void harness()
     uint16_t * pThingNameLength;
 
     __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
-    __CPROVER_assume( *pThingNameLength < SHADOW_THINGNAME_LENGTH_MAX );
-
     pTopicName = mallocCanFail( topicNameLength );
 
     pMessageType = mallocCanFail( sizeof( *pMessageType ) );
