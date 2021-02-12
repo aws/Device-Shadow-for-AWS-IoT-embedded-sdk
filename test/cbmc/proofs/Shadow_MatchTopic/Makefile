@@ -31,18 +31,20 @@ PROOF_UID = Shadow_MatchTopic
 # $aws/things/thingName/shadow/update/documents
 TOPIC_STRING_LENGTH_MAX=165
 
+# Maximum thing name length.
+# Refer to https://docs.aws.amazon.com/general/latest/gr/iot-core.html#device-shadow-limits
+# for more details about the Device Shadow limits.
+SHADOW_THINGNAME_LENGTH_MAX=128
+
 DEFINES += -DTOPIC_STRING_LENGTH_MAX=$(TOPIC_STRING_LENGTH_MAX)
+DEFINES += -DSHADOW_THINGNAME_LENGTH_MAX=$(SHADOW_THINGNAME_LENGTH_MAX)
 INCLUDES +=
 
 # The maximum length of the message type ( /update/documents ) is 17.
 UNWINDSET += strncmp.0:18
 
-# Allow for the longest possible Thing name
-UNWINDSET += __CPROVER_file_local_shadow_c_validateName.0:128
-
 # The number of message types is 8.
 UNWINDSET += __CPROVER_file_local_shadow_c_extractShadowMessageType.0:9
-
 
 PROOF_SOURCES += $(PROOFDIR)/$(HARNESS_FILE).c
 PROOF_SOURCES += $(SRCDIR)/test/cbmc/sources/shadow_cbmc_state.c
