@@ -940,7 +940,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
 
     /* Update the output parameter for Thing name length.
      * Shadow_MatchTopicString takes a pointer to a 8 bit unsigned integer for
-     * output parameter `Thing name length`, whereas Shadow_MatchTopic takes a
+     * output parameter Thing name length, whereas Shadow_MatchTopic takes a
      * pointer to a 16 bit integer. The maximum possible Thing name length is
      * 128 bytes and hence unsigned 8 bit integer is large enough to hold the
      * Thing name length. Refer to #SHADOW_THINGNAME_MAX_LENGTH for more details. */
