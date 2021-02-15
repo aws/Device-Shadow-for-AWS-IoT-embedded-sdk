@@ -26,10 +26,13 @@ PROOF_UID = Shadow_MatchTopic
 # The topic length is bounded to reduce the proof run time. This length bounds
 # the time to look for the thing name in the topic string. The minimum length
 # of the topic string is the length of the SHADOW_PREFIX ("$aws/things/")
-# plus the maximum Shadow Message Type length ("/shadow/update/documents").
-# Memory safety on the buffer holding the topic string can be proven within
-# a reasonable bound. It adds no value to the proof to input the largest possible
-# topic string accepted by AWS (64KB).
+# plus the maximum Shadow Message Type length ("/shadow/update/documents")
+# plus the minimum Thing name length (1 byte). Memory safety on the buffer
+# holding the topic string can be proven within a reasonable bound. It adds
+# no value to the proof to input the largest possible topic string accepted
+# by AWS (64KB). The reasonable bound for topic length is chosen as 50 bytes,
+# which is higher than the minimum (38 bytes) topic length and provides a good
+# allowance for the variable Thing name length (13 bytes).
 TOPIC_STRING_LENGTH_MAX=50
 
 DEFINES += -DTOPIC_STRING_LENGTH_MAX=$(TOPIC_STRING_LENGTH_MAX)
