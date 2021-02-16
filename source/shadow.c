@@ -936,8 +936,8 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
      * Thing name length. Refer to #SHADOW_THINGNAME_MAX_LENGTH for more details.
      * Passing a pointer to 16 bit integer directly to Shadow_MatchTopicString
      * may create data inconsistencies depending on the byte ordering in the
-     * device. Hence, a local variable of 8 bit integer width is used for the
-     * call to Shadow_MatchTopicString and its value is copied to the 16 bit
+     * device platform. Hence, a local variable of 8 bit integer width is used for
+     * the call to Shadow_MatchTopicString, and its value is copied to the 16 bit
      * integer pointer passed to Shadow_MatchTopic. */
     uint8_t thingNameLength = 0U;
     ShadowStatus_t shadowStatus = Shadow_MatchTopicString( pTopic,
