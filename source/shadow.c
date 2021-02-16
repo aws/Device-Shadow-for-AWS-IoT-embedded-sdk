@@ -929,6 +929,16 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   const char ** pThingName,
                                   uint16_t * pThingNameLength )
 {
+    /* Shadow_MatchTopicString takes a pointer to a 8 bit unsigned integer for
+     * output parameter Thing name length, whereas Shadow_MatchTopic takes a
+     * pointer to a 16 bit integer. The maximum possible Thing name length is
+     * 128 bytes and hence unsigned 8 bit integer is large enough to hold the
+     * Thing name length. Refer to #SHADOW_THINGNAME_MAX_LENGTH for more details.
+     * Passing a pointer to 16 bit integer directly to Shadow_MatchTopicString
+     * may create data inconsistencies depending on the byte ordering in the
+     * device. Hence, a local variable of 8 bit integer width is used for the
+     * call to Shadow_MatchTopicString and its value is copied to the 16 bit
+     * integer pointer passed to Shadow_MatchTopic. */
     uint8_t thingNameLength = 0U;
     ShadowStatus_t shadowStatus = Shadow_MatchTopicString( pTopic,
                                                            topicLength,
@@ -938,12 +948,7 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                                            NULL,
                                                            NULL );
 
-    /* Update the output parameter for Thing name length.
-     * Shadow_MatchTopicString takes a pointer to a 8 bit unsigned integer for
-     * output parameter Thing name length, whereas Shadow_MatchTopic takes a
-     * pointer to a 16 bit integer. The maximum possible Thing name length is
-     * 128 bytes and hence unsigned 8 bit integer is large enough to hold the
-     * Thing name length. Refer to #SHADOW_THINGNAME_MAX_LENGTH for more details. */
+    /* Update the output parameter for Thing name length. */
     if( pThingNameLength != NULL )
     {
         *pThingNameLength = thingNameLength;
