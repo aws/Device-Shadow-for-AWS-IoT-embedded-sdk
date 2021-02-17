@@ -300,13 +300,13 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
 
 /*-----------------------------------------------------------*/
 
-ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicType,
-                                                const char * pThingName,
-                                                uint8_t thingNameLength,
-                                                const char * pShadowName,
-                                                uint8_t shadowNameLength,
-                                                const char * pTopicBuffer,
-                                                const uint16_t * pOutLength )
+static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t topicType,
+                                                       const char * pThingName,
+                                                       uint8_t thingNameLength,
+                                                       const char * pShadowName,
+                                                       uint8_t shadowNameLength,
+                                                       const char * pTopicBuffer,
+                                                       const uint16_t * pOutLength )
 {
     ShadowStatus_t shadowStatus = SHADOW_BAD_PARAMETER;
 
@@ -409,8 +409,10 @@ static ShadowStatus_t validateName( const char * pString,
         }
         else
         {
-            /* Only accept names of greater than zero length */
-            *pNameLength = index;
+            /* Only accept names of greater than zero length.
+             * The variable `index` will not exceed the 8 bit integer width here
+             * since it will be lesser than the 8 bit integer `maxAllowedLength`. */
+            *pNameLength = ( uint8_t ) index;
             returnStatus = SHADOW_SUCCESS;
         }
     }
