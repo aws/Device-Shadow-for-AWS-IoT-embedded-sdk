@@ -3,7 +3,7 @@
 ## v1.1.0 (March 2021)
 
 ### Updates
- - [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/56), [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/72) and [#73](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/73) Add support for named shadow, a feature of the AWS IoT Device Defender service that allows you to create multiple shadows for a single IoT device.
+ - [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/56), [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/72) and [#73](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/73) Add support for named shadow, a feature of the AWS IoT Device Shadow service that allows you to create multiple shadows for a single IoT device.
 
 ### Other
  - [#74](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/74) Add CBMC proof for `Shadow_MatchTopic` API.
