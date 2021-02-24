@@ -1,6 +1,6 @@
 # Changelog for AWS IoT Device Shadow
 
-## v2.0.0 (March 2021)
+## v1.1.0 (March 2021)
 
 ### Updates
  - [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/56), [#56](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/72) and [#73](https://github.com/aws/device-shadow-for-aws-iot-embedded-sdk/pull/73) Add support for Named Shadow feature of AWS IoT Device Shadow service.
