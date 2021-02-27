@@ -1,4 +1,4 @@
-# Changelog for AWS IoT Device Shadow
+# Changelog for AWS IoT Device Shadow library
 
 ## v1.1.0 (March 2021)
 
