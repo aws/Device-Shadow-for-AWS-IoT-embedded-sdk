@@ -498,7 +498,7 @@ static ShadowStatus_t extractShadowRootAndName( const char * pTopic,
         else
         {
             shadowStatus = SHADOW_ROOT_PARSE_FAILED;
-            LogDebug( ( "Not a Shadow topic. Failed to parse shadow root in pTopic %s", pTopic ) );
+            LogDebug( ( "Not a Shadow topic. Failed to parse shadow root in pTopic %.*s", topicLength, pTopic ) );
         }
     }
 
@@ -578,7 +578,7 @@ static ShadowStatus_t extractShadowMessageType( const char * pString,
 
     if( returnStatus != SHADOW_SUCCESS )
     {
-        LogDebug( ( "Not a Shadow topic. Failed to match shadow message type in pString %s.", pString ) );
+        LogDebug( ( "Not a Shadow topic. Failed to match shadow message type in pString %.*s", stringLength, pString ) );
     }
 
     return returnStatus;
@@ -804,7 +804,7 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
         }
         else
         {
-            LogDebug( ( "Not a Shadow topic. Failed to parse shadow topic prefix in pTopic %s.", pTopic ) );
+            LogDebug( ( "Not a Shadow topic. Failed to parse shadow topic prefix in pTopic %.*s", topicLength, pTopic ) );
         }
     }
 
@@ -835,7 +835,7 @@ ShadowStatus_t Shadow_MatchTopicString( const char * pTopic,
         if( shadowStatus != SHADOW_SUCCESS )
         {
             shadowStatus = SHADOW_MESSAGE_TYPE_PARSE_FAILED;
-            LogDebug( ( "Not a Shadow topic. Shadow message type is not in pTopic %s, failed to parse shadow message type.", pTopic ) );
+            LogDebug( ( "Not a Shadow topic. Shadow message type is not in pTopic %.*s, failed to parse shadow message type.", topicLength, pTopic ) );
         }
     }
 
