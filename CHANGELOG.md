@@ -1,4 +1,8 @@
 # Changelog for AWS IoT Device Shadow library
+## v1.1.1 (May 2021)
+
+### Other
+ - [#85](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/85) Update CBMC proof for `Shadow_AssembleTopicString` API.
 
 ## v1.1.0 (March 2021)
 
