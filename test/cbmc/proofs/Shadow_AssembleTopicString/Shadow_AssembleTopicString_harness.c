@@ -49,7 +49,7 @@ void harness()
                                 thingNameLength,
                                 pShadowName,
                                 shadowNameLength,
-                                &( topicBuffer[ 0 ] ),
+                                topicBuffer,
                                 bufferSize,
                                 pOutLength );
 }
