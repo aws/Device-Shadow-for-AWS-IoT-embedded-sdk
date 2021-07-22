@@ -15,10 +15,10 @@ css
 defgroup
 developerguide
 device-shadow-limits
+doxygen
 endcode
 endif
 endlink
-doxygen
 gcc
 generatedtopicstringlength
 getshadowoperationlength
@@ -44,6 +44,7 @@ mainpage
 malloc
 matchtopic
 maxallowedlength
+md
 mdash
 messagetype
 mqtt
@@ -59,10 +60,10 @@ outlength
 param
 pconsumedtopiclength
 pmessagetype
-png
-posix
 pname
 pnamelength
+png
+posix
 poutlength
 pre
 pshadowname
@@ -85,12 +86,12 @@ shadowtopicstringtypedeleterejected
 shadowtopicstringtypeget
 shadowtopicstringtypegetaccepted
 shadowtopicstringtypegetrejected
+shadowtopicstringtypemaxnum
 shadowtopicstringtypeupdate
 shadowtopicstringtypeupdateaccepted
 shadowtopicstringtypeupdatedelta
 shadowtopicstringtypeupdatedocuments
 shadowtopicstringtypeupdaterejected
-shadowtopicstringtypemaxnum
 sizeof
 stdint
 stringlength
@@ -110,5 +111,5 @@ topiclength
 topicnamelength
 topictype
 tr
-utest
 un
+utest

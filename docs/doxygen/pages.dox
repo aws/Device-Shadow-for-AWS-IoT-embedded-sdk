@@ -15,7 +15,7 @@ Embedded devices often use MQTT to interact with Device Shadow. This library pro
 @section shadow_memory_requirements Memory Requirements
 @brief Memory requirements of the Shadow library.
 
-@include{doc} size_table.html
+@include{doc} size_table.md
  */
 
 /**
