@@ -4,8 +4,6 @@
 
 ### Other
  - [#85](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/85) Fix CBMC proof for `Shadow_AssembleTopicString` API.
- - [#86](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/86) Fix description of CBMC in README
- - [#87](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/87) Upgrade proof tools: Litani 1.10.0 and starter kit
  - [#88](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/88) Update broken MISRA link
 
 ## v1.1.0 (March 2021)
