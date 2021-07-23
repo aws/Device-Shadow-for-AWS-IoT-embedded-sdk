@@ -31,6 +31,12 @@
 /* Standard includes. */
 #include <stdint.h>
 
+/* *INDENT-OFF* */
+#ifdef __cplusplus
+    extern "C" {
+#endif
+/* *INDENT-ON* */
+
 /* SHADOW_DO_NOT_USE_CUSTOM_CONFIG allows building the Shadow library
  * without a custom config. If a custom config is provided, the
  * SHADOW_DO_NOT_USE_CUSTOM_CONFIG macro should not be defined. */
@@ -1054,5 +1060,11 @@ ShadowStatus_t Shadow_MatchTopic( const char * pTopic,
                                   const char ** pThingName,
                                   uint16_t * pThingNameLength );
 /* @[declare_shadow_matchtopic] */
+
+/* *INDENT-OFF* */
+#ifdef __cplusplus
+    }
+#endif
+/* *INDENT-ON* */
 
 #endif /* ifndef SHADOW_H_ */
