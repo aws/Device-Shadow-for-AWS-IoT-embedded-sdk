@@ -65,6 +65,20 @@ Please refer to the demos of the AWS IoT Device Shadow library in the following 
 | FreeRTOS | [FreeRTOS/FreeRTOS](https://github.com/FreeRTOS/FreeRTOS/tree/master/FreeRTOS-Plus/Demo/AWS/Device_Shadow_Windows_Simulator) | FreeRTOS+TCP for TCP/IP and mbedTLS for TLS stack |
 | FreeRTOS | [FreeRTOS AWS Reference Integrations](https://github.com/aws/amazon-freertos/tree/master/demos/device_shadow_for_aws) | Based on Secure Sockets Abstraction |
 
+## Documentation
+
+### Existing Documentation
+
+For pre-generated documentation, please see the documentation linked in the locations below:
+
+| Location |
+| :-: |
+| [AWS IoT Device SDK for Embedded C](https://github.com/aws/aws-iot-device-sdk-embedded-C#releases-and-documentation) |
+| [FreeRTOS.org](https://freertos.org/Documentation/api-ref/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html) |
+
+Note that the latest included version of IoT Device Shadow library may differ across repositories.
+
+
 ## Generating documentation
 
 The Doxygen references were created using Doxygen version 1.8.20. To generate the
