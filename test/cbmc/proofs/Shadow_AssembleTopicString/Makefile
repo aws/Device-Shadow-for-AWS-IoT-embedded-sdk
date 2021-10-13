@@ -29,7 +29,6 @@ INCLUDES +=
 REMOVE_FUNCTION_BODY +=
 
 PROOF_SOURCES += $(PROOFDIR)/$(HARNESS_FILE).c
-PROOF_SOURCES += $(SRCDIR)/test/cbmc/sources/shadow_cbmc_state.c
 PROJECT_SOURCES += $(SRCDIR)/source/shadow.c
 
 include ../Makefile.common

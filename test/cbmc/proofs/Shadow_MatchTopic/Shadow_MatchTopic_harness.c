@@ -26,7 +26,8 @@
  */
 
 #include "shadow.h"
-#include "shadow_cbmc_state.h"
+
+#include <stdlib.h>
 
 void harness()
 {
@@ -37,12 +38,12 @@ void harness()
     uint16_t * pThingNameLength;
 
     __CPROVER_assume( topicNameLength < TOPIC_STRING_LENGTH_MAX );
-    pTopicName = mallocCanFail( topicNameLength );
+    pTopicName = malloc( topicNameLength );
 
-    pMessageType = mallocCanFail( sizeof( *pMessageType ) );
+    pMessageType = malloc( sizeof( *pMessageType ) );
 
-    pThingName = mallocCanFail( sizeof( *pThingName ) );
-    pThingNameLength = mallocCanFail( sizeof( *pThingNameLength ) );
+    pThingName = malloc( sizeof( *pThingName ) );
+    pThingNameLength = malloc( sizeof( *pThingNameLength ) );
 
     Shadow_MatchTopic( pTopicName,
                        topicNameLength,
