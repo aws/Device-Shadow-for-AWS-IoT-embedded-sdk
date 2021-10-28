@@ -19,8 +19,8 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
- 
- /**
+
+/**
  * @file shadow_config.h
  * @brief Config values for testing the AWS IoT Device Shadow Library.
  */
@@ -38,4 +38,4 @@
 
 #define LogDebug( message )    printf( "Debug: " ); printf message; printf( "\n" )
 
-#endif
+#endif /* ifndef SHADOW_CONFIG_H_ */
