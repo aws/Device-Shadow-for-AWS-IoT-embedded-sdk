@@ -48,6 +48,7 @@ jobs:
           cmake -S test -B build/ \
           -G "Unix Makefiles" \
           -DCMAKE_BUILD_TYPE=Debug \
+          -DBUILD_CLONE_SUBMODULES=ON \
           -DCMAKE_C_FLAGS='-Wall -Wextra -Werror -DSHADOW_DO_NOT_USE_CUSTOM_CONFIG'
           make -C build/ all
   complexity:
