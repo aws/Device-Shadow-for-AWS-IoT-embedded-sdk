@@ -28,4 +28,3 @@ INCLUDES += -I$(SRCDIR)/test/include
 
 # Preprocessor definitions -D...
 DEFINES += -Dshadow_EXPORTS
-# DEFINES += -DSHADOW_DO_NOT_USE_CUSTOM_CONFIG
