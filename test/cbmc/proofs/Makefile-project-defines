@@ -24,7 +24,7 @@ PROJECT_NAME = "FreeRTOS coreShadow"
 INCLUDES += -I$(SRCDIR)/test/cbmc/include
 INCLUDES += -I$(SRCDIR)/source/include
 INCLUDES += -I$(SRCDIR)/source
+INCLUDES += -I$(SRCDIR)/test/include
 
 # Preprocessor definitions -D...
 DEFINES += -Dshadow_EXPORTS
-DEFINES += -DSHADOW_DO_NOT_USE_CUSTOM_CONFIG

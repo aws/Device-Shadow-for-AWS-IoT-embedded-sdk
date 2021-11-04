@@ -41,11 +41,11 @@ include( ${MODULE_ROOT_DIR}/shadowFilePaths.cmake )
 add_library( coverity_analysis
              ${SHADOW_SOURCES} )
 
-# Build Shadow library target without custom config dependency.
-target_compile_definitions( coverity_analysis PUBLIC SHADOW_DO_NOT_USE_CUSTOM_CONFIG=1 )
-
 # Shadow public include path.
-target_include_directories( coverity_analysis PUBLIC ${SHADOW_INCLUDE_PUBLIC_DIRS} )
+target_include_directories( coverity_analysis
+                            PUBLIC
+                            ${SHADOW_INCLUDE_PUBLIC_DIRS}
+                            "${CMAKE_CURRENT_LIST_DIR}/include" )
 
 #  ====================================  Test Configuration ========================================
 
@@ -71,9 +71,6 @@ endif()
 # Use CTest utility for managing test runs. This has to be added BEFORE
 # defining test targets with add_test()
 enable_testing()
-
-# disable to include shadow custom configuration header
-add_compile_definitions(SHADOW_DO_NOT_USE_CUSTOM_CONFIG)
 
 # Add build targets for CMock and Unit, required for unit testing.
 add_cmock_targets()
