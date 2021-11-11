@@ -1,5 +1,11 @@
 # Changelog for AWS IoT Device Shadow library
 
+## v1.2.0 (November 2021)
+
+### Other
+ - [#93](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/93) Rename master references to main.
+ - [#94](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/94) Updated CBMC proof.
+
 ## v1.1.1 (July 2021)
 
 ### Other
