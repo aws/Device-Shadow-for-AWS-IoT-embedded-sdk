@@ -30,6 +30,23 @@
 
 #include <stdio.h>
 
+#ifdef DISABLE_LOGGING
+    #ifndef LogError
+        #define LogError( message )
+    #endif
+    #ifndef LogWarn
+        #define LogWarn( message )
+    #endif
+
+    #ifndef LogInfo
+        #define LogInfo( message )
+    #endif
+
+    #ifndef LogDebug
+        #define LogDebug( message )
+    #endif
+
+#else /* ! DISABLE_LOGGING */
 #define LogError( message )    printf( "Error: " ); printf message; printf( "\n" )
 
 #define LogWarn( message )     printf( "Warn: " ); printf message; printf( "\n" )
@@ -37,5 +54,6 @@
 #define LogInfo( message )     printf( "Info: " ); printf message; printf( "\n" )
 
 #define LogDebug( message )    printf( "Debug: " ); printf message; printf( "\n" )
+#endif /* DISABLE_LOGGING */
 
 #endif /* ifndef SHADOW_CONFIG_H_ */
