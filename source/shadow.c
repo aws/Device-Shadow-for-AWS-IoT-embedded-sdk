@@ -323,7 +323,7 @@ static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t t
                     ( const void * ) pThingName,
                     ( uint8_t ) thingNameLength,
                     ( const void * ) pShadowName,
-                    ( uint8_t  ) shadowNameLength,
+                    ( uint8_t ) shadowNameLength,
                     ( uint32_t ) topicType,
                     ( const void * ) pOutLength ) );
     }
