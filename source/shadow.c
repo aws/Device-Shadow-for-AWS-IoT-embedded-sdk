@@ -289,7 +289,7 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
         ( pMessageType == NULL ) )
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
-        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %hu, pMessageType: %p.",
+        LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
                     ( const void * ) pTopic,
                     ( unsigned int ) topicLength,
                     ( const void * ) pMessageType ) );
@@ -317,8 +317,8 @@ static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t t
         ( topicType >= ShadowTopicStringTypeMaxNum ) ||
         ( pOutLength == NULL ) )
     {
-        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %hhu,\
-                    pShadowName: %p, shadowNameLength: %hhu, topicType: %d, pOutLength: %p.",
+        LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u,\
+                    pShadowName: %p, shadowNameLength: %u, topicType: %d, pOutLength: %p.",
                     ( const void * ) pTopicBuffer,
                     ( const void * ) pThingName,
                     ( unsigned int ) thingNameLength,
@@ -329,13 +329,13 @@ static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t t
     }
     else if( thingNameLength > SHADOW_THINGNAME_MAX_LENGTH )
     {
-        LogError( ( "Invalid thingNamelength. Thing name length of %hhu exceeds maximum allowed length %u.",
+        LogError( ( "Invalid thingNamelength. Thing name length of %u exceeds maximum allowed length %u.",
                     ( unsigned int ) thingNameLength,
                     ( unsigned int ) SHADOW_THINGNAME_MAX_LENGTH ) );
     }
     else if( shadowNameLength > SHADOW_NAME_MAX_LENGTH )
     {
-        LogError( ( "Invalid shadowNameLength. Shadow name length of %hhu exceeds maximum allowed length %u.",
+        LogError( ( "Invalid shadowNameLength. Shadow name length of %u exceeds maximum allowed length %u.",
                     ( unsigned int ) shadowNameLength,
                     ( unsigned int ) SHADOW_NAME_MAX_LENGTH ) );
     }
@@ -402,7 +402,7 @@ static ShadowStatus_t validateName( const char * pString,
         }
         else if( index > maxAllowedLength )
         {
-            LogDebug( ( "Not a Shadow topic. Extracted %s name length of %hu exceeds maximum allowed length %hhu.",
+            LogDebug( ( "Not a Shadow topic. Extracted %s name length of %u exceeds maximum allowed length %u.",
                         ( maxAllowedLength == SHADOW_THINGNAME_MAX_LENGTH ) ? "Thing" : "Shadow",
                         ( unsigned int ) index,
                         ( unsigned int ) maxAllowedLength ) );
@@ -901,7 +901,7 @@ ShadowStatus_t Shadow_AssembleTopicString( ShadowTopicStringType_t topicType,
         if( bufferSize < generatedTopicStringLength )
         {
             shadowStatus = SHADOW_BUFFER_TOO_SMALL;
-            LogError( ( "Input bufferSize too small, bufferSize %hu, required %hu.",
+            LogError( ( "Input bufferSize too small, bufferSize %u, required %u.",
                         ( unsigned int ) bufferSize,
                         ( unsigned int ) generatedTopicStringLength ) );
         }
