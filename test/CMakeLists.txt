@@ -47,7 +47,7 @@ target_include_directories( coverity_analysis
                             ${SHADOW_INCLUDE_PUBLIC_DIRS}
                             "${CMAKE_CURRENT_LIST_DIR}/include" )
 
-target_compile_options(coverity_analysis PUBLIC -DDISABLE_LOGGING )
+target_compile_options(coverity_analysis PUBLIC -DNDEBUG -DDISABLE_LOGGING  )
 
 #  ====================================  Test Configuration ========================================
 
