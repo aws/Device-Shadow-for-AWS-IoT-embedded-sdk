@@ -1,5 +1,13 @@
 # Changelog for AWS IoT Device Shadow library
 
+
+## v1.2.1 (November 2021)
+
+### Other
+- [#102](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/102) MISRA compliance update
+- [#101](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/101) Update CBMC starter kit
+- [#98](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/98) Loop invariant update
+
 ## v1.2.0 (November 2021)
 
 ### Other
