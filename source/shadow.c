@@ -290,9 +290,9 @@ static ShadowStatus_t validateMatchTopicParameters( const char * pTopic,
     {
         shadowStatus = SHADOW_BAD_PARAMETER;
         LogError( ( "Invalid input parameters pTopic: %p, topicLength: %u, pMessageType: %p.",
-                    ( void * ) pTopic,
+                    ( const void * ) pTopic,
                     ( unsigned int ) topicLength,
-                    ( void * ) pMessageType ) );
+                    ( const void * ) pMessageType ) );
     }
 
     return shadowStatus;
@@ -319,13 +319,13 @@ static ShadowStatus_t validateAssembleTopicParameters( ShadowTopicStringType_t t
     {
         LogError( ( "Invalid input parameters pTopicBuffer: %p, pThingName: %p, thingNameLength: %u,\
                     pShadowName: %p, shadowNameLength: %u, topicType: %d, pOutLength: %p.",
-                    ( void * ) pTopicBuffer,
-                    ( void * ) pThingName,
+                    ( const void * ) pTopicBuffer,
+                    ( const void * ) pThingName,
                     ( unsigned int ) thingNameLength,
-                    ( void * ) pShadowName,
+                    ( const void * ) pShadowName,
                     ( unsigned int ) shadowNameLength,
                     ( int ) topicType,
-                    ( void * ) pOutLength ) );
+                    ( const void * ) pOutLength ) );
     }
     else if( thingNameLength > SHADOW_THINGNAME_MAX_LENGTH )
     {
