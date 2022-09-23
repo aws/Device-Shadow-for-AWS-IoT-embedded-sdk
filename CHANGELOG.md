@@ -1,7 +1,7 @@
 # Changelog for AWS IoT Device Shadow library
 
 
-## v1.3.0 (September 2022)
+## v1.3.0 (October 2022)
 
 ### Other
 - [#102](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/102) MISRA C:2012 compliance update
