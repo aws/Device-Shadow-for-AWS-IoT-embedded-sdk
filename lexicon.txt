@@ -47,6 +47,7 @@ maxallowedlength
 md
 mdash
 messagetype
+mit
 mqtt
 myshadow
 myshadowname
@@ -93,6 +94,7 @@ shadowtopicstringtypeupdatedelta
 shadowtopicstringtypeupdatedocuments
 shadowtopicstringtypeupdaterejected
 sizeof
+spdx
 stdint
 stringlength
 strlen
