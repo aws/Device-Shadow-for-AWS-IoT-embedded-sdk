@@ -1,8 +1,8 @@
 # MISRA Compliance
 
 The Device Shadow Library files conform to the [MISRA C:2012](https://www.misra.org.uk)
-guidelines, with some noted exceptions. Compliance is checked with Coverity static analysis.
-The specific deviations, suppressed inline, are listed below.
+guidelines, with some noted exceptions. Compliance is checked with Coverity static analysis
+version 2023.6.1. The specific deviations, suppressed inline, are listed below.
 
 Additionally, [MISRA configuration file](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/blob/main/tools/coverity/misra.config) contains the project wide deviations.
 
