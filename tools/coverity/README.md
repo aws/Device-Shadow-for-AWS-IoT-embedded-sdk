@@ -5,7 +5,7 @@ To that end, this directory provides a [configuration file](https://github.com/a
 building a binary for the tool to analyze.
 
 > **Note**
-For generating the report as outlined below, we have used Coverity version 2018.09.
+For generating the report as outlined below, we have used Coverity version 2023.6.1.
 
 For details regarding the suppressed violations in the report (which can be generated using the instructions described below), please
 see the [MISRA.md](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/blob/main/MISRA.md) file.
@@ -31,7 +31,7 @@ Go to the root directory of the library and run the following commands in termin
   ~~~
 2. Create the build files using CMake in a `build` directory
   ~~~
-  cmake -B build -S test
+  cmake -B build -S test -DCOV_ANALYSIS
   ~~~
 3. Go to the build directory and copy the coverity configuration file
   ~~~
