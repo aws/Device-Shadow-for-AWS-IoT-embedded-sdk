@@ -20,6 +20,7 @@ jobs:
           -G "Unix Makefiles" \
           -DCMAKE_BUILD_TYPE=Debug \
           -DBUILD_CLONE_SUBMODULES=ON \
+          -DUNITTEST=1 \
           -DCMAKE_C_FLAGS='--coverage -Wall -Wextra -Werror -DNDEBUG'
           make -C build/ all
       - name: Test
