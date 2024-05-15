@@ -1,6 +1,12 @@
 # Changelog for AWS IoT Device Shadow library
 
 
+## v1.4.0 (May 2024)
+
+### Other
+- [#102](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/121) MISRA C:2012 compliance checked with Coverity static analysis version 2023.6.1
+- [#101](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/111) Update doxygen version to 1.9.6
+
 ## v1.3.0 (October 2022)
 
 ### Other
