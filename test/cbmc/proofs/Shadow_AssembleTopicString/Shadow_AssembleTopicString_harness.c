@@ -1,5 +1,5 @@
 /*
- * AWS IoT Device Shadow v1.3.1
+ * AWS IoT Device Shadow v1.4.0
  * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
  *
  * SPDX-License-Identifier: MIT
