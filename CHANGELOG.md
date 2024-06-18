@@ -1,5 +1,9 @@
 # Changelog for AWS IoT Device Shadow library
 
+## v1.4.1 (June 2024)
+
+### Other
+- Fix doxygen deployment on Github.
 
 ## v1.4.0 (May 2024)
 
