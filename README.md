@@ -37,16 +37,10 @@ safety through the
 See memory requirements for this library
 [here](https://docs.aws.amazon.com/embedded-csdk/202103.00/lib-ref/libraries/aws/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html#shadow_memory_requirements).
 
-**AWS IoT Device Shadow v1.3.0
-[source code](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/tree/v1.3.0)
+**AWS IoT Device Shadow v1.4.1
+[source code](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/tree/v1.4.1)
 is part of the
-[FreeRTOS 202210.00 LTS](https://github.com/FreeRTOS/FreeRTOS-LTS/tree/202210.00-LTS)
-release.**
-
-**AWS IoT Device Shadow v1.0.2
-[source code](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/tree/v1.0.2)
-is part of the
-[FreeRTOS 202012.00 LTS](https://github.com/FreeRTOS/FreeRTOS-LTS/tree/202012.00-LTS)
+[FreeRTOS 202406.00 LTS](https://github.com/FreeRTOS/FreeRTOS-LTS/tree/202406.00-LTS)
 release.**
 
 ### AWS IoT Device Shadow Config File
