@@ -142,7 +142,7 @@ locations below:
 |                                                               Location                                                                |
 | :-----------------------------------------------------------------------------------------------------------------------------------: |
 |         [AWS IoT Device SDK for Embedded C](https://github.com/aws/aws-iot-device-sdk-embedded-C#releases-and-documentation)          |
-| [FreeRTOS.org](https://freertos.org/Documentation/api-ref/device-shadow-for-aws-iot-embedded-sdk/docs/doxygen/output/html/index.html) |
+| [GitHub.io](https://aws.github.io/Device-Shadow-for-AWS-IoT-embedded-sdk/v1.4.1/) |
 
 Note that the latest included version of IoT Device Shadow library may differ
 across repositories.
