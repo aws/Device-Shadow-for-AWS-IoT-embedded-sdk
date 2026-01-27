@@ -39,6 +39,16 @@
 #endif
 /* *INDENT-ON* */
 
+/**
+ * @cond DOXYGEN_IGNORE
+ * The current version of this library.
+ *
+ * If SHADOW_LIBRARY_VERSION ends with + it represents the version in development
+ * after the numbered release.
+ */
+#define SHADOW_LIBRARY_VERSION    "v1.4.1+"
+/** @endcond */
+
 /* SHADOW_DO_NOT_USE_CUSTOM_CONFIG allows building the Shadow library
  * without a custom config. If a custom config is provided, the
  * SHADOW_DO_NOT_USE_CUSTOM_CONFIG macro should not be defined. */
