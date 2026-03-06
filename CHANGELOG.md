@@ -1,5 +1,13 @@
 # Changelog for AWS IoT Device Shadow library
 
+## v1.4.2 (March 2026)
+
+### Other
+- [#131](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/131) Remove formatting bot workflow
+- [#130](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/130) Update coverity links
+- [#129](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/129) Fix links
+- [#128](https://github.com/aws/Device-Shadow-for-AWS-IoT-embedded-sdk/pull/128) Adjust proof tooling to support CBMC v6
+
 ## v1.4.1 (June 2024)
 
 ### Other
